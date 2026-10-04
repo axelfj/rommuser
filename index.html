@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chequeo de stems · ROMMUSER Studio</title>
+    <meta name="description" content="Revisá tus stems antes de mandarlos a mezclar: sample rate, clipping, largos y más. Gratis y sin subir tus archivos." />
+    <meta property="og:title" content="Chequeo de stems · ROMMUSER Studio" />
+    <meta property="og:description" content="Revisá tus stems antes de mandarlos a mezclar. Gratis, en tu navegador." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <span class="brand">ROMMUSER <span class="dim">Studio</span></span>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Chequeo de stems</h1>
+        <p class="lead">
+          Antes de mandar tus stems a mezclar, revisá que estén bien exportados.
+          Todo pasa en tu navegador: tus archivos no se suben a ningún lado.
+        </p>
+      </section>
+
+      <section id="drop" class="drop" tabindex="0" aria-label="Soltá aquí tu carpeta de stems">
+        <p class="drop-title">Soltá aquí la carpeta de stems</p>
+        <p class="drop-sub">WAV o AIFF · todos los que quieras</p>
+        <div class="drop-actions">
+          <label class="btn">
+            Elegir carpeta
+            <input id="pick-folder" type="file" webkitdirectory multiple hidden />
+          </label>
+          <label class="btn ghost">
+            Elegir archivos
+            <input id="pick-files" type="file" accept=".wav,.wave,.aif,.aiff,.aifc,.bwf,.mp3,.m4a,.flac" multiple hidden />
+          </label>
+        </div>
+        <ul class="checks-list">
+          <li>Sample rate igual en todos</li>
+          <li>Clipping y picos</li>
+          <li>Mismo largo, desde el inicio</li>
+          <li>Pistas en silencio</li>
+          <li>Mono guardado en estéreo</li>
+          <li>Bit depth y nombres</li>
+        </ul>
+      </section>
+
+      <section id="progress" class="progress" hidden>
+        <p id="progress-label">Revisando…</p>
+        <div class="bar"><div id="progress-bar"></div></div>
+      </section>
+
+      <section id="report" class="report" hidden></section>
+
+      <section id="cta" class="cta" hidden>
+        <h2>¿Lo mandamos a mezclar?</h2>
+        <p class="lead">Mezclo y masterizo house y techno con alma melódica. Contame del track y te respondo con los siguientes pasos.</p>
+        <div class="services" id="services"></div>
+        <form id="order" class="order" hidden>
+          <input type="hidden" name="servicio" />
+          <label>Nombre o nombre artístico<input name="nombre" required autocomplete="name" /></label>
+          <label>Correo<input name="correo" type="email" required autocomplete="email" /></label>
+          <label>Link a los stems (Drive, WeTransfer, Dropbox…)<input name="link" type="url" placeholder="https://" /></label>
+          <label>Algo que deba saber (referencias, fecha de salida, sello…)<textarea name="mensaje" rows="3"></textarea></label>
+          <button class="btn" type="submit">Enviar</button>
+          <p class="fine" id="terms"></p>
+          <p class="fine" id="order-status" role="status"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>ROMMUSER Studio · Costa Rica</span>
+      <a id="mail-link" href="#"></a>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
