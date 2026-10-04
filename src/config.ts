@@ -1,6 +1,6 @@
 // Datos del servicio. Los precios salen de la lista vigente de ROMMUSER.
 
-export const BOOKINGS_EMAIL = 'bookings@rommuser.com';
+export const CONTACT_EMAIL = 'contact@rommuser.com';
 
 export const SERVICES = {
   mixdown: {
@@ -19,7 +19,7 @@ export type ServiceKey = keyof typeof SERVICES;
 
 export const PAYMENT_TERMS = '50% para empezar, 50% al entregar.';
 
-/** Endpoint tipo Formspree. Sin él, el formulario abre un correo a bookings@. */
+/** Endpoint tipo Formspree. Sin él, el formulario abre un correo a contact@. */
 export const FORM_ENDPOINT: string = import.meta.env.VITE_FORM_ENDPOINT ?? '';
 
 /** Dominio en Plausible. Sin él no se carga ninguna analítica. */

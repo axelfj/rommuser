@@ -17,7 +17,7 @@ npm run build      # typecheck + build estático en dist/
 
 | Variable | Para qué |
 |---|---|
-| `VITE_FORM_ENDPOINT` | Endpoint tipo Formspree para recibir pedidos. Sin él, el formulario abre un correo a bookings@rommuser.com. |
+| `VITE_FORM_ENDPOINT` | Endpoint tipo Formspree para recibir pedidos. Sin él, el formulario abre un correo a contact@rommuser.com. |
 | `VITE_PLAUSIBLE_DOMAIN` | Dominio en Plausible para contar chequeos y clics (sin cookies). Sin él no se carga analítica. |
 
 Precios y textos del servicio: `src/config.ts`.

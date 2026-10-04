@@ -1,4 +1,4 @@
-import { BOOKINGS_EMAIL, FORM_ENDPOINT, PAYMENT_TERMS, PLAUSIBLE_DOMAIN, SERVICES, type ServiceKey } from './config';
+import { CONTACT_EMAIL, FORM_ENDPOINT, PAYMENT_TERMS, PLAUSIBLE_DOMAIN, SERVICES, type ServiceKey } from './config';
 import type { FileAnalysis } from './lib/analyze';
 import {
   buildReport,
@@ -240,7 +240,7 @@ function renderServices() {
     });
     wrap.append(btn);
   }
-  $('terms').textContent = `${PAYMENT_TERMS} Te respondo desde ${BOOKINGS_EMAIL}.`;
+  $('terms').textContent = `${PAYMENT_TERMS} Te respondo desde ${CONTACT_EMAIL}.`;
 }
 
 form.addEventListener('submit', async (e) => {
@@ -264,7 +264,7 @@ form.addEventListener('submit', async (e) => {
       status.textContent = 'Listo, te escribo pronto.';
       return;
     } catch {
-      status.textContent = `No se pudo enviar. Escribime a ${BOOKINGS_EMAIL}.`;
+      status.textContent = `No se pudo enviar. Escribime a ${CONTACT_EMAIL}.`;
       return;
     }
   }
@@ -279,9 +279,9 @@ form.addEventListener('submit', async (e) => {
   ]
     .filter(Boolean)
     .join('\n');
-  const href = `mailto:${BOOKINGS_EMAIL}?subject=${encodeURIComponent(`${service.label} · ${data.nombre}`)}&body=${encodeURIComponent(body)}`;
+  const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`${service.label} · ${data.nombre}`)}&body=${encodeURIComponent(body)}`;
   window.location.href = href;
-  status.textContent = `Se abrió tu correo. Si no, escribime a ${BOOKINGS_EMAIL}.`;
+  status.textContent = `Se abrió tu correo. Si no, escribime a ${CONTACT_EMAIL}.`;
 });
 
 // --- Entrada de archivos --------------------------------------------------------
@@ -306,7 +306,7 @@ for (const id of ['pick-folder', 'pick-files']) {
 }
 
 const mail = $<HTMLAnchorElement>('mail-link');
-mail.href = `mailto:${BOOKINGS_EMAIL}`;
-mail.textContent = BOOKINGS_EMAIL;
+mail.href = `mailto:${CONTACT_EMAIL}`;
+mail.textContent = CONTACT_EMAIL;
 
 renderServices();
