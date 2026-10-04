@@ -421,3 +421,32 @@ h2 {
 .order .btn {
   align-self: flex-start;
 }
+
+/* Navegación hacia el sitio principal */
+.brand,
+.nav a,
+.foot a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav a {
+  color: var(--dim);
+}
+
+.nav a:hover,
+.brand:hover,
+.foot a:hover {
+  color: var(--fg);
+}
+
+.foot-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
