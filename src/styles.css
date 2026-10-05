@@ -1,13 +1,17 @@
-/* Pautas ROMMUSER v2: universo en blanco y negro. El estado se lee por
-   íconos y peso, no por color. */
+/* Mismo lenguaje que rommuser.com: fondo noche, texto hueso, League Spartan
+   para titulares, Poppins para el resto y un solo rojo de acento. El estado
+   del reporte se lee por íconos y peso; el rojo solo marca lo que hay que
+   corregir. */
 
 :root {
-  --bg: #000;
-  --fg: #fff;
-  --dim: rgba(255, 255, 255, 0.6);
-  --faint: rgba(255, 255, 255, 0.14);
-  --line: rgba(255, 255, 255, 0.24);
-  --radius: 4px;
+  --bg: #12130f;
+  --fg: #eae6e5;
+  --red: #c81d25;
+  --dim: rgba(234, 230, 229, 0.62);
+  --faint: rgba(234, 230, 229, 0.12);
+  --line: rgba(234, 230, 229, 0.24);
+  --radius: 0;
+  --display: 'League Spartan', 'Poppins', system-ui, sans-serif;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--fg);
   background: var(--bg);
@@ -29,7 +33,7 @@ body {
 main {
   flex: 1;
   width: 100%;
-  max-width: 760px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0 16px 64px;
 }
@@ -41,16 +45,34 @@ main {
   align-items: center;
   gap: 16px;
   padding: 20px 16px;
-  max-width: 760px;
+  max-width: 1120px;
   width: 100%;
   margin: 0 auto;
   font-size: 13px;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.top {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--faint);
+}
+
+.foot {
+  border-top: 1px solid var(--faint);
 }
 
 .brand {
+  font-family: var(--display);
   font-weight: 700;
-  letter-spacing: 0.24em;
+  font-size: 22px;
+  letter-spacing: -0.01em;
 }
 
 .dim,
@@ -62,23 +84,99 @@ main {
   color: var(--dim);
 }
 
-h1 {
-  font-size: clamp(36px, 8vw, 64px);
+h1,
+h2 {
+  font-family: var(--display);
   font-weight: 700;
-  line-height: 1;
-  margin: 48px 0 16px;
+  text-transform: uppercase;
   letter-spacing: -0.02em;
 }
 
+h1 {
+  font-size: clamp(56px, 13vw, 168px);
+  line-height: 0.88;
+  margin: 0 0 32px;
+}
+
 h2 {
-  font-size: 28px;
-  font-weight: 600;
-  margin: 0 0 8px;
+  font-size: clamp(40px, 7vw, 80px);
+  line-height: 0.92;
+  margin: 0 0 20px;
+}
+
+.hero {
+  padding: 36px 0 56px;
+}
+
+.eyebrow-row,
+.label {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.eyebrow,
+.label p {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 32px;
+}
+
+.label {
+  margin-top: 72px;
+}
+
+.label p:last-child {
+  text-align: right;
+}
+
+/* Etiqueta con barra roja, como «House y techno, con alma melódica.» */
+.hero-tag {
+  border-left: 4px solid var(--red);
+  padding-left: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 20px;
+}
+
+.hero h1::after {
+  content: '';
+  display: block;
+  width: min(360px, 60%);
+  height: 8px;
+  margin-top: 24px;
+  background: var(--red);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.link {
+  color: var(--fg);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--fg);
+}
+
+.link:hover {
+  border-color: var(--red);
 }
 
 .lead {
-  color: var(--dim);
-  font-weight: 300;
+  color: var(--fg);
+  font-weight: 400;
   font-size: 17px;
   line-height: 1.6;
   max-width: 560px;
@@ -95,14 +193,16 @@ h2 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 20px;
-  border: 1px solid var(--fg);
-  background: var(--fg);
-  color: var(--bg);
+  padding: 18px 26px;
+  border: 1px solid var(--red);
+  background: var(--red);
+  color: var(--fg);
+  text-decoration: none;
   font: inherit;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   border-radius: var(--radius);
   cursor: pointer;
 }
@@ -110,7 +210,7 @@ h2 {
 .btn.ghost {
   background: transparent;
   color: var(--fg);
-  border-color: var(--line);
+  border-color: var(--fg);
 }
 
 .btn:hover {
@@ -161,8 +261,11 @@ h2 {
   padding: 0;
   margin: 32px 0 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 8px 16px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
   text-align: left;
   color: var(--dim);
   font-size: 13px;
@@ -215,7 +318,9 @@ h2 {
 }
 
 .verdict-title {
-  font-size: 26px;
+  font-family: var(--display);
+  text-transform: uppercase;
+  font-size: 34px;
   font-weight: 700;
   margin-bottom: 4px !important;
 }
@@ -231,7 +336,7 @@ h2 {
 
 .verdict.corregir {
   border-width: 2px;
-  border-color: var(--fg);
+  border-color: var(--red);
 }
 
 .findings {
@@ -267,8 +372,8 @@ h2 {
 }
 
 .finding.corregir .tag {
-  background: var(--fg);
-  color: var(--bg);
+  background: var(--red);
+  color: var(--fg);
 }
 
 .finding.revisar .tag {
@@ -292,7 +397,7 @@ h2 {
 }
 
 .file.corregir {
-  border-color: var(--fg);
+  border-color: var(--red);
 }
 
 .file header {
@@ -337,7 +442,6 @@ h2 {
 
 /* Llamado a la acción */
 .cta {
-  border-top: 1px solid var(--line);
   padding-top: 48px;
 }
 
@@ -377,12 +481,15 @@ h2 {
 }
 
 .service-name {
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .service-price {
-  font-size: 24px;
+  font-family: var(--display);
+  font-size: 36px;
   font-weight: 700;
 }
 
@@ -420,4 +527,74 @@ h2 {
 
 .order .btn {
   align-self: flex-start;
+}
+
+/* Navegación hacia el sitio principal */
+.brand,
+.nav a,
+.foot a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media (max-width: 560px) {
+  .nav {
+    gap: 18px;
+  }
+
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .nav {
+    justify-content: flex-start;
+    gap: 16px;
+  }
+}
+
+.nav a {
+  color: var(--fg);
+}
+
+.nav .nav-cta {
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--red);
+}
+
+.nav a:hover,
+.brand:hover,
+.foot a:hover {
+  color: var(--dim);
+}
+
+.foot-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* `hidden` tiene que ganarle a los display de arriba (p. ej. el formulario). */
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 560px) {
+  .foot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.label p:first-child {
+  white-space: nowrap;
 }

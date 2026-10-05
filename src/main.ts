@@ -309,4 +309,14 @@ const mail = $<HTMLAnchorElement>('mail-link');
 mail.href = `mailto:${CONTACT_EMAIL}`;
 mail.textContent = CONTACT_EMAIL;
 
+// "Servicios" y "Ver precios" muestran los precios aunque no se haya hecho un chequeo.
+for (const id of ['nav-services', 'hero-services']) {
+  $(id).addEventListener('click', (e) => {
+    e.preventDefault();
+    $('cta').hidden = false;
+    $('cta').scrollIntoView({ behavior: 'smooth' });
+    track('nav_servicios', { desde: id });
+  });
+}
+
 renderServices();
