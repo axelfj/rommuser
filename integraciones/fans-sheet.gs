@@ -48,7 +48,7 @@ const WELCOME = {
       'No vas a recibir correos de más. Solo cuando valga la pena.',
       'Mientras tanto, cierra los ojos. Siente.',
     ],
-    leave: 'Si en algún momento quieres salir del círculo, responde a este correo con la palabra SILENCIO.',
+    leave: 'Si en algún momento quieres salir del círculo, responde a este correo con la palabra DESCONECTAR.',
   },
   en: {
     subject: 'You are in the Golden Circle',
@@ -58,7 +58,7 @@ const WELCOME = {
       'No extra emails. Only when it matters.',
       'Until then, close your eyes. Feel.',
     ],
-    leave: 'If you ever want to leave the circle, reply to this email with the word SILENCE.',
+    leave: 'If you ever want to leave the circle, reply to this email with the word DISCONNECT.',
   },
 };
 
