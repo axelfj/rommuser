@@ -56,6 +56,9 @@ const ERRORS_EN: Record<string, string> = {
   'El encabezado del AIFF está dañado.': 'The AIFF header is damaged.',
   'AIFF con tamaño de muestra no soportado.': 'AIFF sample size not supported.',
   'No pude leer este archivo.': "Couldn't read this file.",
+  'El WAV está incompleto: el export se cortó antes de terminar.': 'The WAV is incomplete: the export stopped before finishing.',
+  'El AIFF está incompleto: el export se cortó antes de terminar.': 'The AIFF is incomplete: the export stopped before finishing.',
+  'El análisis se detuvo. Probá de nuevo con este archivo.': 'The check stopped. Try this file again.',
 };
 
 export function errorText(message: string): string {

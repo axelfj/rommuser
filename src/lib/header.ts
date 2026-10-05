@@ -76,8 +76,13 @@ async function readWav(read: ReadFn, fileSize: number, is64: boolean): Promise<A
     } else if (id === 'data') {
       dataOffset = body;
       dataBytes = is64 && size === 0xffffffff && ds64DataSize !== null ? ds64DataSize : size;
-      // Algunos DAWs dejan el tamaño en 0 o mal si el export se cortó.
-      dataBytes = Math.min(dataBytes || fileSize - body, fileSize - body);
+      // Tamaño 0 o 0xFFFFFFFF: algunos DAWs lo dejan así al exportar en streaming.
+      // Cualquier otro tamaño mayor a lo que hay en el archivo es un export cortado.
+      const unknown = dataBytes === 0 || dataBytes === 0xffffffff;
+      if (!unknown && dataBytes > fileSize - body) {
+        throw new HeaderError('El WAV está incompleto: el export se cortó antes de terminar.');
+      }
+      dataBytes = unknown ? fileSize - body : dataBytes;
       if (fmt) break;
     }
     const step = id === 'data' ? dataBytes : size;
@@ -154,7 +159,10 @@ async function readAiff(read: ReadFn, fileSize: number, isAifc: boolean): Promis
       const ss = await read(body, 8);
       const off = ss.getUint32(0, false);
       dataOffset = body + 8 + off;
-      dataBytes = Math.min(Math.max(size - 8 - off, 0), fileSize - dataOffset);
+      dataBytes = Math.max(size - 8 - off, 0);
+      if (dataBytes > fileSize - dataOffset) {
+        throw new HeaderError('El AIFF está incompleto: el export se cortó antes de terminar.');
+      }
     }
     pos = body + size + (size % 2);
   }
