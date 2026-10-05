@@ -208,7 +208,6 @@ function renderReport(r: Report) {
   root.append(el('div', { class: 'report-actions' }, copy, again));
 
   root.hidden = false;
-  $('cta').hidden = false;
   root.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -309,14 +308,6 @@ const mail = $<HTMLAnchorElement>('mail-link');
 mail.href = `mailto:${CONTACT_EMAIL}`;
 mail.textContent = CONTACT_EMAIL;
 
-// "Servicios" y "Ver precios" muestran los precios aunque no se haya hecho un chequeo.
-for (const id of ['nav-services', 'hero-services']) {
-  $(id).addEventListener('click', (e) => {
-    e.preventDefault();
-    $('cta').hidden = false;
-    $('cta').scrollIntoView({ behavior: 'smooth' });
-    track('nav_servicios', { desde: id });
-  });
-}
+$('nav-services').addEventListener('click', () => track('nav_servicios', { desde: 'nav-services' }));
 
 renderServices();
