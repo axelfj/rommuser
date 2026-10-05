@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { analyzeBlob } from '../src/lib/analyze';
 import { buildReport, classify, reportToText, type FileEntry } from '../src/lib/checks';
+import { setLang } from '../src/lib/i18n';
 import { blobOf, makeWav, signals, type SynthOptions } from './fixtures';
 
 async function entry(name: string, opts: SynthOptions = {}): Promise<FileEntry> {
@@ -87,5 +88,21 @@ describe('buildReport', () => {
     const text = reportToText(r);
     expect(text).toContain('Resultado: Casi listo');
     expect(text).toContain('02 Bass.wav (48 kHz · 16 bit · estéreo');
+  });
+});
+
+describe('idioma', () => {
+  afterEach(() => setLang('es'));
+
+  it('los hallazgos y el reporte salen en inglés', async () => {
+    setLang('en');
+    const r = buildReport([
+      await entry('01 Kick.wav', { sampleRate: 44100 }),
+      await entry('02 Bass.wav', { sampleRate: 48000 }),
+      { name: 'roto.wav', kind: 'audio', error: 'No es un WAV válido.' },
+    ]);
+    expect(r.global[0].message).toMatch(/^Your stems have different sample rates/);
+    expect(r.files[2].findings[0].message).toBe('Not a valid WAV.');
+    expect(reportToText(r)).toMatch(/^Stem check · ROMMUSER Studio\nResult: Some things need fixing/);
   });
 });
