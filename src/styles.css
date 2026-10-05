@@ -513,10 +513,33 @@ h2 {
     justify-content: flex-start;
     gap: 16px;
   }
+
+  .lang-toggle {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
 }
 
 .nav a {
   color: var(--fg);
+}
+
+.lang-toggle {
+  font: 700 13px 'Poppins', system-ui, sans-serif;
+  letter-spacing: 0.1em;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--line);
+  min-width: 44px;
+  min-height: 40px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.lang-toggle:hover {
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .nav .nav-cta {

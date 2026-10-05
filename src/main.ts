@@ -1,4 +1,4 @@
-import { CONTACT_EMAIL, FORM_ENDPOINT, PAYMENT_TERMS, PLAUSIBLE_DOMAIN, SERVICES, type ServiceKey } from './config';
+import { CONTACT_EMAIL, FORM_ENDPOINT, PAYMENT_TERMS, PAYMENT_TERMS_EN, PLAUSIBLE_DOMAIN, SERVICES, type ServiceKey } from './config';
 import type { FileAnalysis } from './lib/analyze';
 import {
   buildReport,
@@ -13,6 +13,7 @@ import {
   type Report,
 } from './lib/checks';
 import { filesFromDrop, filesFromInput, type PickedFile } from './lib/files';
+import { lang, preferredLang, saveLang, setLang, tx, type Lang } from './lib/i18n';
 import type { WorkerRequest, WorkerResponse } from './worker';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -68,6 +69,7 @@ function analyzeInWorker(file: File, onProgress: (f: number) => void): Promise<F
 }
 
 let busy = false;
+let lastEntries: FileEntry[] | null = null;
 let lastReport: Report | null = null;
 
 async function run(picked: PickedFile[]) {
@@ -100,7 +102,7 @@ async function analyzeAll(picked: PickedFile[]) {
       entries.push({ name, kind });
       continue;
     }
-    label.textContent = `Revisando ${name}…`;
+    label.textContent = tx(`Revisando ${name}…`, `Checking ${name}…`);
     try {
       const analysis = await analyzeInWorker(p.file, (f) => {
         bar.style.width = `${(((doneBytes + f * p.file.size) / totalBytes) * 100).toFixed(1)}%`;
@@ -113,6 +115,7 @@ async function analyzeAll(picked: PickedFile[]) {
   }
 
   const report = buildReport(entries);
+  lastEntries = entries;
   lastReport = report;
   progress.hidden = true;
   bar.style.width = '0';
@@ -122,32 +125,44 @@ async function analyzeAll(picked: PickedFile[]) {
 
 // --- Reporte ------------------------------------------------------------------
 
-const LEVEL_LABEL = { corregir: 'Corregir', revisar: 'Revisar', info: 'Nota' } as const;
 const LEVEL_ICON = { corregir: '✕', revisar: '!', info: '·' } as const;
+
+function levelLabel(level: Finding['level']) {
+  return { corregir: tx('Corregir', 'Fix'), revisar: tx('Revisar', 'Check'), info: tx('Nota', 'Note') }[level];
+}
 
 function findingItem(f: Finding) {
   return el(
     'li',
     { class: `finding ${f.level}` },
-    el('span', { class: 'tag', 'aria-label': LEVEL_LABEL[f.level] }, LEVEL_ICON[f.level]),
+    el('span', { class: 'tag', 'aria-label': levelLabel(f.level) }, LEVEL_ICON[f.level]),
     el('span', {}, f.message),
   );
 }
 
-function renderReport(r: Report) {
+function renderReport(r: Report, scroll = true) {
   const root = $('report');
   root.replaceChildren();
 
   const verdictText = {
-    listo: ['Listo para mezcla', 'Tus stems están bien exportados. Podés mandarlos tranquilo.'],
-    casi: ['Casi listo', 'Se puede mezclar, pero hay detalles que conviene revisar.'],
-    corregir: ['Corregí antes de mandar', 'Hay problemas que van a costar tiempo (y plata) en la mezcla.'],
+    listo: [
+      tx('Listo para mezcla', 'Ready to mix'),
+      tx('Tus stems están bien exportados. Podés mandarlos tranquilo.', 'Your stems are exported right. Send them with confidence.'),
+    ],
+    casi: [
+      tx('Casi listo', 'Almost ready'),
+      tx('Se puede mezclar, pero hay detalles que conviene revisar.', 'They can be mixed, but a few details are worth checking.'),
+    ],
+    corregir: [
+      tx('Corregí antes de mandar', 'Fix before sending'),
+      tx('Hay problemas que van a costar tiempo (y plata) en la mezcla.', 'Some problems will cost time (and money) in the mix.'),
+    ],
   }[r.verdict];
 
   const summary = [
-    `${r.files.length} ${r.files.length === 1 ? 'archivo' : 'archivos'}`,
-    r.counts.corregir ? `${r.counts.corregir} para corregir` : '',
-    r.counts.revisar ? `${r.counts.revisar} para revisar` : '',
+    `${r.files.length} ${r.files.length === 1 ? tx('archivo', 'file') : tx('archivos', 'files')}`,
+    r.counts.corregir ? tx(`${r.counts.corregir} para corregir`, `${r.counts.corregir} to fix`) : '',
+    r.counts.revisar ? tx(`${r.counts.revisar} para revisar`, `${r.counts.revisar} to check`) : '',
   ]
     .filter(Boolean)
     .join(' · ');
@@ -190,17 +205,28 @@ function renderReport(r: Report) {
   root.append(list);
 
   if (r.ignored.length) {
-    root.append(el('p', { class: 'fine' }, `Ignoré ${r.ignored.length} archivo(s) que no son audio (${r.ignored.slice(0, 3).join(', ')}${r.ignored.length > 3 ? '…' : ''}).`));
+    const names = `${r.ignored.slice(0, 3).join(', ')}${r.ignored.length > 3 ? '…' : ''}`;
+    root.append(
+      el(
+        'p',
+        { class: 'fine' },
+        tx(
+          `Ignoré ${r.ignored.length} archivo(s) que no son audio (${names}).`,
+          `Skipped ${r.ignored.length} non-audio file(s) (${names}).`,
+        ),
+      ),
+    );
   }
 
-  const copy = el('button', { class: 'btn ghost', type: 'button' }, 'Copiar reporte');
+  const copyLabel = tx('Copiar reporte', 'Copy report');
+  const copy = el('button', { class: 'btn ghost', type: 'button' }, copyLabel);
   copy.addEventListener('click', async () => {
     await navigator.clipboard.writeText(reportToText(r));
-    copy.textContent = 'Copiado';
-    setTimeout(() => (copy.textContent = 'Copiar reporte'), 2000);
+    copy.textContent = tx('Copiado', 'Copied');
+    setTimeout(() => (copy.textContent = copyLabel), 2000);
     track('copiar_reporte');
   });
-  const again = el('button', { class: 'btn ghost', type: 'button' }, 'Revisar otra carpeta');
+  const again = el('button', { class: 'btn ghost', type: 'button' }, tx('Revisar otra carpeta', 'Check another folder'));
   again.addEventListener('click', () => {
     root.hidden = true;
     $('drop').scrollIntoView({ behavior: 'smooth' });
@@ -208,11 +234,11 @@ function renderReport(r: Report) {
   root.append(el('div', { class: 'report-actions' }, copy, again));
 
   root.hidden = false;
-  root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (scroll) root.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function metaLine(a: FileAnalysis) {
-  return `${formatFormat(a)} · ${formatDuration(duration(a))} · pico ${formatPeak(a.stats.peak)}`;
+  return `${formatFormat(a)} · ${formatDuration(duration(a))} · ${tx('pico', 'peak')} ${formatPeak(a.stats.peak)}`;
 }
 
 // --- Pedido -------------------------------------------------------------------
@@ -221,14 +247,16 @@ const form = $<HTMLFormElement>('order');
 
 function renderServices() {
   const wrap = $('services');
+  const selected = (form.elements.namedItem('servicio') as HTMLInputElement).value;
+  wrap.replaceChildren();
   for (const key of Object.keys(SERVICES) as ServiceKey[]) {
     const s = SERVICES[key];
     const btn = el(
       'button',
-      { class: 'service', type: 'button', 'data-service': key },
+      { class: key === selected ? 'service selected' : 'service', type: 'button', 'data-service': key },
       el('span', { class: 'service-name' }, s.label),
-      el('span', { class: 'service-price' }, s.price),
-      el('span', { class: 'fine' }, s.detail),
+      el('span', { class: 'service-price' }, tx(s.price, s.priceEn)),
+      el('span', { class: 'fine' }, tx(s.detail, s.detailEn)),
     );
     btn.addEventListener('click', () => {
       wrap.querySelectorAll('.service').forEach((b) => b.classList.toggle('selected', b === btn));
@@ -239,7 +267,7 @@ function renderServices() {
     });
     wrap.append(btn);
   }
-  $('terms').textContent = `${PAYMENT_TERMS} Te respondo desde ${CONTACT_EMAIL}.`;
+  $('terms').textContent = tx(`${PAYMENT_TERMS} Te respondo desde ${CONTACT_EMAIL}.`, `${PAYMENT_TERMS_EN} I'll reply from ${CONTACT_EMAIL}.`);
 }
 
 form.addEventListener('submit', async (e) => {
@@ -251,7 +279,7 @@ form.addEventListener('submit', async (e) => {
   track('pedido', { servicio: data.servicio });
 
   if (FORM_ENDPOINT) {
-    status.textContent = 'Enviando…';
+    status.textContent = tx('Enviando…', 'Sending…');
     try {
       const res = await fetch(FORM_ENDPOINT, {
         method: 'POST',
@@ -260,18 +288,18 @@ form.addEventListener('submit', async (e) => {
       });
       if (!res.ok) throw new Error(String(res.status));
       form.reset();
-      status.textContent = 'Listo, te escribo pronto.';
+      status.textContent = tx('Listo, te escribo pronto.', "Done, I'll write to you soon.");
       return;
     } catch {
-      status.textContent = `No se pudo enviar. Escribime a ${CONTACT_EMAIL}.`;
+      status.textContent = tx(`No se pudo enviar. Escribime a ${CONTACT_EMAIL}.`, `Couldn't send. Email me at ${CONTACT_EMAIL}.`);
       return;
     }
   }
 
   const body = [
-    `Nombre: ${data.nombre}`,
-    `Correo: ${data.correo}`,
-    `Servicio: ${service.label} (${service.price})`,
+    `${tx('Nombre', 'Name')}: ${data.nombre}`,
+    `${tx('Correo', 'Email')}: ${data.correo}`,
+    `${tx('Servicio', 'Service')}: ${service.label} (${tx(service.price, service.priceEn)})`,
     data.link ? `Stems: ${data.link}` : '',
     data.mensaje ? `\n${data.mensaje}` : '',
     reporte ? `\n---\n${reporte}` : '',
@@ -280,7 +308,7 @@ form.addEventListener('submit', async (e) => {
     .join('\n');
   const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`${service.label} · ${data.nombre}`)}&body=${encodeURIComponent(body)}`;
   window.location.href = href;
-  status.textContent = `Se abrió tu correo. Si no, escribime a ${CONTACT_EMAIL}.`;
+  status.textContent = tx(`Se abrió tu correo. Si no, escribime a ${CONTACT_EMAIL}.`, `Your email app opened. If not, email me at ${CONTACT_EMAIL}.`);
 });
 
 // --- Entrada de archivos --------------------------------------------------------
@@ -310,4 +338,47 @@ mail.textContent = CONTACT_EMAIL;
 
 $('nav-services').addEventListener('click', () => track('nav_servicios', { desde: 'nav-services' }));
 
-renderServices();
+// --- Idioma -------------------------------------------------------------------
+
+const META = {
+  es: {
+    title: 'Chequeo de stems · ROMMUSER Studio',
+    description: 'Revisá tus stems antes de mandarlos a mezclar: sample rate, clipping, largos y más. Gratis y sin subir tus archivos.',
+  },
+  en: {
+    title: 'Stem check · ROMMUSER Studio',
+    description: 'Check your stems before you send them to mix: sample rate, clipping, lengths and more. Free, and your files are never uploaded.',
+  },
+};
+
+function applyLang(next: Lang) {
+  setLang(next);
+  document.documentElement.lang = next;
+  document.title = META[next].title;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', META[next].description);
+  document.querySelectorAll<HTMLElement>('[data-en]').forEach((node) => {
+    node.dataset.es ??= node.textContent?.trim() ?? '';
+    node.textContent = next === 'en' ? node.dataset.en! : node.dataset.es;
+  });
+  document.querySelectorAll<HTMLElement>('[data-en-aria-label]').forEach((node) => {
+    node.dataset.esAriaLabel ??= node.getAttribute('aria-label') ?? '';
+    node.setAttribute('aria-label', next === 'en' ? node.dataset.enAriaLabel! : node.dataset.esAriaLabel);
+  });
+  const toggle = $('lang-toggle');
+  toggle.textContent = next.toUpperCase();
+  toggle.setAttribute('aria-label', tx('Switch to English', 'Cambiar a español'));
+  renderServices();
+  if (lastEntries && !$('report').hidden) {
+    lastReport = buildReport(lastEntries);
+    renderReport(lastReport, false);
+  }
+}
+
+$('lang-toggle').addEventListener('click', () => {
+  const next = lang() === 'es' ? 'en' : 'es';
+  saveLang(next);
+  applyLang(next);
+  track('idioma', { idioma: next });
+});
+
+applyLang(preferredLang());

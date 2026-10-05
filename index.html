@@ -17,41 +17,42 @@
     <header class="top">
       <a class="brand" href="https://rommuser.com">ROMMUSER <span class="dim">/ STUDIO</span></a>
       <nav class="nav" aria-label="ROMMUSER">
-        <a href="#drop">Chequeo</a>
-        <a href="#cta" id="nav-services">Servicios</a>
+        <a href="#drop" data-en="Check">Chequeo</a>
+        <a href="#cta" id="nav-services" data-en="Services">Servicios</a>
         <a href="https://rommuser.com" class="nav-cta">rommuser.com</a>
+        <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch to English">ES</button>
       </nav>
     </header>
 
     <main>
       <section class="intro">
-        <h1>Chequeo de stems</h1>
-        <p class="lead">
+        <h1 data-en="Stem check">Chequeo de stems</h1>
+        <p class="lead" data-en="Make sure your stems are exported right before you send them to mix. Everything runs in your browser: your files are never uploaded.">
           Revisá que tus stems estén bien exportados antes de mandarlos a mezclar.
           Todo pasa en tu navegador: tus archivos no se suben a ningún lado.
         </p>
       </section>
 
-            <section id="drop" class="drop" tabindex="0" aria-label="Soltá aquí tu carpeta de stems">
-        <p class="drop-title">Soltá aquí la carpeta de stems</p>
-        <p class="drop-sub">WAV o AIFF · todos los que quieras</p>
+            <section id="drop" class="drop" tabindex="0" aria-label="Soltá aquí tu carpeta de stems" data-en-aria-label="Drop your stems folder here">
+        <p class="drop-title" data-en="Drop your stems folder here">Soltá aquí la carpeta de stems</p>
+        <p class="drop-sub" data-en="WAV or AIFF · as many as you like">WAV o AIFF · todos los que quieras</p>
         <div class="drop-actions">
           <label class="btn">
-            Elegir carpeta
+            <span data-en="Choose folder">Elegir carpeta</span>
             <input id="pick-folder" type="file" webkitdirectory multiple hidden />
           </label>
           <label class="btn ghost">
-            Elegir archivos
+            <span data-en="Choose files">Elegir archivos</span>
             <input id="pick-files" type="file" accept=".wav,.wave,.aif,.aiff,.aifc,.bwf,.mp3,.m4a,.flac" multiple hidden />
           </label>
         </div>
         <ul class="checks-list">
-          <li>Sample rate igual en todos</li>
-          <li>Clipping y picos</li>
-          <li>Mismo largo, desde el inicio</li>
-          <li>Pistas en silencio</li>
-          <li>Mono guardado en estéreo</li>
-          <li>Bit depth y nombres</li>
+          <li data-en="Same sample rate on all">Sample rate igual en todos</li>
+          <li data-en="Clipping and peaks">Clipping y picos</li>
+          <li data-en="Same length, from the start">Mismo largo, desde el inicio</li>
+          <li data-en="Silent tracks">Pistas en silencio</li>
+          <li data-en="Mono saved as stereo">Mono guardado en estéreo</li>
+          <li data-en="Bit depth and names">Bit depth y nombres</li>
         </ul>
       </section>
 
@@ -63,16 +64,16 @@
       <section id="report" class="report" hidden></section>
 
       <section id="cta" class="cta">
-        <h2>Mezcla y master</h2>
-        <p class="lead">Mezclo y masterizo house y techno con alma melódica. Contame del track y te respondo con los siguientes pasos.</p>
+        <h2 data-en="Mixing and mastering">Mezcla y master</h2>
+        <p class="lead" data-en="I mix and master house and techno with a melodic soul. Tell me about your track and I’ll reply with next steps.">Mezclo y masterizo house y techno con alma melódica. Contame del track y te respondo con los siguientes pasos.</p>
         <div class="services" id="services"></div>
         <form id="order" class="order" hidden>
           <input type="hidden" name="servicio" />
-          <label>Nombre o nombre artístico<input name="nombre" required autocomplete="name" /></label>
-          <label>Correo<input name="correo" type="email" required autocomplete="email" /></label>
-          <label>Link a los stems (Drive, WeTransfer, Dropbox…)<input name="link" type="url" placeholder="https://" /></label>
-          <label>Algo que deba saber (referencias, fecha de salida, sello…)<textarea name="mensaje" rows="3"></textarea></label>
-          <button class="btn" type="submit">Enviar</button>
+          <label><span data-en="Name or artist name">Nombre o nombre artístico</span><input name="nombre" required autocomplete="name" /></label>
+          <label><span data-en="Email">Correo</span><input name="correo" type="email" required autocomplete="email" /></label>
+          <label><span data-en="Link to your stems (Drive, WeTransfer, Dropbox…)">Link a los stems (Drive, WeTransfer, Dropbox…)</span><input name="link" type="url" placeholder="https://" /></label>
+          <label><span data-en="Anything I should know (references, release date, label…)">Algo que deba saber (referencias, fecha de salida, sello…)</span><textarea name="mensaje" rows="3"></textarea></label>
+          <button class="btn" type="submit" data-en="Send">Enviar</button>
           <p class="fine" id="terms"></p>
           <p class="fine" id="order-status" role="status"></p>
         </form>

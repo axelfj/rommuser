@@ -1,7 +1,8 @@
-// Convierte el análisis de cada archivo en hallazgos en español, con tres
+// Convierte el análisis de cada archivo en hallazgos (español o inglés), con tres
 // niveles: corregir (no se puede mezclar así), revisar (conviene) y bien.
 
 import { toDb, type FileAnalysis } from './analyze';
+import { errorText, tx } from './i18n';
 
 export type Level = 'corregir' | 'revisar' | 'info';
 
@@ -68,13 +69,13 @@ export function formatDuration(seconds: number): string {
 export function formatFormat(a: FileAnalysis): string {
   const h = a.header;
   const depth = h.encoding === 'float' ? `${h.bitsPerSample} float` : `${h.bitsPerSample} bit`;
-  const ch = h.channels === 1 ? 'mono' : h.channels === 2 ? 'estéreo' : `${h.channels} canales`;
+  const ch = h.channels === 1 ? 'mono' : h.channels === 2 ? tx('estéreo', 'stereo') : tx(`${h.channels} canales`, `${h.channels} channels`);
   return `${formatRate(h.sampleRate)} · ${depth} · ${ch}`;
 }
 
 export function formatPeak(peak: number): string {
   const db = toDb(peak);
-  return Number.isFinite(db) ? `${db.toFixed(1)} dBFS` : 'silencio';
+  return Number.isFinite(db) ? `${db.toFixed(1)} dBFS` : tx('silencio', 'silent');
 }
 
 export function duration(a: FileAnalysis): number {
@@ -106,16 +107,16 @@ export function buildReport(entries: FileEntry[]): Report {
       findings.push({
         level: 'corregir',
         code: 'lossy',
-        message: 'Formato con pérdida (MP3/AAC). Para mezcla mandá WAV o AIFF.',
+        message: tx('Formato con pérdida (MP3/AAC). Para mezcla mandá WAV o AIFF.', 'Lossy format (MP3/AAC). For mixing, send WAV or AIFF.'),
       });
     } else if (e.kind === 'flac') {
       findings.push({
         level: 'revisar',
         code: 'flac',
-        message: 'FLAC todavía no lo reviso. Exportalo en WAV para chequearlo.',
+        message: tx('FLAC todavía no lo reviso. Exportalo en WAV para chequearlo.', "FLAC isn't supported yet. Export it as WAV to check it."),
       });
     } else if (e.error || !e.analysis) {
-      findings.push({ level: 'corregir', code: 'unreadable', message: e.error ?? 'No pude leer este archivo.' });
+      findings.push({ level: 'corregir', code: 'unreadable', message: errorText(e.error ?? 'No pude leer este archivo.') });
     } else {
       findings.push(...fileFindings(e.name, e.analysis));
     }
@@ -131,14 +132,20 @@ export function buildReport(entries: FileEntry[]): Report {
     global.push({
       level: 'corregir',
       code: 'rate-mismatch',
-      message: `Hay stems con sample rates distintos (${rates.map(formatRate).join(', ')}). Exportá todo al mismo, idealmente ${formatRate(main)}.`,
+      message: tx(
+        `Hay stems con sample rates distintos (${rates.map(formatRate).join(', ')}). Exportá todo al mismo, idealmente ${formatRate(main)}.`,
+        `Your stems have different sample rates (${rates.map(formatRate).join(', ')}). Export them all at the same one, ideally ${formatRate(main)}.`,
+      ),
     });
     for (const f of analyzed) {
       if (f.analysis.header.sampleRate !== main) {
         f.findings.unshift({
           level: 'corregir',
           code: 'rate-odd-one',
-          message: `Está a ${formatRate(f.analysis.header.sampleRate)} y la mayoría a ${formatRate(main)}.`,
+          message: tx(
+            `Está a ${formatRate(f.analysis.header.sampleRate)} y la mayoría a ${formatRate(main)}.`,
+            `It's at ${formatRate(f.analysis.header.sampleRate)} and most are at ${formatRate(main)}.`,
+          ),
         });
       }
     }
@@ -152,14 +159,20 @@ export function buildReport(entries: FileEntry[]): Report {
       global.push({
         level: 'corregir',
         code: 'length-mismatch',
-        message: 'Los stems no duran lo mismo. Exportá todos desde el inicio de la canción hasta el mismo final, para que caigan alineados.',
+        message: tx(
+          'Los stems no duran lo mismo. Exportá todos desde el inicio de la canción hasta el mismo final, para que caigan alineados.',
+          'Your stems have different lengths. Export them all from the start of the song to the same end point so they line up.',
+        ),
       });
       analyzed.forEach((f, i) => {
         if (longest - durs[i] > LENGTH_TOLERANCE_S) {
           f.findings.push({
             level: 'corregir',
             code: 'shorter',
-            message: `Dura ${formatDuration(durs[i])} y el más largo ${formatDuration(longest)}.`,
+            message: tx(
+              `Dura ${formatDuration(durs[i])} y el más largo ${formatDuration(longest)}.`,
+              `It's ${formatDuration(durs[i])} long and the longest is ${formatDuration(longest)}.`,
+            ),
           });
         }
       });
@@ -171,14 +184,20 @@ export function buildReport(entries: FileEntry[]): Report {
     global.push({
       level: 'info',
       code: 'numbering',
-      message: 'Tip: numerá los stems (01 Kick, 02 Bass, 03 Pads…) para que la sesión abra en orden.',
+      message: tx(
+        'Tip: numerá los stems (01 Kick, 02 Bass, 03 Pads…) para que la sesión abra en orden.',
+        'Tip: number your stems (01 Kick, 02 Bass, 03 Pads…) so the session opens in order.',
+      ),
     });
   }
   if (files.length === 1 && analyzed.length === 1) {
     global.push({
       level: 'info',
       code: 'single',
-      message: 'Un solo archivo: si es para mastering, perfecto. Si es para mezcla, mandá cada pista por separado.',
+      message: tx(
+        'Un solo archivo: si es para mastering, perfecto. Si es para mezcla, mandá cada pista por separado.',
+        'Just one file: perfect for mastering. For mixing, send each track separately.',
+      ),
     });
   }
 
@@ -201,61 +220,88 @@ function fileFindings(name: string, a: FileAnalysis): Finding[] {
     out.push({
       level: 'corregir',
       code: 'silent',
-      message: 'Está en silencio (o casi). ¿Se exportó la pista equivocada o con el canal en mute?',
+      message: tx(
+        'Está en silencio (o casi). ¿Se exportó la pista equivocada o con el canal en mute?',
+        'It is silent (or nearly). Was the wrong track exported, or the channel muted?',
+      ),
     });
   }
   if (s.clipEvents > 0) {
     out.push({
       level: 'corregir',
       code: 'clipping',
-      message: `Clipping: ${s.clipEvents} ${s.clipEvents === 1 ? 'punto' : 'puntos'} donde la señal se pega a 0 dBFS. Bajá el fader o quitá el limitador del master y re-exportá.`,
+      message: tx(
+        `Clipping: ${s.clipEvents} ${s.clipEvents === 1 ? 'punto' : 'puntos'} donde la señal se pega a 0 dBFS. Bajá el fader o quitá el limitador del master y re-exportá.`,
+        `Clipping: ${s.clipEvents} ${s.clipEvents === 1 ? 'spot' : 'spots'} where the signal hits 0 dBFS. Lower the fader or remove the master limiter and re-export.`,
+      ),
     });
   } else if (s.overSamples > 0) {
     out.push({
       level: 'revisar',
       code: 'over',
-      message: `Pasa de 0 dBFS (pico ${peakDb.toFixed(1)} dBFS). En 32 float no se rompe, pero bajalo para dejar margen.`,
+      message: tx(
+        `Pasa de 0 dBFS (pico ${peakDb.toFixed(1)} dBFS). En 32 float no se rompe, pero bajalo para dejar margen.`,
+        `It goes over 0 dBFS (peak ${peakDb.toFixed(1)} dBFS). 32-bit float won't break, but turn it down to leave headroom.`,
+      ),
     });
   } else if (peakDb > HOT_PEAK_DB && peakDb >= SILENCE_DB) {
     out.push({
       level: 'revisar',
       code: 'hot',
-      message: `Pico a ${peakDb.toFixed(1)} dBFS. Dejá algo de margen: entre −6 y −3 dBFS está bien.`,
+      message: tx(
+        `Pico a ${peakDb.toFixed(1)} dBFS. Dejá algo de margen: entre −6 y −3 dBFS está bien.`,
+        `Peak at ${peakDb.toFixed(1)} dBFS. Leave some headroom: −6 to −3 dBFS is fine.`,
+      ),
     });
   }
   if (!STANDARD_RATES.includes(h.sampleRate)) {
     out.push({
       level: 'revisar',
       code: 'rate-unusual',
-      message: `Sample rate poco común (${formatRate(h.sampleRate)}). Lo normal es 44.1 o 48 kHz.`,
+      message: tx(
+        `Sample rate poco común (${formatRate(h.sampleRate)}). Lo normal es 44.1 o 48 kHz.`,
+        `Unusual sample rate (${formatRate(h.sampleRate)}). 44.1 or 48 kHz is standard.`,
+      ),
     });
   }
   if (h.encoding !== 'float' && h.bitsPerSample < 24) {
     out.push({
       level: 'revisar',
       code: 'low-bits',
-      message: `${h.bitsPerSample} bits: mejor exportar a 24 bits o 32 float para tener más detalle y margen.`,
+      message: tx(
+        `${h.bitsPerSample} bits: mejor exportar a 24 bits o 32 float para tener más detalle y margen.`,
+        `${h.bitsPerSample}-bit: better to export at 24-bit or 32-bit float for more detail and headroom.`,
+      ),
     });
   }
   if (h.channels === 2 && s.identicalChannels) {
     out.push({
       level: 'info',
       code: 'fake-stereo',
-      message: 'Es mono guardado en estéreo (L y R idénticos). Podés exportarlo mono.',
+      message: tx(
+        'Es mono guardado en estéreo (L y R idénticos). Podés exportarlo mono.',
+        'This is mono saved as stereo (L and R are identical). You can export it as mono.',
+      ),
     });
   }
   if (h.channels > 2) {
     out.push({
       level: 'revisar',
       code: 'multichannel',
-      message: `Tiene ${h.channels} canales. Para mezcla en estéreo mandá mono o estéreo.`,
+      message: tx(
+        `Tiene ${h.channels} canales. Para mezcla en estéreo mandá mono o estéreo.`,
+        `It has ${h.channels} channels. For a stereo mix, send mono or stereo.`,
+      ),
     });
   }
   if (GENERIC_NAME.test(baseName(name).trim())) {
     out.push({
       level: 'revisar',
       code: 'generic-name',
-      message: 'Nombre genérico. Ponele qué es (Kick, Bass, Vox…) para no perderse en la sesión.',
+      message: tx(
+        'Nombre genérico. Ponele qué es (Kick, Bass, Vox…) para no perderse en la sesión.',
+        'Generic name. Say what it is (Kick, Bass, Vox…) so nothing gets lost in the session.',
+      ),
     });
   }
   return out;
@@ -264,14 +310,18 @@ function fileFindings(name: string, a: FileAnalysis): Finding[] {
 /** Texto plano para copiar y pegar en un correo o WhatsApp. */
 export function reportToText(r: Report): string {
   const lines: string[] = [];
-  const title = { listo: 'Listo para mezcla', casi: 'Casi listo', corregir: 'Hay cosas que corregir' }[r.verdict];
-  lines.push(`Chequeo de stems · ROMMUSER Studio`, `Resultado: ${title}`, '');
+  const title = {
+    listo: tx('Listo para mezcla', 'Ready to mix'),
+    casi: tx('Casi listo', 'Almost ready'),
+    corregir: tx('Hay cosas que corregir', 'Some things need fixing'),
+  }[r.verdict];
+  lines.push(tx('Chequeo de stems · ROMMUSER Studio', 'Stem check · ROMMUSER Studio'), `${tx('Resultado', 'Result')}: ${title}`, '');
   for (const g of r.global) lines.push(`• ${g.message}`);
   if (r.global.length) lines.push('');
   for (const f of r.files) {
     const a = f.analysis;
     const meta = a
-      ? ` (${formatFormat(a)} · ${formatDuration(duration(a))} · pico ${formatPeak(a.stats.peak)})`
+      ? ` (${formatFormat(a)} · ${formatDuration(duration(a))} · ${tx('pico', 'peak')} ${formatPeak(a.stats.peak)})`
       : '';
     lines.push(`${f.name}${meta}`);
     for (const x of f.findings) lines.push(`   - ${x.message}`);
