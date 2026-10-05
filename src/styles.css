@@ -93,70 +93,23 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(56px, 13vw, 168px);
-  line-height: 0.88;
-  margin: 0 0 32px;
+  font-size: clamp(36px, 6vw, 56px);
+  line-height: 0.95;
+  margin: 0 0 16px;
 }
 
 h2 {
-  font-size: clamp(40px, 7vw, 80px);
-  line-height: 0.92;
-  margin: 0 0 20px;
+  font-size: clamp(28px, 4.5vw, 40px);
+  line-height: 0.95;
+  margin: 0 0 16px;
 }
 
-.hero {
-  padding: 36px 0 56px;
+.intro {
+  padding: 40px 0 24px;
 }
 
-.eyebrow-row,
-.label {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.eyebrow,
-.label p {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin: 0 0 32px;
-}
-
-.label {
-  margin-top: 72px;
-}
-
-.label p:last-child {
-  text-align: right;
-}
-
-/* Etiqueta con barra roja, como «House y techno, con alma melódica.» */
-.hero-tag {
-  border-left: 4px solid var(--red);
-  padding-left: 12px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin: 0 0 20px;
-}
-
-.hero h1::after {
-  content: '';
-  display: block;
-  width: min(360px, 60%);
-  height: 8px;
-  margin-top: 24px;
-  background: var(--red);
-}
-
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
+.intro .lead {
+  margin-bottom: 0;
 }
 
 .link {
@@ -595,6 +548,3 @@ h2 {
   }
 }
 
-.label p:first-child {
-  white-space: nowrap;
-}
