@@ -6,7 +6,7 @@
 :root {
   --bg: #12130f;
   --fg: #eae6e5;
-  --red: #c81c25;
+  --red: #c81d25;
   --dim: rgba(234, 230, 229, 0.62);
   --faint: rgba(234, 230, 229, 0.12);
   --line: rgba(234, 230, 229, 0.24);
@@ -70,7 +70,7 @@ main {
 
 .brand {
   font-family: var(--display);
-  font-weight: 800;
+  font-weight: 700;
   font-size: 22px;
   letter-spacing: -0.01em;
 }
@@ -87,7 +87,7 @@ main {
 h1,
 h2 {
   font-family: var(--display);
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
 }
@@ -321,7 +321,7 @@ h2 {
   font-family: var(--display);
   text-transform: uppercase;
   font-size: 34px;
-  font-weight: 800;
+  font-weight: 700;
   margin-bottom: 4px !important;
 }
 
@@ -490,7 +490,7 @@ h2 {
 .service-price {
   font-family: var(--display);
   font-size: 36px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .order {
