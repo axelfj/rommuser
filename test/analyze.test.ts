@@ -99,3 +99,31 @@ describe('analyzeBlob', () => {
     expect(seen.at(-1)).toBe(1);
   });
 });
+
+describe('archivos cortados', () => {
+  it('WAV con menos audio del que declara se rechaza', async () => {
+    const full = makeWav({ seconds: 0.1 });
+    await expect(header(full.slice(0, full.byteLength - 4))).rejects.toThrow(HeaderError);
+  });
+
+  it('AIFF con menos audio del que declara se rechaza', async () => {
+    const full = makeAiff({ seconds: 0.1 });
+    await expect(header(full.slice(0, full.byteLength - 4))).rejects.toThrow(HeaderError);
+  });
+
+  it('WAV con tamaño 0 en data (export en streaming) se sigue leyendo', async () => {
+    const wav = makeWav({ seconds: 0.1 });
+    const view = new DataView(wav.buffer);
+    for (let p = 12; p + 8 <= wav.byteLength; ) {
+      const id = String.fromCharCode(...wav.slice(p, p + 4));
+      const size = view.getUint32(p + 4, true);
+      if (id === 'data') {
+        view.setUint32(p + 4, 0, true);
+        break;
+      }
+      p += 8 + size + (size % 2);
+    }
+    const h = await header(wav);
+    expect(h.frames).toBe(Math.round(0.1 * 48000));
+  });
+});

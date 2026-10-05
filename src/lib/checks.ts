@@ -201,6 +201,18 @@ export function buildReport(entries: FileEntry[]): Report {
     });
   }
 
+  // Sin ningún archivo de audio no hay nada que dar por listo.
+  if (files.length === 0) {
+    global.push({
+      level: 'corregir',
+      code: 'no-audio',
+      message: tx(
+        'No encontré archivos de audio. Elegí la carpeta con los stems en WAV o AIFF.',
+        'No audio files found. Choose the folder with your WAV or AIFF stems.',
+      ),
+    });
+  }
+
   let corregir = global.filter((g) => g.level === 'corregir').length;
   let revisar = global.filter((g) => g.level === 'revisar').length;
   for (const f of files) {

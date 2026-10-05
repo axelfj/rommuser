@@ -77,6 +77,12 @@ describe('buildReport', () => {
     expect(r.files[0].findings[0]).toMatchObject({ level: 'corregir', message: 'No es un WAV válido.' });
   });
 
+  it('sin audio no queda listo', () => {
+    const r = buildReport([{ name: 'notes.txt', kind: 'ignored' }]);
+    expect(r.verdict).toBe('corregir');
+    expect(codes(r.global)).toEqual(['no-audio']);
+  });
+
   it('pide numerar si nadie está numerado', async () => {
     const r = buildReport([await entry('Kick.wav'), await entry('Bass.wav'), await entry('Pads.wav')]);
     expect(codes(r.global)).toContain('numbering');

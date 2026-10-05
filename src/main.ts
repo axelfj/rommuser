@@ -49,21 +49,78 @@ function track(event: string, props?: Record<string, string | number>) {
 
 // --- Análisis -----------------------------------------------------------------
 
-const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
+// Si el worker se cae o deja de avisar progreso, el archivo se marca como no leído
+// en vez de dejar el chequeo colgado.
+const STALL_MS = 60_000;
+const STALLED = 'El análisis se detuvo. Probá de nuevo con este archivo.';
+
+interface Pending {
+  resolve: (a: FileAnalysis) => void;
+  reject: (e: Error) => void;
+  onProgress: (f: number) => void;
+  timer: number;
+}
+
+let worker = startWorker();
 let nextId = 0;
+const pending = new Map<number, Pending>();
+
+function startWorker() {
+  const w = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
+  w.addEventListener('message', (e: MessageEvent<WorkerResponse>) => {
+    const msg = e.data;
+    const job = pending.get(msg.id);
+    if (!job) return;
+    if (msg.type === 'progress') {
+      armTimer(msg.id, job);
+      return job.onProgress(msg.fraction);
+    }
+    finish(msg.id);
+    if (msg.type === 'done') job.resolve(msg.analysis);
+    else job.reject(new Error(msg.message));
+  });
+  w.addEventListener('error', (e) => {
+    e.preventDefault();
+    failAll();
+  });
+  w.addEventListener('messageerror', failAll);
+  return w;
+}
+
+function armTimer(id: number, job: Pending) {
+  clearTimeout(job.timer);
+  job.timer = window.setTimeout(() => {
+    finish(id);
+    job.reject(new Error(STALLED));
+    restartWorker();
+  }, STALL_MS);
+}
+
+function finish(id: number) {
+  const job = pending.get(id);
+  if (job) clearTimeout(job.timer);
+  pending.delete(id);
+}
+
+function failAll() {
+  for (const [id, job] of [...pending]) {
+    finish(id);
+    job.reject(new Error(STALLED));
+  }
+  restartWorker();
+}
+
+function restartWorker() {
+  worker.terminate();
+  worker = startWorker();
+}
 
 function analyzeInWorker(file: File, onProgress: (f: number) => void): Promise<FileAnalysis> {
   const id = nextId++;
   return new Promise((resolve, reject) => {
-    const handler = (e: MessageEvent<WorkerResponse>) => {
-      const msg = e.data;
-      if (msg.id !== id) return;
-      if (msg.type === 'progress') return onProgress(msg.fraction);
-      worker.removeEventListener('message', handler);
-      if (msg.type === 'done') resolve(msg.analysis);
-      else reject(new Error(msg.message));
-    };
-    worker.addEventListener('message', handler);
+    const job: Pending = { resolve, reject, onProgress, timer: 0 };
+    pending.set(id, job);
+    armTimer(id, job);
     worker.postMessage({ id, file } satisfies WorkerRequest);
   });
 }
@@ -308,7 +365,10 @@ form.addEventListener('submit', async (e) => {
     .join('\n');
   const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`${service.label} · ${data.nombre}`)}&body=${encodeURIComponent(body)}`;
   window.location.href = href;
-  status.textContent = tx(`Se abrió tu correo. Si no, escribime a ${CONTACT_EMAIL}.`, `Your email app opened. If not, email me at ${CONTACT_EMAIL}.`);
+  status.textContent = tx(
+    `Te preparé el correo con el pedido: falta que lo envíes desde tu app de correo. Si no se abrió, escribime a ${CONTACT_EMAIL}.`,
+    `Your order email is ready: you still need to send it from your email app. If it didn't open, email me at ${CONTACT_EMAIL}.`,
+  );
 });
 
 // --- Entrada de archivos --------------------------------------------------------
