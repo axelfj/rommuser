@@ -1,0 +1,5 @@
+# Sitio principal rommuser.com. Es HTML estático: no hay build.
+# En Netlify: Base directory = site, Publish directory = site (relativo a la base: ".").
+[build]
+  publish = "."
+  command = ""
