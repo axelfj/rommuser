@@ -1,8 +1,9 @@
 /* Pautas ROMMUSER v2: universo en blanco y negro. El estado se lee por
-   íconos y peso, no por color. */
+   íconos y peso, no por color. El fondo, las mayúsculas espaciadas y las
+   secciones numeradas siguen a rommuser.com para que se sienta el mismo sitio. */
 
 :root {
-  --bg: #000;
+  --bg: #12130f;
   --fg: #fff;
   --dim: rgba(255, 255, 255, 0.6);
   --faint: rgba(255, 255, 255, 0.14);
@@ -44,8 +45,21 @@ main {
   max-width: 760px;
   width: 100%;
   margin: 0 auto;
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--faint);
+}
+
+.foot {
+  border-top: 1px solid var(--faint);
 }
 
 .brand {
@@ -63,17 +77,59 @@ main {
 }
 
 h1 {
-  font-size: clamp(36px, 8vw, 64px);
+  font-size: clamp(40px, 9vw, 76px);
   font-weight: 700;
-  line-height: 1;
-  margin: 48px 0 16px;
-  letter-spacing: -0.02em;
+  line-height: 0.95;
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
 h2 {
-  font-size: 28px;
+  font-size: clamp(26px, 5vw, 36px);
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.hero {
+  padding: 56px 0 40px;
+}
+
+.eyebrow,
+.label {
+  font-size: 12px;
   font-weight: 600;
-  margin: 0 0 8px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 0 0 20px;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label span {
+  color: var(--fg);
+}
+
+.label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.tagline {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0 0 24px;
 }
 
 .lead {
@@ -101,8 +157,9 @@ h2 {
   color: var(--bg);
   font: inherit;
   font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.04em;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   border-radius: var(--radius);
   cursor: pointer;
 }
@@ -337,7 +394,6 @@ h2 {
 
 /* Llamado a la acción */
 .cta {
-  border-top: 1px solid var(--line);
   padding-top: 48px;
 }
 
@@ -433,6 +489,21 @@ h2 {
 .nav {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media (max-width: 560px) {
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .nav {
+    justify-content: flex-start;
+    gap: 16px;
+  }
 }
 
 .nav a {
@@ -449,4 +520,16 @@ h2 {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+}
+
+/* `hidden` tiene que ganarle a los display de arriba (p. ej. el formulario). */
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 560px) {
+  .foot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
