@@ -2,6 +2,7 @@
 // "FANS DE ROMMUSER" y manda un correo de bienvenida desde la cuenta que publica el script (contact@).
 // Se pega en la hoja: Extensiones > Apps Script. Se publica como app web (Ejecutar como: yo, Acceso: cualquier usuario).
 // La URL /exec que da Google va en data-endpoint del formulario .fan-form en site/index.html.
+// Usa funciones de newsletter.gs (segmentos, códigos de referido, bajas): los dos archivos van en el mismo proyecto.
 
 const SHEET_NAME = 'Fans';
 const EMAIL = /^[^\s@=+\-][^\s@]*@[^\s@]+\.[^\s@]{2,}$/;
@@ -18,17 +19,29 @@ function doPost(e) {
   // "website" es un campo oculto: si viene lleno, es un bot.
   if (p.website || email.length > 254 || !EMAIL.test(email)) return reply_('invalid');
 
+  // ref: código de quien compartió su enlace. origen: de dónde llegó (utm_source o el sitio anterior).
+  const ref = /^[A-Z0-9]{4,10}$/.test(String(p.ref || '').toUpperCase()) ? String(p.ref).toUpperCase() : '';
+  const origin = /^[\w.\-]{1,40}$/.test(String(p.origen || '')) ? String(p.origen).toLowerCase() : '';
+
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
     const sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME);
     const last = sheet.getLastRow();
     const known = last > 1 ? sheet.getRange(2, 2, last - 1, 1).getValues().flat() : [];
-    if (known.indexOf(email) === -1) {
+    const at = known.indexOf(email);
+    if (at === -1) {
       const lang = p.lang === 'en' ? 'en' : 'es';
-      sheet.appendRow([new Date(), email, lang.toUpperCase(), 'rommuser.com', '']);
+      const by = creditReferral_(sheet, ref, email);
+      removeBaja_(email); // si alguna vez se dio de baja, entrar de nuevo es pedir volver
+      sheet.appendRow([new Date(), email, lang.toUpperCase(), origin ? 'rommuser.com · ' + origin : 'rommuser.com', '',
+        'Fans', refCode_(email), by, 0, 'Activo']);
       const row = sheet.getLastRow();
       welcomeRow_(sheet, row, email, lang);
+    } else if (sheet.getRange(at + 2, COL.estado).getValue() === 'Baja') {
+      // Se había ido y volvió a entrar: vuelve a estar activo.
+      sheet.getRange(at + 2, COL.estado).setValue('Activo');
+      removeBaja_(email);
     }
   } finally {
     lock.releaseLock();
@@ -96,7 +109,8 @@ const WELCOME = {
       'No vas a recibir correos de más. Solo cuando valga la pena.',
       'Mientras tanto, cierra los ojos. Siente.',
     ],
-    leave: 'Si en algún momento quieres salir del círculo, responde a este correo con la palabra DESCONECTAR.',
+    share: 'Este es tu enlace al círculo. Quien entre con él queda contado a tu nombre, y a quienes traigan a más gente les llega algo que no está en ningún otro lado:',
+    leave: 'Si en algún momento quieres salir del círculo, responde a este correo con la palabra DESCONECTAR o usa este enlace:',
   },
   en: {
     subject: 'You are in the Golden Circle',
@@ -106,21 +120,27 @@ const WELCOME = {
       'No extra emails. Only when it matters.',
       'Until then, close your eyes. Feel.',
     ],
-    leave: 'If you ever want to leave the circle, reply to this email with the word DISCONNECT.',
+    share: 'This is your link to the circle. Everyone who joins through it counts under your name, and those who bring more people get something that is nowhere else:',
+    leave: 'If you ever want to leave the circle, reply to this email with the word DISCONNECT or use this link:',
   },
 };
 
 function sendWelcome_(email, lang) {
   const t = WELCOME[lang];
+  const share = referralLink_(refCode_(email));
+  const leave = leaveLink_(email);
   const signature = 'ROMMUSER\nwww.rommuser.com';
-  const body = t.lines.join('\n\n') + '\n\n' + signature + '\n\n' + t.leave;
+  const body = t.lines.join('\n\n') + '\n\n' + t.share + '\n' + share + '\n\n' + signature + '\n\n' + t.leave + '\n' + leave;
   const html =
     '<div style="background:#12130F;color:#EAE6E5;padding:40px 28px;font:16px/1.65 Poppins,Arial,sans-serif">' +
     '<p style="margin:0 0 28px;font:700 13px Arial,sans-serif;letter-spacing:.12em">GOLDEN CIRCLE</p>' +
     t.lines.map(l => '<p style="margin:0 0 18px">' + l + '</p>').join('') +
+    '<p style="margin:28px 0 6px">' + t.share + '</p>' +
+    '<p style="margin:0 0 18px"><a href="' + escape_(share) + '" style="color:#EAE6E5">' + escape_(share) + '</a></p>' +
     '<p style="margin:32px 0 0;font:700 20px Arial,sans-serif;letter-spacing:-.02em">ROMMUSER</p>' +
     '<p style="margin:4px 0 32px"><a href="https://www.rommuser.com" style="color:#EAE6E5">www.rommuser.com</a></p>' +
-    '<p style="margin:0;font-size:12px;opacity:.7">' + t.leave + '</p></div>';
+    '<p style="margin:0;font-size:12px;opacity:.7">' + t.leave + ' <a href="' + escape_(leave) + '" style="color:#EAE6E5">' +
+    (lang === 'en' ? 'leave' : 'salir') + '</a></p></div>';
   MailApp.sendEmail({ to: email, subject: t.subject, body: body, htmlBody: html, name: 'ROMMUSER', replyTo: 'contact@rommuser.com' });
 }
 
