@@ -5,6 +5,10 @@
 
 const SHEET_NAME = 'Fans';
 const EMAIL = /^[^\s@=+\-][^\s@]*@[^\s@]+\.[^\s@]{2,}$/;
+// Tope contra ataques: si alguien intenta meter miles de correos, solo entran DAILY_CAP por día
+// (y solo esos reciben bienvenida). Al llegar al tope, contact@ recibe un aviso una vez ese día.
+const DAILY_CAP = 50;
+const ALERT_TO = 'contact@rommuser.com';
 
 function doPost(e) {
   const p = (e && e.parameter) || {};
@@ -15,6 +19,7 @@ function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
+    if (!countToday_()) return reply_('busy');
     const sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME);
     const last = sheet.getLastRow();
     const known = last > 1 ? sheet.getRange(2, 2, last - 1, 1).getValues().flat() : [];
@@ -33,6 +38,23 @@ function doPost(e) {
     lock.releaseLock();
   }
   return reply_('ok');
+}
+
+// Suma un registro al contador de hoy (hora de Costa Rica). Devuelve false si ya se llegó al tope.
+function countToday_() {
+  const props = PropertiesService.getScriptProperties();
+  const today = Utilities.formatDate(new Date(), 'America/Costa_Rica', 'yyyy-MM-dd');
+  const count = props.getProperty('day') === today ? Number(props.getProperty('count') || 0) : 0;
+  if (count >= DAILY_CAP) {
+    if (props.getProperty('alerted') !== today) {
+      props.setProperty('alerted', today);
+      MailApp.sendEmail(ALERT_TO, 'Golden Circle: tope diario alcanzado',
+        'Hoy llegaron más de ' + DAILY_CAP + ' registros a la lista de rommuser.com. Los demás se rechazaron hasta mañana. Si no fue una campaña tuya, puede ser un ataque: revisa la hoja FANS DE ROMMUSER.');
+    }
+    return false;
+  }
+  props.setProperties({ day: today, count: String(count + 1) });
+  return true;
 }
 
 function reply_(status) {
