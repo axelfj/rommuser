@@ -5,6 +5,12 @@
 
 const SHEET_NAME = 'Fans';
 const EMAIL = /^[^\s@=+\-][^\s@]*@[^\s@]+\.[^\s@]{2,}$/;
+// Tope de bienvenidas: todo correo válido se guarda siempre (nadie se queda fuera si nos volvemos
+// virales), pero solo DAILY_CAP bienvenidas salen por día. Las demás quedan "Bienvenida pendiente"
+// y salen los días siguientes con sendPending. Así un ataque no quema el cupo ni la reputación de contact@.
+// Al llegar al tope, contact@ recibe un aviso una vez ese día.
+const DAILY_CAP = 100;
+const ALERT_TO = 'contact@rommuser.com';
 
 function doPost(e) {
   const p = (e && e.parameter) || {};
@@ -22,17 +28,59 @@ function doPost(e) {
       const lang = p.lang === 'en' ? 'en' : 'es';
       sheet.appendRow([new Date(), email, lang.toUpperCase(), 'rommuser.com', '']);
       const row = sheet.getLastRow();
-      try {
-        sendWelcome_(email, lang);
-        sheet.getRange(row, 5).setValue('Bienvenida enviada');
-      } catch (err) {
-        sheet.getRange(row, 5).setValue('Bienvenida falló: ' + err.message);
-      }
+      welcomeRow_(sheet, row, email, lang);
     }
   } finally {
     lock.releaseLock();
   }
   return reply_('ok');
+}
+
+const PENDING = 'Bienvenida pendiente';
+
+function welcomeRow_(sheet, row, email, lang) {
+  if (!countToday_()) {
+    sheet.getRange(row, 5).setValue(PENDING);
+    return false;
+  }
+  try {
+    sendWelcome_(email, lang);
+    sheet.getRange(row, 5).setValue('Bienvenida enviada');
+  } catch (err) {
+    sheet.getRange(row, 5).setValue('Bienvenida falló: ' + err.message);
+  }
+  return true;
+}
+
+// Manda las bienvenidas pendientes hasta llenar el cupo de hoy. Programarla una vez:
+// Activadores (reloj) > Agregar activador > sendPending, según tiempo, cada día.
+function sendPending() {
+  const sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME);
+  const last = sheet.getLastRow();
+  if (last < 2) return;
+  const rows = sheet.getRange(2, 2, last - 1, 4).getValues();
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i][3] !== PENDING) continue;
+    const lang = rows[i][1] === 'EN' ? 'en' : 'es';
+    if (!welcomeRow_(sheet, i + 2, rows[i][0], lang)) return;
+  }
+}
+
+// Suma una bienvenida al contador de hoy (hora de Costa Rica). Devuelve false si ya se llegó al tope.
+function countToday_() {
+  const props = PropertiesService.getScriptProperties();
+  const today = Utilities.formatDate(new Date(), 'America/Costa_Rica', 'yyyy-MM-dd');
+  const count = props.getProperty('day') === today ? Number(props.getProperty('count') || 0) : 0;
+  if (count >= DAILY_CAP) {
+    if (props.getProperty('alerted') !== today) {
+      props.setProperty('alerted', today);
+      MailApp.sendEmail(ALERT_TO, 'Golden Circle: tope diario alcanzado',
+        'Hoy entraron más de ' + DAILY_CAP + ' personas a la lista de rommuser.com. Todas quedaron guardadas; las bienvenidas que faltan salen los próximos días (Bienvenida pendiente). Si no hay una razón (un post viral, una campaña), puede ser un ataque: revisa la hoja FANS DE ROMMUSER.');
+    }
+    return false;
+  }
+  props.setProperties({ day: today, count: String(count + 1) });
+  return true;
 }
 
 function reply_(status) {
