@@ -29,6 +29,10 @@ Precios y textos del servicio: `src/config.ts`.
 - `src/lib/checks.ts`: convierte el análisis en hallazgos y el veredicto.
 - `src/worker.ts`, `src/main.ts`: análisis fuera del hilo principal y la página.
 
+## Herramientas locales
+
+- `tools/libreria/`: analizador de BPM, tonalidad y Camelot para la librería de música, corre en tu compu con `npm run libreria`. Ver [tools/libreria/README.md](tools/libreria/README.md).
+
 ## Publicar
 
 Es un sitio estático: Vercel o Cloudflare Pages con `npm run build` y carpeta `dist/`.
