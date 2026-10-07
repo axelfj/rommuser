@@ -1,30 +1,31 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { buildFromDisk } from '../scripts/build-site-en.mjs';
+import { PAGES, buildFromDisk } from '../scripts/build-site-en.mjs';
 
 const read = (path) => readFileSync(new URL('../site/' + path, import.meta.url), 'utf8');
 const SPANISH = /\b(el|la|los|las|de|del|y|tu|tus|para|con|que|una?|más|sin|por)\b|[ñ¿¡]/i;
 const PLACES = new Set(['EL BOILER', 'El Sótano · San José', 'EL BOTECITO DELUXE,', 'San José, Costa Rica']);
 
 describe('rommuser.com', () => {
-  it('site/en/index.html está al día con index.html e i18n.js (npm run site:en)', () => {
-    const [page] = buildFromDisk();
-    expect(read('en/index.html')).toBe(page);
+  const built = buildFromDisk();
+
+  it.each(built.map((b) => [b.page.en, b]))('%s está al día con su página en español e i18n.js (npm run site:en)', (path, { html }) => {
+    expect(read(path)).toBe(html);
   });
 
-  it('todo texto en español visible tiene su traducción al inglés', () => {
-    const [, missing] = buildFromDisk();
+  it.each(built.map((b) => [b.page.es, b]))('todo texto en español visible de %s tiene traducción', (_, { missing }) => {
     expect(missing.filter((text) => SPANISH.test(text) && !PLACES.has(text))).toEqual([]);
   });
 
-  it('las dos versiones se enlazan entre sí para los buscadores', () => {
-    for (const path of ['index.html', 'en/index.html']) {
+  it.each(PAGES.map((p) => [p.esPath, p]))('%s y su versión en inglés se enlazan entre sí para los buscadores', (_, page) => {
+    for (const path of [page.es, page.en]) {
       const html = read(path);
-      expect(html).toContain('hreflang="es" href="https://rommuser.com/"');
-      expect(html).toContain('hreflang="en" href="https://rommuser.com/en/"');
+      expect(html).toContain(`hreflang="es" href="https://rommuser.com${page.esPath}"`);
+      expect(html).toContain(`hreflang="en" href="https://rommuser.com${page.enPath}"`);
     }
-    expect(read('en/index.html')).toContain('<link rel="canonical" href="https://rommuser.com/en/">');
-    expect(read('sitemap.xml')).toContain('<loc>https://rommuser.com/en/</loc>');
+    expect(read(page.en)).toContain(`<link rel="canonical" href="https://rommuser.com${page.enPath}">`);
+    expect(read('sitemap.xml')).toContain(`<loc>https://rommuser.com${page.esPath}</loc>`);
+    expect(read('sitemap.xml')).toContain(`<loc>https://rommuser.com${page.enPath}</loc>`);
   });
 
   it('la política de seguridad deja que el formulario del Golden Circle envíe', () => {
@@ -35,7 +36,7 @@ describe('rommuser.com', () => {
   });
 
   it('solo acredita los sellos aprobados', () => {
-    for (const path of ['index.html', 'en/index.html']) {
+    for (const path of PAGES.flatMap((p) => [p.es, p.en])) {
       expect(read(path)).not.toMatch(/HOUSE OF BOOGIE|LFTD|LVLD|HOUSEYOUNITE/i);
     }
   });
