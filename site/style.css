@@ -95,3 +95,6 @@ footer.universe-footer.compact-footer{display:flex;align-items:center;justify-co
 
 /* Releases: hovering a row lights both of its lines, not only the top one. */
 .track:hover+.track{border-top-color:var(--bone)}
+/* Sticky top nav; booking email shown as the button label */
+header{position:sticky;top:0;z-index:15}
+.contact-booking .button.contact-email{letter-spacing:.02em;font-size:15px;text-transform:none;overflow-wrap:anywhere}
