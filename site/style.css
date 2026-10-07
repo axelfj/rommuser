@@ -85,3 +85,13 @@ footer.universe-footer.compact-footer{display:flex;align-items:center;justify-co
 .contact-choice small{font-size:11px}
 .contact-choice strong.contact-other{font-size:14px}
 }
+
+/* 03 / El artista: the lines under the universe read as one centred statement, with room
+   to breathe from the animation, and the credentials stay legible below a rule. */
+.cosmic-after{max-width:760px;margin:44px auto 0;gap:0}
+.cosmic-after p:first-child{font:700 clamp(22px,2.6vw,32px)/1.3 'League Spartan',Arial,sans-serif;letter-spacing:-.01em;text-transform:uppercase}
+.cosmic-after .credentials{margin-top:36px;padding-top:24px;font-size:13px;line-height:1.8;opacity:.85}
+@media(max-width:620px){.cosmic-after{margin-top:32px;padding:0 4px}.cosmic-after p:first-child{font-size:22px}.cosmic-after .credentials{font-size:11px;margin-top:28px}}
+
+/* Releases: hovering a row lights both of its lines, not only the top one. */
+.track:hover+.track{border-top-color:var(--bone)}
