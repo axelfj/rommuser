@@ -115,3 +115,6 @@ button.collection-card{width:100%;background:none;color:inherit;font:inherit;tex
 .club-history{border-top:0}
 nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:.09em;opacity:.45;cursor:default}nav .nav-soon small{display:block;font-size:8px;letter-spacing:.12em}
 .label-list{gap:12px 28px}.label-list li{font-size:clamp(14px,1.4vw,18px)}nav .nav-soon{line-height:1.1}
+.soon{min-height:calc(100vh - 94px - 120px);display:flex;flex-direction:column;justify-content:center;gap:28px}
+.soon h1{font-size:clamp(38px,11vw,150px);line-height:.95;overflow-wrap:anywhere}
+.soon .button{align-self:flex-start}

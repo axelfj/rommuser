@@ -26,6 +26,14 @@ export const PAGES = [
     ogImageAlt: 'ROMMUSER, DJ and producer from Costa Rica',
     ld: [['Mezcla, mastering y ghost production de house y techno.', 'House and techno mixing, mastering and ghost production.'], ['Desde USD 250. 6 a 8 multipistas, 2 revisiones.', 'From USD 250. 6 to 8 multitracks, 2 revisions.'], ['Por track, 2 revisiones.', 'Per track, 2 revisions.']],
   },
+  {
+    es: 'tienda/index.html', en: 'en/store/index.html', esPath: '/tienda/', enPath: '/en/store/',
+    description: 'The ROMMUSER store is under construction.',
+    ogTitle: 'Store | ROMMUSER',
+    ogDescription: 'The ROMMUSER store is under construction.',
+    ogImageAlt: 'ROMMUSER, DJ and producer from Costa Rica',
+    ld: [],
+  },
 ];
 
 export function readDictionary(i18nSource) {
