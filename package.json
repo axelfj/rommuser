@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc",
-    "site:en": "node scripts/build-site-en.mjs"
+    "site:en": "node scripts/build-site-en.mjs",
+    "lanzamientos": "node scripts/publicar-lanzamientos.mjs"
   },
   "repository": {
     "type": "git",
