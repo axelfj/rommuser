@@ -4,7 +4,7 @@ import { PAGES, buildFromDisk } from '../scripts/build-site-en.mjs';
 
 const read = (path) => readFileSync(new URL('../site/' + path, import.meta.url), 'utf8');
 const SPANISH = /\b(el|la|los|las|de|del|y|tu|tus|para|con|que|una?|más|sin|por)\b|[ñ¿¡]/i;
-const PLACES = new Set(['EL BOILER', 'El Sótano · San José', 'EL BOTECITO DELUXE,', 'San José, Costa Rica']);
+const PLACES = new Set(['EL BOILER', 'Amón Solar, El Sótano · San José', 'Ivo Villalobos · San José', 'EL BOTECITO DELUXE,', 'San José, Costa Rica']);
 
 describe('rommuser.com', () => {
   const built = buildFromDisk();
