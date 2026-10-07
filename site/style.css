@@ -34,3 +34,47 @@ footer.universe-footer.compact-footer{display:flex;align-items:center;justify-co
 /* Fan list */
 .fan-list-grid{display:grid;grid-template-columns:1fr 1fr;gap:7%;align-items:end}.fan-list h2 span{border-bottom:9px solid var(--red)}.fan-list-copy>p{max-width:460px;margin-bottom:28px}.fan-form-row{display:flex;border:1px solid var(--bone)}.fan-form input[type=email]{flex:1;min-width:0;min-height:52px;padding:14px 18px;background:transparent;border:0;color:var(--bone);font:400 16px Poppins,Arial,sans-serif;border-radius:0}.fan-form input[type=email]::placeholder{color:var(--bone);opacity:.45}.fan-form input[type=email]:focus-visible{outline:3px solid var(--bone);outline-offset:-3px}.fan-form .button{border:0;flex-shrink:0}.fan-form .button:disabled{opacity:.6;cursor:wait}.fan-trap{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}.fan-note{margin-top:14px;font-size:12px;letter-spacing:.06em}.fan-status{min-height:27px;margin-top:10px;font-size:14px}@media(max-width:900px){.fan-list-grid{grid-template-columns:1fr;gap:30px}}@media(max-width:620px){.fan-list h2{font-size:15vw}.fan-form-row{flex-direction:column}.fan-form .button{width:100%}}
 .cosmic-scene{cursor:none;touch-action:pan-y}.cosmic-scene .motion-control{cursor:pointer}
+
+/* Contact: one booking action, quiet secondary contact and documents. */
+.contact.contact-simple{padding-top:64px;padding-bottom:40px}
+.contact-simple .section-label{margin-bottom:36px}
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.contact.contact-simple h2{font-size:clamp(48px,6vw,84px);line-height:1.05;margin:0 0 16px;letter-spacing:-.035em}
+.contact-intro .eyebrow{font-size:11px;letter-spacing:.08em;font-weight:500}
+.contact-booking{max-width:400px;width:100%;justify-self:end}
+.contact-booking .button{width:100%;gap:28px;min-height:56px}
+.contact-booking .button span{font-size:22px;line-height:1}
+.contact-address{display:block;font-size:14px;font-weight:400;letter-spacing:0;margin-top:12px;text-align:center;overflow-wrap:anywhere;min-height:44px;padding:10px 0}
+.contact-address:hover,.contact-general a:hover{text-decoration:underline;text-underline-offset:5px}
+.contact-docs{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:4px}
+.contact-docs a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;font-size:12px;font-weight:500;letter-spacing:.06em;text-decoration:underline;text-underline-offset:5px;text-decoration-color:var(--line)}
+.contact-docs a:hover{text-decoration-color:var(--bone)}
+.contact-general{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
+.contact-general span{font-size:10px;letter-spacing:.06em;font-weight:500}
+.contact-general a{display:inline-flex;align-items:center;min-height:44px;font-size:14px;overflow-wrap:anywhere}
+.contact-choices{width:100%;max-width:480px;justify-self:end}
+.contact-choice{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:86px;padding:20px 0;border-top:1px solid var(--line)}
+.contact-choice>span:first-child{min-width:0}
+.contact-choice strong{display:block;font:700 25px/1.2 'League Spartan',Arial,sans-serif;letter-spacing:0}
+.contact-choice small{display:block;font-size:12px;line-height:1.6;margin-top:5px;font-weight:400;overflow-wrap:anywhere}
+.contact-choice strong.contact-other{font:400 16px/1.5 Poppins,Arial,sans-serif;margin-top:6px;overflow-wrap:anywhere}
+.contact-choice .contact-arrow{font-size:24px;flex-shrink:0}
+.contact-choice-booking{border-top:2px solid var(--red)}
+.contact-choice:hover .contact-arrow{color:var(--red)}
+.contact-rows .contact-docs{justify-content:flex-start;border-top:1px solid var(--line);margin-top:0;padding-top:8px}
+@media(max-width:620px){
+.contact.contact-simple{padding-top:44px;padding-bottom:30px}
+.contact-simple .section-label{margin-bottom:28px}
+.contact-layout{grid-template-columns:1fr;gap:24px}
+.contact.contact-simple h2{font-size:44px;margin-bottom:10px}
+.contact-intro .eyebrow{font-size:10px;letter-spacing:.05em}
+.contact-booking,.contact-choices{justify-self:start;max-width:none}
+.contact-booking .button{min-height:54px;font-size:12px}
+.contact-general{margin-top:22px;padding-top:16px;display:block}
+.contact-general span{display:block;font-size:9px;line-height:1.6}
+.contact-general a{font-size:13px}
+.contact-choice{padding:16px 0;min-height:78px}
+.contact-choice strong{font-size:22px}
+.contact-choice small{font-size:11px}
+.contact-choice strong.contact-other{font-size:14px}
+}
