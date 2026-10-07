@@ -6,7 +6,7 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)');let clock=0,paused=
 const seeds=Array.from({length:matchMedia('(max-width:620px)').matches?95:185},()=>({x:Math.random(),y:Math.random(),depth:Math.random(),phase:Math.random()*Math.PI*2}));
 // Mini game: the cursor becomes a ship that shoots the notes; the RR logo dodges.
 const ship={x:0,y:0,on:false,tilt:0},bullets=[],sparks=[],dead=[0,0],pos=[null,null,null],dodge={x:0,y:0,vx:0,vy:0};
-const logo=new Image();logo.src="assets/rr.png";logo.addEventListener("load",draw);
+const logo=new Image();logo.src="/assets/rr.webp";logo.addEventListener("load",draw);
 function resize(){const r=scene.getBoundingClientRect();w=r.width;h=r.height;const d=Math.min(devicePixelRatio||1,2);canvas.width=w*d;canvas.height=h*d;ctx.setTransform(d,0,0,d,0,0);draw();}
 function portal(x,mirror){ctx.save();ctx.translate(x,h*.5);ctx.scale(.45+entrance*.55,.18+entrance*.82);const rx=Math.max(12,w*.019),ry=h*.3;
 // Nested luminous rings suggest depth into a wormhole.
