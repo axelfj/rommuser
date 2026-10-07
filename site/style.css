@@ -98,3 +98,4 @@ footer.universe-footer.compact-footer{display:flex;align-items:center;justify-co
 /* Sticky top nav; booking email shown as the button label */
 header{position:sticky;top:0;z-index:15}
 .contact-booking .button.contact-email{letter-spacing:.02em;font-size:15px;text-transform:none;overflow-wrap:anywhere}
+.show-row p a.promoter{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--red)}
