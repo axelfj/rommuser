@@ -7,7 +7,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "site:en": "node scripts/build-site-en.mjs"
   },
   "repository": {
     "type": "git",
