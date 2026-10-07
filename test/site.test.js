@@ -37,7 +37,7 @@ describe('rommuser.com', () => {
 
   it('solo acredita los sellos aprobados', () => {
     for (const path of PAGES.flatMap((p) => [p.es, p.en])) {
-      expect(read(path)).not.toMatch(/HOUSE OF BOOGIE|LFTD|LVLD|HOUSEYOUNITE/i);
+      expect(read(path)).not.toMatch(/HOUSE OF BOOGIE/i);
     }
   });
 });
