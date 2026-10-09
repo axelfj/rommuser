@@ -22,6 +22,7 @@ window.initFanChallenge = () => {
   fanWidgetId = window.turnstile.render(target, {
     sitekey: target.dataset.sitekey,
     action: 'fan_signup',
+    appearance: 'interaction-only',
     language: document.documentElement.lang === 'en' ? 'en' : 'es',
     callback: token => { fanToken = token; },
     'expired-callback': () => { fanToken = ''; },
