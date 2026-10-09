@@ -10,16 +10,27 @@ function refreshYear(){const year=new Intl.DateTimeFormat('en',{timeZone:'Americ
 
 function syncMarqueeSpeed(){const group=document.querySelector('.signal-group');const track=document.querySelector('.signal-track');if(group&&track){const pixelsPerSecond=matchMedia('(max-width:620px)').matches?75:115;track.style.setProperty('--marquee-duration',(group.getBoundingClientRect().width/pixelsPerSecond)+'s')}}syncMarqueeSpeed();document.fonts.ready.then(syncMarqueeSpeed);addEventListener('resize',syncMarqueeSpeed);document.addEventListener('languagechange',syncMarqueeSpeed);
 
-// Keep the full hero navigation, then make room for the page after the red band.
+// Shrink desktop navigation continuously from the page top to the red band.
 const homeHeader = document.querySelector('.artist-home > header');
 const heroSignal = document.querySelector('.artist-home .signal');
 if (homeHeader && heroSignal) {
-  const compactNavigation = () => {
-    homeHeader.classList.toggle('is-compact', window.innerWidth > 900 && heroSignal.getBoundingClientRect().bottom <= 94);
+  let navigationFrame = 0;
+  const resizeNavigation = () => {
+    navigationFrame = 0;
+    const end = Math.max(1, heroSignal.getBoundingClientRect().bottom + window.scrollY - 94);
+    const progress = window.innerWidth > 900 ? Math.min(1, Math.max(0, window.scrollY / end)) : 0;
+    homeHeader.style.setProperty('--nav-height', `${94 - 47 * progress}px`);
+    homeHeader.style.setProperty('--nav-logo-size', `${58 - 26 * progress}px`);
+    homeHeader.style.setProperty('--nav-language-height', `${44 - 12 * progress}px`);
+    homeHeader.style.setProperty('--nav-language-padding', `${9 - 6 * progress}px`);
   };
-  window.addEventListener('scroll', compactNavigation, { passive: true });
-  window.addEventListener('resize', compactNavigation);
-  compactNavigation();
+  const scheduleNavigation = () => {
+    if (!navigationFrame) navigationFrame = window.requestAnimationFrame(resizeNavigation);
+  };
+  window.addEventListener('scroll', scheduleNavigation, { passive: true });
+  window.addEventListener('resize', scheduleNavigation);
+  window.addEventListener('load', scheduleNavigation);
+  resizeNavigation();
 }
 
 // Keep the existing Apps Script endpoint. Every submission needs a fresh Turnstile token.

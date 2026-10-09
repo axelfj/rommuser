@@ -155,11 +155,9 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 .artist-home .compact-footer{padding-top:24px;padding-bottom:24px}
 @media(min-width:901px){
   .artist-home{padding-top:94px}
-  .artist-home>header{position:fixed;top:0;left:0;right:0;z-index:15;height:94px;transition:height .2s}
-  .artist-home>header.is-compact{height:47px}
-  .artist-home>header .brand img{transition:width .2s,height .2s}
-  .artist-home>header.is-compact .brand img{width:32px;height:32px}
-  .artist-home>header.is-compact .language-toggle{min-height:32px;padding:3px 10px}
+  .artist-home>header{position:fixed;top:0;left:0;right:0;z-index:15;height:var(--nav-height,94px)}
+  .artist-home>header .brand img{width:var(--nav-logo-size,58px);height:var(--nav-logo-size,58px)}
+  .artist-home>header .language-toggle{min-height:var(--nav-language-height,44px);padding:var(--nav-language-padding,9px) 12px}
   .artist-home>header nav a{display:inline-flex;align-items:center;min-height:44px}
 }
 @media(max-width:1100px){.fan-strip{gap:16px}.fan-strip .fan-form{width:310px}}
