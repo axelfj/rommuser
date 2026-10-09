@@ -3,8 +3,8 @@
 ## Estado de esta propuesta
 
 PR de preparación. **No fusionar hasta completar la configuración de Turnstile.**
-`site/index.html` tiene `data-sitekey=""` intencionalmente: el formulario rechaza el envío
-sin una verificación real. No se usan claves de prueba en producción ni se aceptan tokens
+La clave pública de Turnstile ya está incorporada en `site/index.html` y su versión en inglés.
+Falta confirmar el secreto en Apps Script, publicar el backend y validar un registro real. No se usan claves de prueba en producción ni se aceptan tokens
 sin validarlos. `site/en/index.html` se genera con `npm run site:en`.
 
 El sitio se publica automáticamente al fusionar en `main`. Apps Script se publica por separado.
