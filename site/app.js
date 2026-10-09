@@ -10,6 +10,18 @@ function refreshYear(){const year=new Intl.DateTimeFormat('en',{timeZone:'Americ
 
 function syncMarqueeSpeed(){const group=document.querySelector('.signal-group');const track=document.querySelector('.signal-track');if(group&&track){const pixelsPerSecond=matchMedia('(max-width:620px)').matches?75:115;track.style.setProperty('--marquee-duration',(group.getBoundingClientRect().width/pixelsPerSecond)+'s')}}syncMarqueeSpeed();document.fonts.ready.then(syncMarqueeSpeed);addEventListener('resize',syncMarqueeSpeed);document.addEventListener('languagechange',syncMarqueeSpeed);
 
+// Keep the full hero navigation, then make room for the page after the red band.
+const homeHeader = document.querySelector('.artist-home > header');
+const heroSignal = document.querySelector('.artist-home .signal');
+if (homeHeader && heroSignal) {
+  const compactNavigation = () => {
+    homeHeader.classList.toggle('is-compact', window.innerWidth > 900 && heroSignal.getBoundingClientRect().bottom <= 94);
+  };
+  window.addEventListener('scroll', compactNavigation, { passive: true });
+  window.addEventListener('resize', compactNavigation);
+  compactNavigation();
+}
+
 // Keep the existing Apps Script endpoint. Every submission needs a fresh Turnstile token.
 const fanForm = document.querySelector('.fan-form');
 let fanWidgetId;
