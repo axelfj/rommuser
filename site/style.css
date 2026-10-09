@@ -118,3 +118,6 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 .soon{min-height:calc(100vh - 94px - 120px);display:flex;flex-direction:column;justify-content:center;gap:28px}
 .soon h1{font-size:clamp(38px,11vw,150px);line-height:.95;overflow-wrap:anywhere}
 .soon .button{align-self:flex-start}
+@media(max-width:900px){.music-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.music-tabs button:last-child{grid-column:auto}}@media(max-width:620px){.music-tabs{gap:6px}.music-tabs button{padding:10px 4px;font-size:10px;letter-spacing:.02em}}
+@media(max-width:900px){.fan-list-grid{grid-template-columns:minmax(0,1fr)}}@media(max-width:620px){.fan-list h2{font-size:13vw}}
+@media(max-width:620px){.music-tabs button::before,.music-tabs button::after{display:none}.music-tabs button{padding:10px 4px!important;text-align:center}}
