@@ -35,9 +35,10 @@ describe('rommuser.com', () => {
     expect(connect).toContain('https://script.googleusercontent.com');
   });
 
-  it('solo acredita los sellos aprobados', () => {
-    for (const path of PAGES.flatMap((p) => [p.es, p.en])) {
-      expect(read(path)).not.toMatch(/HOUSE OF BOOGIE/i);
+  it('acredita los sellos confirmados para Never Be y Echoes', () => {
+    for (const path of ['index.html', 'en/index.html']) {
+      expect(read(path)).toContain('<strong>NEVER BE</strong><small>HOUSE OF BOOGIE</small>');
+      expect(read(path)).toContain('<strong>ECHOES</strong><small>LVLD MUSIC</small>');
     }
   });
 });
