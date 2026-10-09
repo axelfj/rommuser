@@ -35,6 +35,9 @@ Para agregar otra hoja, se suma un bloque en `SOURCES` al inicio de `newsletter.
 
 ## Paso a paso (una sola vez)
 
+**Antes de actualizar el formulario o Apps Script, completar el despliegue coordinado de
+[seguridad](security.md). El nuevo backend requiere Turnstile y `TURNSTILE_SECRET`.**
+
 1. **Quitar el teléfono del pie de contact@.** Todo lo que sale de contact@ (también estos scripts) lleva el
    pie de Google Workspace. En admin.google.com: Apps > Google Workspace > Gmail > Cumplimiento >
    Agregar pie de página; borra el teléfono y guarda. Antes de este paso no se envía nada.

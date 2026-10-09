@@ -1,6 +1,7 @@
 // Recibe los registros del Golden Circle (lista de fans de rommuser.com), los guarda en la hoja
 // "FANS DE ROMMUSER" y manda un correo de bienvenida desde la cuenta que publica el script (contact@).
 // Se pega en la hoja: Extensiones > Apps Script. Se publica como app web (Ejecutar como: yo, Acceso: cualquier usuario).
+// Requiere TURNSTILE_SECRET en Propiedades del script. Ver docs/security.md antes de publicar.
 // La URL /exec que da Google va en data-endpoint del formulario .fan-form en site/index.html.
 // Usa funciones de newsletter.gs (segmentos, códigos de referido, bajas): los dos archivos van en el mismo proyecto.
 
@@ -14,23 +15,27 @@ const DAILY_CAP = 100;
 const ALERT_TO = 'contact@rommuser.com';
 
 function doPost(e) {
-  const p = (e && e.parameter) || {};
+  if (!e || !e.postData || e.postData.length > 8192) return reply_('invalid');
+  const p = e.parameter || {};
   const email = String(p.email || '').trim().toLowerCase();
   // "website" es un campo oculto: si viene lleno, es un bot.
   if (p.website || email.length > 254 || !EMAIL.test(email)) return reply_('invalid');
+
+  if (!verifyFanToken_(p['cf-turnstile-response'])) return reply_('forbidden');
 
   // ref: código de quien compartió su enlace. origen: de dónde llegó (utm_source o el sitio anterior).
   const ref = /^[A-Z0-9]{4,10}$/.test(String(p.ref || '').toUpperCase()) ? String(p.ref).toUpperCase() : '';
   const origin = /^[\w.\-]{1,40}$/.test(String(p.origen || '')) ? String(p.origen).toLowerCase() : '';
 
   const lock = LockService.getScriptLock();
-  lock.waitLock(10000);
+  if (!lock.tryLock(5000)) return reply_('busy');
   try {
     const sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME);
     const last = sheet.getLastRow();
     const known = last > 1 ? sheet.getRange(2, 2, last - 1, 1).getValues().flat() : [];
     const at = known.indexOf(email);
     if (at === -1) {
+      if (!reserveFanSignup_()) return reply_('limited');
       const lang = p.lang === 'en' ? 'en' : 'es';
       const by = creditReferral_(sheet, ref, email);
       removeBaja_(email); // si alguna vez se dio de baja, entrar de nuevo es pedir volver
@@ -147,4 +152,35 @@ function sendWelcome_(email, lang) {
 // Para probar: cambia el correo, elige testWelcome arriba y dale Ejecutar.
 function testWelcome() {
   sendWelcome_('contact@rommuser.com', 'es');
+}
+
+// Never trust the browser's hostname or a boolean supplied by the client.
+// This also protects direct calls to the public /exec URL.
+function verifyFanToken_(token) {
+  const secret = PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET');
+  if (!secret || typeof token !== 'string' || !token || token.length > 2048) return false;
+  try {
+    const response = UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'post',
+      payload: { secret: secret, response: token },
+      muteHttpExceptions: true,
+    });
+    if (response.getResponseCode() !== 200) return false;
+    const result = JSON.parse(response.getContentText());
+    return result.success === true && result.action === 'fan_signup' &&
+      ['rommuser.com', 'www.rommuser.com'].indexOf(result.hostname) !== -1;
+  } catch (err) {
+    return false; // No fail-open on network errors, invalid JSON or quota exhaustion.
+  }
+}
+
+// Called only while holding the script lock, for NEW rows after token validation.
+// An explicit global safety ceiling, not a per-IP limiter; raise after reviewing traffic.
+function reserveFanSignup_() {
+  const props = PropertiesService.getScriptProperties();
+  const day = Utilities.formatDate(new Date(), 'America/Costa_Rica', 'yyyy-MM-dd');
+  const count = props.getProperty('signupDay') === day ? Number(props.getProperty('signupCount') || 0) : 0;
+  if (!Number.isFinite(count) || count < 0 || count >= 300) return false;
+  props.setProperties({ signupDay: day, signupCount: String(count + 1) });
+  return true;
 }

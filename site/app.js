@@ -10,5 +10,95 @@ function refreshYear(){const year=new Intl.DateTimeFormat('en',{timeZone:'Americ
 
 function syncMarqueeSpeed(){const group=document.querySelector('.signal-group');const track=document.querySelector('.signal-track');if(group&&track){const pixelsPerSecond=matchMedia('(max-width:620px)').matches?75:115;track.style.setProperty('--marquee-duration',(group.getBoundingClientRect().width/pixelsPerSecond)+'s')}}syncMarqueeSpeed();document.fonts.ready.then(syncMarqueeSpeed);addEventListener('resize',syncMarqueeSpeed);document.addEventListener('languagechange',syncMarqueeSpeed);
 
-// Fan list: posts to the Google Apps Script URL in data-endpoint, which adds the email to the FANS DE ROMMUSER sheet. Without it, nothing is sent.
-const fanForm=document.querySelector('.fan-form');if(fanForm){const fanEmail=fanForm.querySelector('#fan-email');const fanStatus=fanForm.querySelector('.fan-status');const fanButton=fanForm.querySelector('button[type="submit"]');const syncFanLanguage=()=>{fanEmail.placeholder=fanEmail.dataset[document.documentElement.lang==='en'?'placeholderEn':'placeholderEs'];fanForm.elements.lang.value=document.documentElement.lang};const fanRef=(()=>{const q=new URLSearchParams(location.search);const keep=(key,value,ok)=>{try{if(value&&ok.test(value)&&!localStorage.getItem(key))localStorage.setItem(key,value);return localStorage.getItem(key)||''}catch{return value&&ok.test(value)?value:''}};let from='';try{const host=document.referrer&&new URL(document.referrer).hostname.replace(/^www\./,'');if(host&&!/(^|\.)rommuser\.com$/.test(host))from=host}catch{}return{ref:keep('rommuser-ref',(q.get('ref')||'').toUpperCase(),/^[A-Z0-9]{4,10}$/),origen:keep('rommuser-origen',(q.get('utm_source')||from).toLowerCase(),/^[\w.\-]{1,40}$/)}})();const syncFanRef=()=>{fanForm.elements.ref.value=fanRef.ref;fanForm.elements.origen.value=fanRef.origen};syncFanRef();syncFanLanguage();document.addEventListener('languagechange',()=>{syncFanLanguage();fanStatus.textContent=''});fanForm.addEventListener('submit',async event=>{event.preventDefault();const email=fanEmail.value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){fanStatus.textContent=tr('Escribe un correo válido.');fanEmail.focus();return}if(fanForm.elements.website.value)return;const endpoint=fanForm.dataset.endpoint;if(!endpoint){fanStatus.textContent=tr('No se pudo enviar. Inténtalo otra vez.');return}fanButton.disabled=true;fanButton.textContent=tr('ENVIANDO');try{await fetch(endpoint,{method:'POST',mode:'no-cors',body:new URLSearchParams(new FormData(fanForm))});fanForm.reset();syncFanLanguage();syncFanRef();fanStatus.textContent=tr('Listo. Ya estás en la lista.')}catch{fanStatus.textContent=tr('No se pudo enviar. Inténtalo otra vez.')}finally{fanButton.disabled=false;fanButton.textContent=tr('ENTRAR')}})}
+// Keep the existing Apps Script endpoint. Every submission needs a fresh Turnstile token.
+const fanForm = document.querySelector('.fan-form');
+let fanWidgetId;
+let fanToken = '';
+let fanSubmitting = false;
+window.initFanChallenge = () => {
+  if (!fanForm) return;
+  const target = fanForm.querySelector('#fan-challenge');
+  if (!target?.dataset.sitekey) return; // Fail closed until deployment is configured.
+  fanWidgetId = window.turnstile.render(target, {
+    sitekey: target.dataset.sitekey,
+    action: 'fan_signup',
+    language: document.documentElement.lang === 'en' ? 'en' : 'es',
+    callback: token => { fanToken = token; },
+    'expired-callback': () => { fanToken = ''; },
+    'error-callback': () => { fanToken = ''; },
+  });
+};
+if (fanForm) {
+  const fanEmail = fanForm.querySelector('#fan-email');
+  const fanStatus = fanForm.querySelector('.fan-status');
+  const fanButton = fanForm.querySelector('button[type="submit"]');
+  const syncFanLanguage = () => {
+    fanEmail.placeholder = fanEmail.dataset[document.documentElement.lang === 'en' ? 'placeholderEn' : 'placeholderEs'];
+    fanForm.elements.lang.value = document.documentElement.lang;
+  };
+  const fanRef = (() => {
+    const q = new URLSearchParams(location.search);
+    const keep = (key, value, ok) => {
+      try {
+        if (value && ok.test(value) && !localStorage.getItem(key)) localStorage.setItem(key, value);
+        const saved = localStorage.getItem(key) || '';
+        return ok.test(saved) ? saved : '';
+      } catch { return value && ok.test(value) ? value : ''; }
+    };
+    let from = '';
+    try {
+      const host = document.referrer && new URL(document.referrer).hostname.replace(/^www\./, '');
+      if (host && !/(^|\.)rommuser\.com$/.test(host)) from = host;
+    } catch {}
+    return {
+      ref: keep('rommuser-ref', (q.get('ref') || '').toUpperCase(), /^[A-Z0-9]{4,10}$/),
+      origen: keep('rommuser-origen', (q.get('utm_source') || from).toLowerCase(), /^[\w.\-]{1,40}$/),
+    };
+  })();
+  const syncFanRef = () => {
+    fanForm.elements.ref.value = fanRef.ref;
+    fanForm.elements.origen.value = fanRef.origen;
+  };
+  syncFanRef();
+  syncFanLanguage();
+  document.addEventListener('languagechange', () => { syncFanLanguage(); fanStatus.textContent = ''; });
+  fanForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (fanSubmitting) return;
+    const email = fanEmail.value.trim();
+    if (email.length > 254 || !/^[^\s@=+\-][^\s@]*@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      fanStatus.textContent = tr('Escribe un correo válido.');
+      fanEmail.focus();
+      return;
+    }
+    if (fanForm.elements.website.value) return;
+    if (!fanToken || fanWidgetId === undefined) {
+      fanStatus.textContent = tr('Completa la verificación. Si no aparece, recarga la página.');
+      return;
+    }
+    const endpoint = fanForm.dataset.endpoint;
+    if (!endpoint) { fanStatus.textContent = tr('No se pudo enviar. Inténtalo otra vez.'); return; }
+    fanSubmitting = true;
+    fanButton.disabled = true;
+    fanButton.textContent = tr('ENVIANDO');
+    try {
+      const body = new URLSearchParams(new FormData(fanForm));
+      body.set('email', email);
+      body.set('cf-turnstile-response', fanToken);
+      await fetch(endpoint, { method: 'POST', mode: 'no-cors', body, signal: AbortSignal.timeout(20000) });
+      // Apps Script's opaque response cannot confirm that a row was accepted.
+      fanForm.reset();
+      syncFanLanguage();
+      syncFanRef();
+      fanStatus.textContent = tr('Solicitud enviada. No podemos confirmar el registro desde esta página.');
+    } catch {
+      fanStatus.textContent = tr('No pudimos confirmar el envío. Inténtalo otra vez.');
+    } finally {
+      fanToken = '';
+      if (fanWidgetId !== undefined) window.turnstile.reset(fanWidgetId);
+      fanSubmitting = false;
+      fanButton.disabled = false;
+      fanButton.textContent = tr('ENTRAR');
+    }
+  });
+}
