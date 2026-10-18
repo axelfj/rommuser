@@ -308,3 +308,37 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
  .artist-home .tracks .track-info{align-self:end}
  .artist-home .tracks .release-date{align-self:start}
 }
+
+/* Contact: one clear booking destination with supporting press documents. */
+.artist-home #contacto .contact-layout{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:32px 64px;align-items:center;text-align:left}
+.artist-home #contacto .contact-intro{display:flex;flex-direction:column;gap:18px;min-width:0}
+.artist-home #contacto .contact-intro h2{font-size:clamp(48px,5.8vw,84px);line-height:.98;letter-spacing:-.035em;margin:0}
+.artist-home #contacto .contact-intro .eyebrow{font-family:var(--control-font);font-size:11px;font-weight:400;line-height:1.6;letter-spacing:.08em;color:#b3b2ac;margin:0}
+.artist-home #contacto .contact-booking{display:flex;flex-direction:column;gap:16px;min-width:0;padding:24px;border:1px solid var(--line);border-radius:var(--control-radius);background:linear-gradient(125deg,rgba(234,230,229,.035),transparent)}
+.artist-home #contacto .contact-email{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;max-width:none;min-height:60px;padding:8px 0 8px 18px;margin:0;border:0;border-left:2px solid var(--red);border-radius:0;background:transparent;color:var(--bone);font:500 clamp(17px,1.65vw,26px)/1.4 Poppins,Arial,sans-serif;letter-spacing:-.025em;text-align:left;overflow-wrap:anywhere;transition:background-color .2s,border-color .2s}
+.artist-home #contacto .contact-email::after{content:'↗';flex-shrink:0;font:400 24px/1 var(--control-font);color:#b3b2ac}
+.artist-home #contacto .contact-docs{display:flex;justify-content:flex-start;gap:10px;flex-wrap:wrap;margin:0;padding-top:16px;border-top:1px solid var(--line)}
+.artist-home #contacto .contact-docs a{display:inline-flex;justify-content:space-between;align-items:center;gap:24px;min-height:44px;min-width:106px;padding:0 14px;border:1px solid var(--control-border);border-radius:var(--control-radius);background:linear-gradient(120deg,rgba(234,230,229,.065),transparent);font:500 10px/1 var(--control-font);letter-spacing:.1em;text-decoration:none;transition:border-color .2s,background-color .2s,box-shadow .2s}
+.artist-home #contacto .contact-docs a::after{content:'↗';font-size:14px;color:#b3b2ac}
+.artist-home #contacto .contact-general{display:flex;justify-content:space-between;align-items:center;gap:12px 24px;margin-top:28px;padding-top:20px;text-align:left}
+.artist-home #contacto .contact-general span{font:400 10px/1.6 var(--control-font);letter-spacing:.08em;color:#b3b2ac}
+.artist-home #contacto .contact-general a{min-height:44px;gap:16px;font-size:15px;line-height:1.5;justify-content:flex-start;text-decoration:none}
+.artist-home #contacto .contact-general a::after{content:'↗';font:400 16px/1 var(--control-font);color:#b3b2ac}
+@media(hover:hover){
+ .artist-home #contacto .contact-email:hover{background:var(--control-hover);border-left-color:var(--bone)}
+ .artist-home #contacto .contact-docs a:hover{border-color:var(--bone);background-color:var(--control-hover);box-shadow:inset 2px 0 var(--red)}
+ .artist-home #contacto .contact-general a:hover{text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:6px}
+}
+@media(max-width:900px){.artist-home #contacto .contact-layout{gap:28px}.artist-home #contacto .contact-booking{padding:20px}}
+@media(max-width:620px){
+ .artist-home #contacto .contact-layout{grid-template-columns:minmax(0,1fr);gap:24px}
+ .artist-home #contacto .contact-intro{gap:12px}
+ .artist-home #contacto .contact-intro h2{font-size:clamp(44px,12vw,64px)}
+ .artist-home #contacto .contact-intro .eyebrow{font-size:10px}
+ .artist-home #contacto .contact-booking{padding:18px 16px;gap:14px}
+ .artist-home #contacto .contact-email{font-size:clamp(15px,4.3vw,21px);gap:10px;padding-left:12px;min-height:52px}
+ .artist-home #contacto .contact-email::after{font-size:20px}
+ .artist-home #contacto .contact-docs a{flex:1;min-width:0}
+ .artist-home #contacto .contact-general{flex-direction:column;align-items:flex-start;gap:4px;margin-top:22px;padding-top:16px}
+}
+@media(prefers-reduced-motion:reduce){.artist-home #contacto .contact-email,.artist-home #contacto .contact-docs a{transition:none}}
