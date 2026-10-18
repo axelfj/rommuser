@@ -335,3 +335,18 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 17 17 7M7 7h10v10' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
 }
 
+
+/* Release archive follows the same year hierarchy as the show archive. */
+.artist-home .release-year{border-bottom:1px solid var(--line)}
+.artist-home .release-year summary{display:flex;align-items:center;gap:18px;min-height:46px;padding:0 4px;cursor:pointer;list-style:none;font:700 13px Poppins,Arial,sans-serif;letter-spacing:.2em}
+.artist-home .release-year summary::-webkit-details-marker{display:none}
+.artist-home .release-year summary::after{content:"";width:8px;height:8px;margin-left:auto;margin-right:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.artist-home .release-year[open] summary::after{transform:rotate(225deg)}
+.artist-home .release-count{font-size:10px;color:#b3b2ac;letter-spacing:.08em}
+.artist-home .release-year .track:last-of-type{border-bottom:0}
+.artist-home .artist-bio{flex:1 0 100%;max-width:680px;margin:auto;font-size:16px;line-height:1.8}
+/* Honor the operating-system preference across every decorative animation. */
+@media(prefers-reduced-motion:reduce){
+ .artist-home .signal>.signal-track,.artist-home .music-tabs button::after,.artist-home #vivo .next-label::after{animation:none!important}
+ .artist-home *{scroll-behavior:auto;transition:none!important}
+}

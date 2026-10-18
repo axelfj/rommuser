@@ -1,6 +1,34 @@
 const menu=document.querySelector('.menu-toggle');const nav=document.querySelector('header nav');menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));nav.classList.toggle('open',open)});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{menu.setAttribute('aria-expanded','false');nav.classList.remove('open')}));document.querySelectorAll('[data-email]').forEach(button=>button.addEventListener('click',async()=>{const status=document.querySelector('.copy-status');try{await navigator.clipboard.writeText(button.dataset.email);status.textContent=tr('Correo copiado: ')+button.dataset.email;button.textContent=tr('COPIADO');setTimeout(()=>{button.textContent=tr('COPIAR CORREO')},2500)}catch{status.textContent=tr('Selecciona y copia el correo: ')+button.dataset.email}}));
-// Upcoming releases open the listen dialog (artist profiles) from their release day; swap in pre-save or track links when they arrive.
-document.querySelectorAll('.track.upcoming[data-release]:not([href])').forEach(t=>{if(t.dataset.release<=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Costa_Rica'}).format(new Date())){t.disabled=false;t.dataset.track=t.querySelector('strong').textContent;t.querySelector('.track-type').textContent=tr('ESCUCHAR')}});
+// Release-day labels update without replacing verified outbound destinations.
+const releaseToday=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Costa_Rica'}).format(new Date());
+document.querySelectorAll('.track.upcoming[data-release]').forEach(track=>{
+  if(track.dataset.release>releaseToday)return;
+  track.classList.remove('upcoming');
+  track.querySelector('.track-type').textContent=tr('ESCUCHAR');
+  // A pre-save smartlink remains a direct outbound link after release.
+  if(!track.hasAttribute('href')){
+    track.disabled=false;
+    track.dataset.track=track.querySelector('strong').textContent;
+  }
+});
+// Preserve the original listening controls inside a chronological release archive.
+const releaseList=document.querySelector('#originales .tracks');
+if(releaseList){
+  const releaseYears=new Map();
+  [...releaseList.children].forEach(track=>{
+    const year=track.querySelector('time')?.dateTime.slice(0,4);
+    if(!year)return;
+    if(!releaseYears.has(year))releaseYears.set(year,[]);
+    releaseYears.get(year).push(track);
+  });
+  [...releaseYears].sort(([a],[b])=>b.localeCompare(a)).forEach(([year,tracks],index)=>{
+    const group=document.createElement('details');group.className='release-year';group.open=index===0;
+    const summary=document.createElement('summary');
+    const label=document.createElement('span');label.textContent=year;
+    const count=document.createElement('span');count.className='release-count';count.textContent=tracks.length+' '+tr(tracks.length===1?'TRACK':'TRACKS');
+    summary.append(label,count);group.append(summary,...tracks);releaseList.append(group);
+  });
+}
 
 const tabs=[...document.querySelectorAll('[role="tab"]')];function chooseTab(tab){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected})}tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>chooseTab(tab));tab.addEventListener('keydown',event=>{let n=i;if(event.key==='ArrowRight')n=(i+1)%tabs.length;else if(event.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.length-1;else return;event.preventDefault();chooseTab(tabs[n]);tabs[n].focus()})});const listenDialog=document.getElementById('listen-dialog');const listenPlatforms=['spotify','soundcloud','youtube','bandcamp','beatport','apple'].map(key=>({key,element:document.getElementById('listen-'+key)})).filter(p=>p.element).map(p=>({...p,defaultHref:p.element.href,defaultLabel:p.element.querySelector('span').textContent}));
 document.querySelectorAll('.music-choice:not(.presave)').forEach(b=>b.addEventListener('click',e=>{
@@ -28,7 +56,7 @@ document.querySelectorAll('.music-choice:not(.presave)').forEach(b=>b.addEventLi
   listenDialog.showModal();
 }));document.querySelector('.dialog-close')?.addEventListener('click',()=>listenDialog.close());listenDialog?.addEventListener('click',e=>{if(e.target===listenDialog){const r=listenDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)listenDialog.close()}});
 // A completed date remains in the artist's show history, never as an upcoming show. It keeps its place and type and lands in date order.
-const todayCR=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Costa_Rica'}).format(new Date());document.querySelectorAll('[data-show-date]').forEach(show=>{if(show.dataset.showDate<todayCR){const venue=show.querySelector('h3')?.textContent||'';const [y,m,d]=show.dataset.showDate.split('-');show.classList.remove('next-show');show.classList.add('show-row');const date=document.createElement('time');date.dateTime=show.dataset.showDate;date.textContent=d+'.'+m+'.'+y.slice(2);const info=document.createElement('div');const title=document.createElement('h3');title.textContent=venue;info.append(title);if(show.dataset.showPlace){const place=document.createElement('p');place.textContent=show.dataset.showPlace;info.append(place)}const type=document.createElement('span');if(show.dataset.showType)type.textContent=show.dataset.showType;else{type.dataset.liveType='true';type.textContent=tr('EN VIVO')}show.replaceChildren(date,info,type);const older=[...document.querySelectorAll('.show-row:not([data-show-date]) > time')].find(t=>t.dateTime<show.dataset.showDate);const rows=[...document.querySelectorAll('.show-row:not([data-show-date])')];if(older)older.parentElement.before(show);else if(rows.length)rows[rows.length-1].after(show);else document.querySelector('.show-history-label').after(show)}});
+const todayCR=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Costa_Rica'}).format(new Date());document.querySelectorAll('[data-show-date]').forEach(show=>{if(show.dataset.showDate<todayCR){if(show.dataset.showStatus==='tentative'){show.remove();return;}const venue=show.querySelector('h3')?.textContent||'';const [y,m,d]=show.dataset.showDate.split('-');show.classList.remove('next-show');show.classList.add('show-row');const date=document.createElement('time');date.dateTime=show.dataset.showDate;date.textContent=d+'.'+m+'.'+y.slice(2);const info=document.createElement('div');const title=document.createElement('h3');title.textContent=venue;info.append(title);if(show.dataset.showPlace){const place=document.createElement('p');place.textContent=show.dataset.showPlace;info.append(place)}const type=document.createElement('span');if(show.dataset.showType)type.textContent=show.dataset.showType;else{type.dataset.liveType='true';type.textContent=tr('EN VIVO')}show.replaceChildren(date,info,type);const older=[...document.querySelectorAll('.show-row:not([data-show-date]) > time')].find(t=>t.dateTime<show.dataset.showDate);const rows=[...document.querySelectorAll('.show-row:not([data-show-date])')];if(older)older.parentElement.before(show);else if(rows.length)rows[rows.length-1].after(show);else document.querySelector('.show-history-label').after(show)}});
 // Older nights fade a little, and each year folds into its own dropdown (the latest one open).
 {const regs=[...document.querySelectorAll('#vivo .show-row')];const years=new Map();regs.forEach((r,i)=>{r.style.setProperty('--fade',String(1-.4*i/Math.max(regs.length-1,1)));const y=r.querySelector('time')?.dateTime.slice(0,4)||'';if(!years.has(y))years.set(y,[]);years.get(y).push(r)});[...years].forEach(([y,rows],i)=>{const box=document.createElement('details');box.className='show-year';box.open=i===0;const sum=document.createElement('summary');const label=document.createElement('span');label.textContent=y;const count=document.createElement('span');count.className='show-count';count.textContent=rows.length+' '+tr(rows.length===1?'SHOW':'SHOWS');sum.append(label,count);rows[0].before(box);box.append(sum,...rows)})}
 
