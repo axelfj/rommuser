@@ -2,19 +2,27 @@ const menu=document.querySelector('.menu-toggle');const nav=document.querySelect
 // Upcoming releases open the listen dialog (artist profiles) from their release day; swap in pre-save or track links when they arrive.
 document.querySelectorAll('.track.upcoming[data-release]:not([href])').forEach(t=>{if(t.dataset.release<=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Costa_Rica'}).format(new Date())){t.disabled=false;t.dataset.track=t.querySelector('strong').textContent;t.querySelector('.track-type').textContent=tr('ESCUCHAR')}});
 
-const tabs=[...document.querySelectorAll('[role="tab"]')];function chooseTab(tab){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected})}tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>chooseTab(tab));tab.addEventListener('keydown',event=>{let n=i;if(event.key==='ArrowRight')n=(i+1)%tabs.length;else if(event.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.length-1;else return;event.preventDefault();chooseTab(tabs[n]);tabs[n].focus()})});const listenDialog=document.getElementById('listen-dialog');const listenPlatforms=['spotify','soundcloud','youtube','apple'].map(key=>({key,element:document.getElementById('listen-'+key)})).filter(p=>p.element).map(p=>({...p,defaultHref:p.element.href,defaultLabel:p.element.querySelector('span').textContent}));
+const tabs=[...document.querySelectorAll('[role="tab"]')];function chooseTab(tab){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected})}tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>chooseTab(tab));tab.addEventListener('keydown',event=>{let n=i;if(event.key==='ArrowRight')n=(i+1)%tabs.length;else if(event.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.length-1;else return;event.preventDefault();chooseTab(tabs[n]);tabs[n].focus()})});const listenDialog=document.getElementById('listen-dialog');const listenPlatforms=['spotify','soundcloud','youtube','bandcamp','beatport','apple'].map(key=>({key,element:document.getElementById('listen-'+key)})).filter(p=>p.element).map(p=>({...p,defaultHref:p.element.href,defaultLabel:p.element.querySelector('span').textContent}));
 document.querySelectorAll('.music-choice:not(.presave)').forEach(b=>b.addEventListener('click',e=>{
   e.preventDefault();
   const isTrack=b.dataset.track!=='MÚSICA DE ROMMUSER';
   listenPlatforms.forEach(({key,element,defaultHref,defaultLabel})=>{
     const href=b.dataset[key];
-    element.hidden=isTrack&&!href;
-    if(element.hidden)element.removeAttribute('href');
-    else element.href=href||defaultHref;
-    element.querySelector('span').textContent=href?tr('ESCUCHAR'):defaultLabel;
+    const pending=isTrack&&!href;
+    element.hidden=false;
+    if(pending){
+      element.removeAttribute('href');
+      element.setAttribute('aria-disabled','true');
+      element.setAttribute('role','link');
+      element.setAttribute('tabindex','-1');
+    }else{
+      element.href=href||defaultHref;
+      element.removeAttribute('aria-disabled');
+      element.removeAttribute('role');
+      element.removeAttribute('tabindex');
+    }
+    element.querySelector('span').textContent=pending?tr('ENLACE PENDIENTE'):href?tr(key==='beatport'||key==='bandcamp'?'COMPRAR':'ESCUCHAR'):defaultLabel;
   });
-  // Catalog links belong to the general selector, never an individual song.
-  listenDialog.querySelectorAll('.listen-links a:not([id])').forEach(a=>{a.hidden=isTrack});
   document.getElementById('listen-title').dataset.original=b.dataset.track;
   document.getElementById('listen-title').textContent=tr(b.dataset.track);
   listenDialog.showModal();

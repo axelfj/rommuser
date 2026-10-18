@@ -342,3 +342,7 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
  .artist-home #contacto .contact-general{flex-direction:column;align-items:flex-start;gap:4px;margin-top:22px;padding-top:16px}
 }
 @media(prefers-reduced-motion:reduce){.artist-home #contacto .contact-email,.artist-home #contacto .contact-docs a{transition:none}}
+
+/* Keep each platform visible while its exact song URL is being verified. */
+.artist-home .listen-links a[aria-disabled="true"]{color:#b3b2ac;cursor:default;background:transparent;pointer-events:none}
+.artist-home .listen-links a[aria-disabled="true"]>span{font-size:10px;font-weight:400;letter-spacing:.04em}
