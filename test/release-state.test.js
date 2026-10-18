@@ -3,11 +3,11 @@ import { runInNewContext } from 'node:vm';
 import { expect, it } from 'vitest';
 const app = readFileSync(new URL('../site/app.js', import.meta.url), 'utf8');
 const source = app.slice(app.indexOf('// Release-day'), app.indexOf('// Preserve the original'));
-function release(day, href = 'https://link.tracks.id/dItL') {
+function release(day, href = 'https://link.tracks.id/dItL', soundcloud) {
   const classes = new Set(['upcoming', 'presave']);
   const label = { textContent: 'PRE-SAVE' };
-  const track = { dataset: { release: '2026-11-10' }, href, disabled: true,
-    classList: { remove: value => classes.delete(value) },
+  const track = { dataset: { release: '2026-11-10', soundcloud }, href, disabled: true,
+    classList: { remove: value => classes.delete(value), contains: value => classes.has(value) },
     hasAttribute: name => name === 'href' && !!href,
     querySelector: selector => selector === '.track-type' ? label : { textContent: 'PIECES' } };
   runInNewContext(source, { document: { querySelectorAll: () => [track] },
@@ -28,4 +28,16 @@ it('enables modal-based releases on their release day', () => {
   const { track, label } = release('2026-11-10', null);
   expect(track.disabled).toBe(false); expect(track.dataset.track).toBe('PIECES');
   expect(label.textContent).toBe('ESCUCHAR');
+});
+
+it('keeps Pieces on pre-save until release, then enables its verified SoundCloud modal destination', () => {
+  const url = 'https://on.soundcloud.com/zYPBqwIx9xIhiN3U4Z';
+  const before = release('2026-11-09', 'https://link.tracks.id/dItL', url);
+  expect(before.classes.has('presave')).toBe(true);
+  expect(before.label.textContent).toBe('PRE-SAVE');
+  const onRelease = release('2026-11-10', 'https://link.tracks.id/dItL', url);
+  expect(onRelease.classes.has('presave')).toBe(false);
+  expect(onRelease.track.dataset.track).toBe('PIECES');
+  expect(onRelease.track.dataset.soundcloud).toBe(url);
+  expect(onRelease.label.textContent).toBe('ESCUCHAR');
 });

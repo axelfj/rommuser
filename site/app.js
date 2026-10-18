@@ -5,7 +5,12 @@ document.querySelectorAll('.track.upcoming[data-release]').forEach(track=>{
   if(track.dataset.release>releaseToday)return;
   track.classList.remove('upcoming');
   track.querySelector('.track-type').textContent=tr('ESCUCHAR');
-  // A pre-save smartlink remains a direct outbound link after release.
+  // Verified release destinations become available through the listening dialog.
+  // Otherwise keep the existing smartlink as the direct outbound destination.
+  if(track.classList.contains('presave')&&track.dataset.soundcloud){
+    track.classList.remove('presave');
+    track.dataset.track=track.querySelector('strong').textContent;
+  }
   if(!track.hasAttribute('href')){
     track.disabled=false;
     track.dataset.track=track.querySelector('strong').textContent;

@@ -28,8 +28,6 @@ footer.universe-footer.compact-footer{display:flex;align-items:center;justify-co
 .music-choice.track{min-height:76px;padding:14px 0;gap:12px}.tracks .track-info{gap:4px}.tracks .track-info strong{font-size:28px;line-height:1.1}.tracks .track-info small{font-size:10px;line-height:1.4}.tracks .track-n,.tracks .release-date,.tracks .track-type{font-size:11px!important}.music-layout .record-block{align-self:start}.music-layout .record-block img{height:190px}.music-layout .record-block h3{font-size:42px;margin:10px 0 18px}@media(max-width:620px){.music-choice.track{min-height:0;padding:12px 0;gap:6px 12px}.tracks .track-info strong{font-size:23px;line-height:1.12}.tracks .track-info small{font-size:10px}.music-choice .track-type{min-height:44px;padding:7px 10px;font-size:10px!important}.tracks .track-n,.tracks .release-date{font-size:10px!important}.music-layout .record-block img{height:150px}.music-layout .record-block h3{font-size:36px;margin:8px 0 15px}}
 /* Release columns share one height; content sits at the center. */
 @media(min-width:1101px){.music-layout .record-block{align-self:stretch;justify-content:center;margin:0;max-width:none;height:100%}}
-/* Orbital category controls echo the matter and portal visual. */
-.music-tabs{gap:10px}.music-tabs button{position:relative;isolation:isolate;overflow:hidden;background:transparent;color:var(--bone);border:1px solid var(--line);border-radius:3px 16px 3px 16px;padding:17px 22px 17px 54px;min-height:58px;text-align:left;font-size:12px;letter-spacing:.1em;transition:border-color .2s,background-color .2s}.music-tabs button::before{content:'';position:absolute;left:20px;top:50%;width:18px;height:28px;border:1px solid var(--bone);border-radius:50%;transform:translateY(-50%) rotate(24deg);opacity:.38;pointer-events:none}.music-tabs button::after{content:'';position:absolute;left:28px;top:calc(50% - 2px);width:4px;height:4px;background:var(--bone);border-radius:50%;transform:translateY(-14px);pointer-events:none}.music-tabs button:hover{border-color:var(--bone)}.music-tabs button[aria-selected="true"]{background:var(--night);color:var(--bone);border-color:var(--bone);border-bottom:3px solid var(--red);padding-bottom:15px}.music-tabs button[aria-selected="true"]::before{opacity:.85}.music-tabs button[aria-selected="true"]::after{background:var(--red);animation:tab-orbit 5s linear infinite}.music-tabs button:hover::after{animation:tab-orbit 5s linear infinite}@keyframes tab-orbit{from{transform:rotate(0deg) translateY(-14px)}to{transform:rotate(360deg) translateY(-14px)}}@media(max-width:620px){.music-tabs button{min-height:54px;padding:14px 12px 14px 42px;font-size:10px;letter-spacing:.05em}.music-tabs button[aria-selected="true"]{padding-bottom:12px}.music-tabs button::before{left:13px;width:16px;height:24px}.music-tabs button::after{left:20px}.music-layout .record-block{justify-content:center}}@media(prefers-reduced-motion:reduce){.music-tabs button{transition:none}.music-tabs button[aria-selected="true"]::after,.music-tabs button:hover::after{animation-duration:12s}}
 /* Studio, Golden Circle teaser, artist credentials, language link */
 .language-toggle{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}.language-toggle:hover{border-color:var(--bone)}nav a[aria-current=page]{text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:8px}
 .gc-teaser{display:flex;align-items:center;justify-content:space-between;gap:12px 32px;flex-wrap:wrap;padding:22px max(4.5%,calc((100vw - 1400px)/2));border-bottom:1px solid var(--line)}.gc-teaser p{flex:1;min-width:220px;font-size:15px}.gc-teaser .eyebrow{margin:0}
@@ -120,7 +118,7 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 .soon .button{align-self:flex-start}
 @media(max-width:900px){.music-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.music-tabs button:last-child{grid-column:auto}}@media(max-width:620px){.music-tabs{gap:6px}.music-tabs button{padding:10px 4px;font-size:10px;letter-spacing:.02em}}
 @media(max-width:900px){.fan-list-grid{grid-template-columns:minmax(0,1fr)}}@media(max-width:620px){.fan-list h2{font-size:13vw}}
-@media(max-width:620px){.music-tabs button::before,.music-tabs button::after{display:none}.music-tabs button{padding:10px 4px!important;text-align:center}}
+
 
 /* Artist home: compact rhythm, a quiet signup strip and aligned booking details. */
 .artist-home .section{padding-top:56px;padding-bottom:56px}
@@ -349,4 +347,24 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 @media(prefers-reduced-motion:reduce){
  .artist-home .signal>.signal-track,.artist-home .music-tabs button::after,.artist-home #vivo .next-label::after{animation:none!important}
  .artist-home *{scroll-behavior:auto;transition:none!important}
+}
+
+/* Compact navigation controls share the listening buttons' visual language. */
+.artist-home .music-tabs{display:flex;gap:10px;flex-wrap:wrap}
+.artist-home .music-tabs button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin:0;padding:0 16px;border:1px solid var(--control-border);border-radius:var(--control-radius);background:linear-gradient(120deg,rgba(234,230,229,.065),transparent);color:var(--bone);font:500 11px/1.4 var(--control-font);letter-spacing:.08em;text-align:center;transition:border-color .2s,background-color .2s,box-shadow .2s}
+.artist-home .music-tabs button[aria-selected="true"]{border-color:var(--bone);background-color:var(--control-hover);box-shadow:inset 2px 0 var(--red)}
+@media(hover:hover){.artist-home .music-tabs button:hover{border-color:var(--bone);background-color:var(--control-hover)}}
+.artist-home .section-label>span{max-width:none;text-align:left}
+.artist-home #contacto.contact-simple{padding-top:28px;padding-bottom:28px}
+.artist-home #contacto .section-label{margin-bottom:18px}
+.artist-home #contacto .contact-entry h3{margin-bottom:4px}
+.artist-home #contacto .contact-entry p{margin-top:4px}
+.artist-home .fan-strip-copy{max-width:480px;opacity:.85}
+@media(max-width:900px){.artist-home .music-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.artist-home #contacto .contact-directory{gap:20px}}
+@media(max-width:620px){
+ .artist-home .music-tabs{gap:6px}
+ .artist-home .music-tabs button{padding:0 5px;font-size:10px;letter-spacing:.02em}
+ .artist-home #contacto.contact-simple{padding-top:24px;padding-bottom:24px}
+ .artist-home .fan-strip-copy{font-size:12px;line-height:1.6}
 }
