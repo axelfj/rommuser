@@ -281,3 +281,24 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 }
 @media(max-width:620px){.artist-home .tracks .track:not(:disabled) .track-type{padding:0 9px;gap:7px;font-size:9px!important;letter-spacing:.06em}}
 @media(prefers-reduced-motion:reduce){.artist-home .tracks .track,.artist-home .tracks .track:not(:disabled) .track-type{transition:none}}
+
+/* Shared interaction rhythm across navigation, cards, forms and dialogs. */
+.artist-home{--control-radius:2px;--control-border:#5c5d55;--control-hover:rgba(234,230,229,.08)}
+.artist-home .button,.artist-home .music-tabs button,.artist-home .copy,.artist-home .dialog-close{border-radius:var(--control-radius)}
+.artist-home .collection-card{background:transparent;color:var(--bone);text-align:left;transition:border-color .2s,background-color .2s}
+.artist-home .collection-card:focus-visible,.artist-home .listen-links a:focus-visible{outline:2px solid var(--bone);outline-offset:4px}
+.artist-home .dialog-close{display:flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;margin:0 0 12px auto;border:1px solid var(--control-border);background:transparent;font:400 28px/1 Arial,sans-serif;letter-spacing:0}
+.artist-home .dialog-close span{line-height:1}
+.artist-home .listen-links a{min-height:56px;align-items:center;padding:12px 8px;transition:background-color .2s}
+@media(hover:hover){
+ .artist-home .collection-card:hover,.artist-home .listen-links a:hover,.artist-home .dialog-close:hover{background-color:var(--control-hover);border-color:var(--bone)}
+}
+@media(max-width:620px){
+ .artist-home .tracks .music-choice.track{grid-template-columns:20px minmax(0,1fr) auto;grid-template-areas:'number info action' '. date action';align-items:center;gap:5px 10px}
+ .artist-home .tracks .track-type{grid-area:action;align-self:center;justify-self:end}
+ .artist-home .tracks .track-info strong{font-size:21px}
+ .artist-home .tracks .track:disabled .track-type{font-size:8px!important;letter-spacing:0;white-space:normal;max-width:82px;min-width:0;text-align:right}
+ .artist-home .listen-links a{flex-wrap:nowrap;gap:12px}
+ .artist-home .listen-links a>span{text-align:right}
+}
+@media(prefers-reduced-motion:reduce){.artist-home .collection-card,.artist-home .listen-links a{transition:none}}
