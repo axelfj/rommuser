@@ -349,11 +349,11 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
  .artist-home *{scroll-behavior:auto;transition:none!important}
 }
 
-/* Compact navigation controls share the listening buttons' visual language. */
-.artist-home .music-tabs{display:flex;gap:10px;flex-wrap:wrap}
-.artist-home .music-tabs button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin:0;padding:0 16px;border:1px solid var(--control-border);border-radius:var(--control-radius);background:linear-gradient(120deg,rgba(234,230,229,.065),transparent);color:var(--bone);font:500 11px/1.4 var(--control-font);letter-spacing:.08em;text-align:center;transition:border-color .2s,background-color .2s,box-shadow .2s}
-.artist-home .music-tabs button[aria-selected="true"]{border-color:var(--bone);background-color:var(--control-hover);box-shadow:inset 2px 0 var(--red)}
-@media(hover:hover){.artist-home .music-tabs button:hover{border-color:var(--bone);background-color:var(--control-hover)}}
+/* Connected category tabs with a shared baseline and selected underline. */
+.artist-home .music-tabs{display:flex;gap:0;flex-wrap:nowrap;border-bottom:1px solid var(--line)}
+.artist-home .music-tabs button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin:0 0 -1px;padding:0 22px;border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;color:rgba(234,230,229,.6);font:500 11px/1.4 var(--control-font);letter-spacing:.08em;text-align:center;transition:border-color .2s,background-color .2s,box-shadow .2s}
+.artist-home .music-tabs button[aria-selected="true"]{border-bottom-color:var(--red);background:transparent;color:var(--bone);box-shadow:none}
+@media(hover:hover){.artist-home .music-tabs button:hover{color:var(--bone);background-color:rgba(234,230,229,.035)}}
 .artist-home .section-label>span{max-width:none;text-align:left}
 .artist-home #contacto.contact-simple{padding-top:28px;padding-bottom:28px}
 .artist-home #contacto .section-label{margin-bottom:18px}
@@ -363,7 +363,7 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 @media(max-width:900px){.artist-home .music-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){.artist-home #contacto .contact-directory{gap:20px}}
 @media(max-width:620px){
- .artist-home .music-tabs{gap:6px}
+ .artist-home .music-tabs{gap:0}
  .artist-home .music-tabs button{padding:0 5px;font-size:10px;letter-spacing:.02em}
  .artist-home #contacto.contact-simple{padding-top:24px;padding-bottom:24px}
  .artist-home .fan-strip-copy{font-size:12px;line-height:1.6}
