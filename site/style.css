@@ -239,7 +239,11 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 #vivo .show-row{grid-template-columns:56px 120px 1fr 100px;padding-left:12px;padding-right:12px;opacity:var(--fade,1);transition:background-color .25s,color .25s,opacity .25s}
 #vivo .show-row::before{content:attr(data-addr);font:400 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em;opacity:.5}
 #vivo .show-row time{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:400;letter-spacing:.06em}
-@media(hover:hover){#vivo .show-row:hover{background:var(--bone);color:var(--night);opacity:1}#vivo .show-row:hover::before{opacity:1}#vivo .show-row:hover a{color:var(--night)}}
+@media(hover:hover){#vivo .show-row:hover{background:var(--bone);color:var(--night);opacity:1}#vivo .show-row:hover::before{opacity:1}#vivo .show-row:hover a:not(:hover){color:var(--night)}}
 #vivo .club-history{margin-top:0;border-top:0}
-@media(max-width:620px){#vivo .show-row{grid-template-columns:34px 64px minmax(0,1fr);gap:12px;padding-left:4px;padding-right:4px}#vivo .show-row::before{font-size:11px}#vivo .show-year summary{padding:0 4px}}
+#vivo .show-video{gap:10px;min-height:36px;margin-top:14px;padding:0 14px 0 12px;border:1px solid currentColor;font-size:11px;letter-spacing:.16em;text-decoration:none;transition:background-color .2s,color .2s}
+#vivo .show-video::before{content:"";width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent currentColor}
+@media(hover:hover){#vivo .show-row .show-video:hover{background:var(--night);color:var(--bone);border-color:var(--night)}}
+#vivo .show-video:focus-visible{outline:1px solid currentColor;outline-offset:3px}
+@media(max-width:620px){#vivo .show-row{grid-template-columns:34px 64px minmax(0,1fr);gap:12px;padding-left:4px;padding-right:4px}#vivo .show-row::before{font-size:11px}#vivo .show-year summary{padding:0 4px}#vivo .show-video{min-height:44px}}
 @media(prefers-reduced-motion:reduce){#vivo .next-label::after{animation:none}#vivo .show-row{transition:none}}
