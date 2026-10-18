@@ -266,3 +266,18 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
   #vivo .show-year summary{padding:0 4px}
 }
 @media(prefers-reduced-motion:reduce){#vivo .next-label::after{animation:none}#vivo .show-row,#vivo .show-video,#vivo .show-year summary::after{transition:none}}
+
+/* Live and recorded music share the same restrained playback controls. */
+#vivo .section-heading>p{text-align:right;margin-left:auto}
+.artist-home .tracks .track{transition:background-color .2s,border-color .2s}
+.artist-home .tracks .track-n,.artist-home .tracks .release-date{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:400;letter-spacing:.04em;color:#b3b2ac}
+.artist-home .tracks .track:not(:disabled) .track-type{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;min-width:0;padding:0 12px;border:1px solid #5c5d55;border-radius:2px;background:linear-gradient(120deg,rgba(234,230,229,.065),transparent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px!important;font-weight:500;line-height:1.4;letter-spacing:.08em;text-decoration:none;transition:border-color .2s,background-color .2s,box-shadow .2s}
+.artist-home .tracks .track:not(:disabled):not(.presave) .track-type::before{content:"";width:0;height:0;border-style:solid;border-width:4px 0 4px 6px;border-color:transparent transparent transparent currentColor}
+.artist-home .tracks .track.presave .track-type::after{content:"↗";font-size:14px;color:#92938c}
+.artist-home .tracks .track:focus-visible .track-type{border-color:var(--bone);background-color:rgba(234,230,229,.08);box-shadow:inset 2px 0 var(--red)}
+@media(hover:hover){
+  .artist-home .tracks .track:not(:disabled):hover{background-color:rgba(234,230,229,.035);border-color:#72736b}
+  .artist-home .tracks .track:not(:disabled):hover .track-type{border-color:var(--bone);background-color:rgba(234,230,229,.08);box-shadow:inset 2px 0 var(--red);text-decoration:none}
+}
+@media(max-width:620px){.artist-home .tracks .track:not(:disabled) .track-type{padding:0 9px;gap:7px;font-size:9px!important;letter-spacing:.06em}}
+@media(prefers-reduced-motion:reduce){.artist-home .tracks .track,.artist-home .tracks .track:not(:disabled) .track-type{transition:none}}
