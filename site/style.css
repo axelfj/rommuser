@@ -230,9 +230,9 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 #vivo .show-year{border-bottom:1px solid var(--line)}
 #vivo .show-year summary{display:flex;align-items:center;gap:18px;min-height:56px;padding:0 12px;cursor:pointer;list-style:none;font:700 13px Poppins,Arial,sans-serif;letter-spacing:.2em}
 #vivo .show-year summary::-webkit-details-marker{display:none}
-#vivo .show-year summary::after{content:"+";margin-left:auto;font:400 20px Poppins,Arial,sans-serif;line-height:1;transition:transform .25s}
+#vivo .show-year summary::after{content:"";width:8px;height:8px;margin-left:auto;margin-right:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .25s}
 #vivo .show-year[open] summary{border-bottom:1px solid var(--bone)}
-#vivo .show-year[open] summary::after{transform:rotate(45deg)}
+#vivo .show-year[open] summary::after{transform:rotate(225deg)}
 #vivo .show-year .show-count{font-size:11px;opacity:.5;letter-spacing:.14em}
 #vivo .show-year summary:focus-visible{outline:1px solid var(--bone);outline-offset:-1px}
 #vivo .show-year .show-row:last-child{border-bottom:0}
@@ -255,13 +255,13 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 #vivo .show-year summary{min-height:46px}
 @media(max-width:900px){#vivo .show-row{grid-template-columns:28px 80px minmax(0,1fr);gap:14px}#vivo .show-row>span{display:none}}
 @media(max-width:620px){
-  #vivo .show-row{grid-template-columns:24px minmax(0,1fr);gap:6px 10px;padding:12px 4px;min-height:90px}
+  #vivo .show-row{grid-template-columns:24px minmax(0,1fr) auto;gap:2px 10px;padding:12px 4px;min-height:90px}
   #vivo .show-row::before{grid-column:1;grid-row:1;align-self:center;font-size:10px}
   #vivo .show-row time{grid-column:2;grid-row:1;font-size:11px}
-  #vivo .show-row>div{grid-column:2;grid-row:2;column-gap:10px}
-  #vivo .show-row h3{font-size:20px}
-  #vivo .show-row p{font-size:11px}
-  #vivo .show-video{gap:7px;padding:0 9px;font-size:9px;letter-spacing:.06em}
+  #vivo .show-row>div{display:contents}
+  #vivo .show-row h3{grid-column:2;grid-row:2;font-size:20px;margin-bottom:0}
+  #vivo .show-row p{grid-column:2;grid-row:3;font-size:11px}
+  #vivo .show-video{grid-column:3;grid-row:1 / span 3;align-self:center;gap:7px;padding:0 9px;font-size:9px;letter-spacing:.06em}
   #vivo .show-video::after{display:none}
   #vivo .show-year summary{padding:0 4px}
 }
