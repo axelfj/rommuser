@@ -226,12 +226,20 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 #vivo .next-label{display:flex;align-items:center;gap:12px}
 #vivo .next-label::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--red);animation:show-signal 1.6s ease-in-out infinite}
 @keyframes show-signal{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(200,29,37,.55)}50%{opacity:.35;box-shadow:0 0 0 7px rgba(200,29,37,0)}}
-#vivo .show-history-label{margin-bottom:0}
-#vivo .show-year{font:700 13px Poppins,Arial,sans-serif;letter-spacing:.2em;border-bottom:1px solid var(--bone);padding:30px 12px 12px}
+#vivo .show-history-label{margin-bottom:12px}
+#vivo .show-year{border-bottom:1px solid var(--line)}
+#vivo .show-year summary{display:flex;align-items:center;gap:18px;min-height:56px;padding:0 12px;cursor:pointer;list-style:none;font:700 13px Poppins,Arial,sans-serif;letter-spacing:.2em}
+#vivo .show-year summary::-webkit-details-marker{display:none}
+#vivo .show-year summary::after{content:"+";margin-left:auto;font:400 20px Poppins,Arial,sans-serif;line-height:1;transition:transform .25s}
+#vivo .show-year[open] summary{border-bottom:1px solid var(--bone)}
+#vivo .show-year[open] summary::after{transform:rotate(45deg)}
+#vivo .show-year .show-count{font-size:11px;opacity:.5;letter-spacing:.14em}
+#vivo .show-year summary:focus-visible{outline:1px solid var(--bone);outline-offset:-1px}
+#vivo .show-year .show-row:last-child{border-bottom:0}
 #vivo .show-row{grid-template-columns:56px 120px 1fr 100px;padding-left:12px;padding-right:12px;opacity:var(--fade,1);transition:background-color .25s,color .25s,opacity .25s}
 #vivo .show-row::before{content:attr(data-addr);font:400 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em;opacity:.5}
 #vivo .show-row time{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:400;letter-spacing:.06em}
 @media(hover:hover){#vivo .show-row:hover{background:var(--bone);color:var(--night);opacity:1}#vivo .show-row:hover::before{opacity:1}#vivo .show-row:hover a{color:var(--night)}}
 #vivo .club-history{margin-top:0;border-top:0}
-@media(max-width:620px){#vivo .show-row{grid-template-columns:34px 64px minmax(0,1fr);gap:12px;padding-left:4px;padding-right:4px}#vivo .show-row::before{font-size:11px}#vivo .show-year{padding-left:4px}}
+@media(max-width:620px){#vivo .show-row{grid-template-columns:34px 64px minmax(0,1fr);gap:12px;padding-left:4px;padding-right:4px}#vivo .show-row::before{font-size:11px}#vivo .show-year summary{padding:0 4px}}
 @media(prefers-reduced-motion:reduce){#vivo .next-label::after{animation:none}#vivo .show-row{transition:none}}
