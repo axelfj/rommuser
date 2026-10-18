@@ -310,9 +310,3 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
  .artist-home .tracks .track-info{align-self:end}
  .artist-home .tracks .release-date{align-self:start}
 }
-/* EN CABINA: venues as a ruled strip aligned with the show columns instead of a run-on line. */
-#vivo .club-history{display:grid;grid-template-columns:168px repeat(3,minmax(0,1fr));align-items:stretch;margin-top:28px;padding:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-#vivo .club-history>.eyebrow{align-self:center;margin:0;padding:18px 12px;font-size:11px;opacity:.6}
-#vivo .club-names{display:contents}
-#vivo .club-names span{display:flex;align-items:center;min-height:72px;padding:14px 20px;border-left:1px solid var(--line);font:700 clamp(15px,1.4vw,19px) 'League Spartan',Arial,sans-serif;letter-spacing:.04em;line-height:1.15}
-@media(max-width:900px){#vivo .club-history{grid-template-columns:1fr;margin-top:12px;border-top:0}#vivo .club-history>.eyebrow{padding:16px 4px 10px}#vivo .club-names span{min-height:52px;padding:12px 4px;border-left:0;border-top:1px solid var(--line)}}
