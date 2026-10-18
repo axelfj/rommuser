@@ -368,3 +368,8 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
  .artist-home #contacto.contact-simple{padding-top:24px;padding-bottom:24px}
  .artist-home .fan-strip-copy{font-size:12px;line-height:1.6}
 }
+
+/* Keep the external studio destination distinct from in-page navigation. */
+nav a.nav-external{display:inline-flex;align-items:center;gap:6px;padding-left:16px;border-left:1px solid var(--line)}
+nav a.nav-external svg{flex:none}
+@media(max-width:900px){nav a.nav-external{padding-left:0;border-left:0}}
