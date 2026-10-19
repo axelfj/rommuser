@@ -21,7 +21,7 @@ ctx.globalAlpha=1;drawGame();}
 function loop(now){frame=0;if((paused&&!active())||!visible||document.hidden){last=0;return;}const dt=last?Math.min((now-last)/1000,.05):0;if(!paused)time+=dt;clock+=dt;step(dt);last=now;draw();frame=requestAnimationFrame(loop);}
 function sync(){scene.classList.toggle('is-paused',paused);button.textContent=tr(paused?'REANUDAR MOVIMIENTO':'PAUSAR MOVIMIENTO');button.setAttribute('aria-pressed',String(paused));if(frame)cancelAnimationFrame(frame);frame=0;last=0;if((!paused||active())&&visible&&!document.hidden)frame=requestAnimationFrame(loop);}
 button.addEventListener('click',()=>{paused=!paused;sync();});reduced.addEventListener('change',()=>{paused=reduced.matches;if(reduced.matches){ship.on=false;bullets.length=0;sparks.length=0;}sync();draw();});document.addEventListener('languagechange',sync);document.addEventListener('visibilitychange',sync);addEventListener('scroll',()=>{if(visible&&(paused||!frame))draw();},{passive:true});new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;sync();},{threshold:.05}).observe(scene);new ResizeObserver(resize).observe(scene);
-function active(){return !reduced.matches&&(ship.on||bullets.length||sparks.length);}
+function active(){return (!reduced.matches&&ship.on)||bullets.length||sparks.length;}
 function step(dt){for(const b of bullets){b.y-=b.v*dt;}for(let k=bullets.length-1;k>=0;k--){const b=bullets[k];let hit=b.y<-10;for(let i=0;i<2&&!hit;i++){const q=pos[i];if(q&&Math.hypot(q.x-b.x,q.y-b.y)<18){hit=true;dead[i]=clock+2.5;for(let n=0;n<16;n++){const a=Math.random()*Math.PI*2,v=60+Math.random()*160;sparks.push({x:q.x,y:q.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:.7});}}}if(hit)bullets.splice(k,1);}
 // The logo reads incoming bullets and the ship, and slips sideways out of the line of fire.
 const q=pos[2];if(q){for(const b of bullets){const dy=q.y-b.y,dx=q.x-b.x;if(dy<0&&dy>-220&&Math.abs(dx)<46){dodge.vx+=(dx>=0?1:-1)*(1400/(Math.abs(dx)+12))*dt*60;}}const sx=q.x-ship.x,sy=q.y-ship.y,sd=Math.hypot(sx,sy);if(ship.on&&sd<110&&sd>0){dodge.vx+=sx/sd*900*dt;dodge.vy+=sy/sd*900*dt;}}
@@ -33,6 +33,6 @@ function point(e){const r=scene.getBoundingClientRect();ship.tilt+=((e.clientX-r
 function onButton(e){return e.target.closest&&e.target.closest('.motion-control');}
 scene.addEventListener('pointermove',e=>{if(onButton(e)){ship.on=false;draw();return;}point(e);ship.on=true;if(reduced.matches){draw();return;}if(!frame)sync();});
 scene.addEventListener('pointerleave',()=>{ship.on=false;draw();});
-scene.addEventListener('pointerdown',e=>{if(reduced.matches)return;if(onButton(e))return;point(e);ship.on=true;bullets.push({x:ship.x,y:ship.y-16,v:720});if(!frame)sync();});
+scene.addEventListener('pointerdown',e=>{if(onButton(e))return;point(e);ship.on=true;bullets.push({x:ship.x,y:ship.y-16,v:720});if(!frame)sync();});
 sync();
 })();
