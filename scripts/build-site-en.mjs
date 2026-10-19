@@ -108,7 +108,7 @@ export function buildEnglishPage(html, dictionary, page = PAGES[0]) {
   out = out.replace(toggle, `<a class="language-toggle" id="site-language" href="${page.esPath}" hreflang="es"$1>EN</a>`);
 
   // Press documents in English.
-  out = out.replace(/<a [^>]*id="localized-(?:epk|rider)"[^>]*>/g, (tag) => {
+  out = out.replace(/<a [^>]*data-en="[^"]+"[^>]*>/g, (tag) => {
     const en = tag.match(/data-en="([^"]+)"/);
     return en ? tag.replace(/ href="[^"]*"/, ` href="${en[1]}"`) : tag;
   });
