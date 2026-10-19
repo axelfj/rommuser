@@ -373,11 +373,12 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 nav a.nav-external{display:inline-flex;align-items:center;gap:6px;padding-left:16px;border-left:1px solid var(--line)}
 nav a.nav-external svg{flex:none}
 @media(max-width:900px){nav a.nav-external{padding-left:0;border-left:0}}
-/* Labels ordered by relevance, spread across the full row. */
-.artist-home .music-labels .label-list{justify-content:space-between;gap:12px 24px}
-@media(max-width:620px){.artist-home .music-labels .label-list{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}}
-
-/* Release and set actions use the same colors for pointer and keyboard interaction. */
-.artist-home .tracks .track:not(:disabled) .track-type,#vivo .show-video{color:var(--bone);text-decoration:none}
-.artist-home .tracks .track:focus-visible .track-type,#vivo .show-video:focus-visible{color:var(--bone);border-color:var(--bone);background-color:var(--control-hover);box-shadow:inset 2px 0 var(--red)}
-@media(hover:hover){.artist-home .tracks .track:not(:disabled):hover .track-type,#vivo .show-video:hover{color:var(--bone);border-color:var(--bone);background-color:var(--control-hover);box-shadow:inset 2px 0 var(--red)}}
+/* Labels ordered by weight in three tiers, spread across the full row. */
+.artist-home .music-labels .label-list{justify-content:space-between;align-items:center;gap:12px 24px}
+.artist-home .music-labels .label-tier-1{font-size:clamp(20px,2.1vw,28px)}
+.artist-home .music-labels .label-tier-1 .label-flag{width:30px;height:20px}
+.artist-home .music-labels .label-tier-3{font-size:clamp(12px,1.1vw,15px);opacity:.75}
+.artist-home .music-labels .label-tier-3 .label-flag{width:20px;height:13px}
+.artist-home .music-labels .label-list li{white-space:nowrap}
+@media(max-width:1100px){.artist-home .music-labels .label-list{display:grid;grid-template-columns:repeat(3,auto);gap:16px 24px}}
+@media(max-width:620px){.artist-home .music-labels .label-list{grid-template-columns:1fr 1fr;gap:14px 16px}.artist-home .music-labels .label-tier-1{font-size:clamp(15px,4.6vw,19px)}.artist-home .music-labels .label-tier-1 .label-flag{width:26px;height:17px}}
