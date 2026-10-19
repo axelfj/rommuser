@@ -373,3 +373,6 @@ nav .nav-soon{font-family:Poppins,Arial,sans-serif;font-size:14px;font-weight:70
 nav a.nav-external{display:inline-flex;align-items:center;gap:6px;padding-left:16px;border-left:1px solid var(--line)}
 nav a.nav-external svg{flex:none}
 @media(max-width:900px){nav a.nav-external{padding-left:0;border-left:0}}
+/* Labels ordered by relevance, spread across the full row. */
+.artist-home .music-labels .label-list{justify-content:space-between;gap:12px 24px}
+@media(max-width:620px){.artist-home .music-labels .label-list{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}}
