@@ -4,9 +4,9 @@ import { expect, it } from 'vitest';
 const source = readFileSync(new URL('../site/universe.js', import.meta.url), 'utf8');
 function setup(reduce) {
   const events = {}, classes = new Set();
-  let frames = 0, bullets = 0, nextFrame;
-  const ctx = new Proxy({ fillRect: () => bullets++ }, { get: (o, k) => o[k] ?? (() => {}) });
-  const button = { addEventListener() {}, setAttribute() {} };
+  let frames = 0, clicks, nextFrame;
+  const ctx = new Proxy({}, { get: (o, k) => o[k] ?? (() => {}), set: (o, k, v) => { o[k] = v; return true; } });
+  const button = { addEventListener: (key, fn) => { if (key === 'click') clicks = fn; }, setAttribute() {} };
   const scene = { querySelector: () => button, getBoundingClientRect: () => ({left:0,top:0,width:600,height:400}),
     classList: { toggle: (key, on) => on ? classes.add(key) : classes.delete(key) },
     addEventListener: (key, fn) => { events[key] = fn; } };
@@ -18,27 +18,25 @@ function setup(reduce) {
     IntersectionObserver: class { constructor(fn) {this.fn=fn;} observe() {this.fn([{isIntersecting:true}]);} },
     ResizeObserver: class { constructor(fn) {this.fn=fn;} observe() {this.fn();} },
     requestAnimationFrame: fn => {nextFrame=fn;return ++frames;}, cancelAnimationFrame() {}, addEventListener() {},
-    innerHeight:800, devicePixelRatio:1, tr: x => x,
+    innerHeight:800, devicePixelRatio:3, tr: x => x,
   });
-  const pointer = {clientX:150,clientY:100,target:{closest:()=>null}};
-  return { events, classes, pointer, frames:()=>frames, bullets:()=>bullets, tick:now=>nextFrame(now) };
+  return { events, classes, ctx, canvas, button, frames:()=>frames, click:()=>clicks(), tick:now=>nextFrame(now) };
 }
-it('shows a static ship in reduced motion and animates only after an explicit shot', () => {
-  const s=setup(true);
-  s.events.pointermove(s.pointer);
-  expect(s.classes.has('ship-active')).toBe(true);
-  expect(s.frames()).toBe(0);
-  s.events.pointerdown(s.pointer);
-  expect(s.frames()).toBe(1);
-  s.tick(100);
-  expect(s.bullets()).toBeGreaterThan(0);
-  s.events.pointerleave();
-  expect(s.classes.has('ship-active')).toBe(false);
+it('drifts on its own without any pointer game', () => {
+  const s=setup(false);
+  expect(s.frames()).toBeGreaterThan(0);
+  expect(Object.keys(s.events)).toEqual([]);
+  expect(source).not.toMatch(/shadowBlur|pointer/);
 });
-it('restores the native cursor over the motion control in reduced motion', () => {
+it('caps the canvas pixel ratio to keep it light', () => {
+  const s=setup(false);
+  expect(s.canvas.width).toBe(900);
+});
+it('stays still in reduced motion until the visitor resumes it', () => {
   const s=setup(true);
-  s.events.pointermove(s.pointer);
-  s.events.pointermove({...s.pointer,target:{closest:()=>({})}});
-  expect(s.classes.has('ship-active')).toBe(false);
   expect(s.frames()).toBe(0);
+  expect(s.classes.has('is-paused')).toBe(true);
+  s.click();
+  expect(s.frames()).toBe(1);
+  expect(s.button.textContent).toBe('PAUSAR MOVIMIENTO');
 });
