@@ -41,4 +41,10 @@ describe('rommuser.com', () => {
       expect(read(path)).toContain('<strong>ECHOES</strong><small>LVLD MUSIC</small>');
     }
   });
+
+  it('acredita los sellos de FIRMADO EN, con LVLD Music en lugar de LFTD Global', () => {
+    const html = read('index.html');
+    for (const label of ['HouseYouNite', 'DENAR RCRDS', 'LVLD Music', 'Electric Eden', 'Late Hours']) expect(html).toContain(label);
+    expect(html).not.toContain('LFTD');
+  });
 });

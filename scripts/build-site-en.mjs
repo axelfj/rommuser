@@ -13,7 +13,7 @@ export const ORIGIN = 'https://rommuser.com';
 export const PAGES = [
   {
     es: 'index.html', en: 'en/index.html', esPath: '/', enPath: '/en/',
-    description: 'ROMMUSER is a house and techno DJ and producer with a melodic soul from San José, Costa Rica. Listen to his releases, watch his live sets and book him for clubs, festivals, events or to mix and master your track.',
+    description: 'ROMMUSER, house and techno DJ and producer with a melodic soul from Costa Rica. Releases, live sets and bookings for clubs, festivals and events.',
     ogDescription: 'House and techno, with a melodic soul. Music, live sets and bookings from Costa Rica.',
     ogImageAlt: 'ROMMUSER, DJ and producer from Costa Rica',
     ld: [['DJ y productor de house y techno con alma melódica desde Costa Rica.', 'House and techno DJ and producer with a melodic soul from Costa Rica.'], ['"knowsAbout":["Mezcla",', '"knowsAbout":["Mixing",']],
