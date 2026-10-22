@@ -35,6 +35,14 @@ describe('rommuser.com', () => {
     expect(connect).toContain('https://script.googleusercontent.com');
   });
 
+  it('anuncia el lanzamiento del 11.12.2026 como ID / ID, con el mismo formato que los demás', () => {
+    const row = read('index.html').match(/<button class="track music-choice upcoming"[^>]*data-release="2026-12-11">.*?<\/button>/s)?.[0];
+    expect(row).toContain('<strong>ID</strong><small>ID</small>');
+    expect(row).toContain('<time class="release-date" datetime="2026-12-11">11.12.2026</time>');
+    expect(row).not.toContain('disabled');
+    expect(read('en/index.html')).toContain('<strong>ID</strong><small>ID</small>');
+  });
+
   it('acredita los sellos confirmados para Never Be y Echoes', () => {
     for (const path of ['index.html', 'en/index.html']) {
       expect(read(path)).toContain('<strong>NEVER BE</strong><small>HOUSE OF BOOGIE</small>');
