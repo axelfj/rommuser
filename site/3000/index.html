@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>ROMMUSER 3000</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap">
+<style>
+/* Layout: una transmisión vertical. Campo de frecuencia vivo detrás, contenido en una columna de "lectura de señal" con datos a la izquierda y voz a la derecha. */
+:root {
+  --void: #050505;        /* el vacío */
+  --ink: #f2f0ea;         /* hueso */
+  --dim: #8b8984;         /* señal débil */
+  --ghost: #2a2927;       /* líneas, bordes */
+  --veil: rgba(5,5,5,.72);
+  --life: #ff4d2e;        /* color = la persona detrás. Solo aparece en USER */
+  --display: "Syncopate", "Eurostile", "Arial Black", sans-serif;
+  --voice: "Cormorant Garamond", "Garamond", Georgia, serif;
+  --data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box }
+html { scroll-behavior: smooth }
+body {
+  background: var(--void); color: var(--ink);
+  font: 300 15px/1.6 var(--data);
+  overflow-x: hidden;
+}
+::selection { background: var(--ink); color: var(--void) }
+a { color: inherit }
+:focus-visible { outline: 1px solid var(--ink); outline-offset: 4px }
+
+#field { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none }
+.grain { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .07;
+  background-image: repeating-linear-gradient(0deg, var(--ink) 0 1px, transparent 1px 3px); mix-blend-mode: overlay }
+
+.wrap { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+
+/* barra de estado */
+.status { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--veil); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ghost) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--void) }
+.status .wrap { display: flex; gap: 20px; align-items: center; justify-content: space-between; padding-block: 12px;
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim) }
+.status nav { display: flex; gap: 22px; flex-wrap: wrap }
+.status nav a { text-decoration: none; color: var(--dim); transition: color .3s }
+.status nav a:hover { color: var(--ink) }
+.mark { display: flex; align-items: center; gap: 10px; color: var(--ink) }
+.mark img { width: 26px; height: 26px; filter: grayscale(1) invert(1) brightness(1.4) }
+.live { display: inline-flex; align-items: center; gap: 8px }
+.live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); animation: pulse 2.4s infinite }
+@keyframes pulse { 50% { opacity: .15 } }
+
+/* HERO */
+.hero { padding-block: 9vh 8vh; display: grid; gap: 40px }
+.boot { font-size: 11px; letter-spacing: .12em; color: var(--dim); display: grid; gap: 4px; text-transform: uppercase }
+.boot b { color: var(--ink); font-weight: 400 }
+.word { font-family: var(--display); font-weight: 700; line-height: .86; letter-spacing: -.02em;
+  font-size: clamp(54px, 14.5vw, 196px); display: flex; flex-wrap: wrap; margin: 0 }
+.word span { display: inline-block; position: relative; transition: color .8s, text-shadow .8s }
+.word .u { -webkit-text-stroke: 1px var(--ink); color: transparent }
+.word:hover .u, .word .u:focus { color: var(--life); -webkit-text-stroke-color: var(--life); text-shadow: 0 0 40px rgba(255,77,46,.45) }
+.etym { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; background: var(--ghost); border: 1px solid var(--ghost) }
+.etym div { background: var(--void); padding: 18px 18px 20px; display: grid; gap: 6px; min-width: 0 }
+.etym small { font-size: 10px; letter-spacing: .2em; color: var(--dim) }
+.etym strong { font-family: var(--display); font-size: 18px; letter-spacing: .08em; font-weight: 400 }
+.etym p { margin: 0; font-family: var(--voice); font-style: italic; font-size: 19px; line-height: 1.3; color: var(--ink) }
+.etym .user-cell strong { transition: color .6s }
+.etym .user-cell:hover strong { color: var(--life) }
+
+.thesis { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: clamp(24px, 5vw, 72px); align-items: end }
+.thesis h2 { font-family: var(--voice); font-weight: 300; font-style: italic; font-size: clamp(30px, 4.4vw, 58px); line-height: 1.04; margin: 0; text-wrap: balance }
+.thesis .side { display: grid; gap: 22px }
+.genre { font-size: 12px; letter-spacing: .24em; text-transform: uppercase }
+.thesis p { margin: 0; color: var(--dim); max-width: 46ch }
+.cta { display: flex; gap: 12px; flex-wrap: wrap }
+.btn { font: 400 11px/1 var(--data); letter-spacing: .2em; text-transform: uppercase; text-decoration: none; cursor: pointer;
+  padding: 15px 20px; border: 1px solid var(--ink); background: var(--ink); color: var(--void); transition: background .3s, color .3s }
+.btn.ghost { background: transparent; color: var(--ink) }
+.btn:hover { background: transparent; color: var(--ink) }
+.btn.ghost:hover, .btn.ghost[aria-pressed="true"] { background: var(--ink); color: var(--void) }
+
+/* secciones */
+section.block { padding-block: 12vh 4vh; display: grid; gap: 36px }
+.head { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 24px; align-items: baseline; border-top: 1px solid var(--ghost); padding-top: 18px }
+.head small { font-size: 10px; letter-spacing: .24em; color: var(--dim); text-transform: uppercase }
+.head h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(22px, 3.4vw, 40px); letter-spacing: .04em; text-wrap: balance }
+
+/* sintonizador */
+.tuner { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); gap: 1px; background: var(--ghost); border: 1px solid var(--ghost) }
+.scope { background: var(--void); padding: 22px; display: grid; gap: 18px; align-content: start; min-width: 0 }
+.scope canvas { width: 100%; height: 150px; display: block; border-bottom: 1px solid var(--ghost) }
+.readout { display: grid; gap: 4px }
+.readout .freq { font-family: var(--display); font-size: clamp(30px, 4vw, 48px); letter-spacing: .02em; font-variant-numeric: tabular-nums }
+.readout .t { font-family: var(--voice); font-style: italic; font-size: 26px; line-height: 1.1 }
+.readout .meta { font-size: 11px; letter-spacing: .14em; color: var(--dim); text-transform: uppercase }
+.dial { width: 100%; accent-color: var(--ink) }
+.channels { background: var(--void); list-style: none; margin: 0; padding: 0; min-width: 0 }
+.channels button { width: 100%; display: grid; grid-template-columns: 74px minmax(0,1fr) auto; gap: 14px; align-items: baseline;
+  text-align: left; font: inherit; color: var(--dim); background: none; border: 0; border-bottom: 1px solid var(--ghost);
+  padding: 15px 20px; cursor: pointer; transition: color .25s, background .25s }
+.channels li:last-child button { border-bottom: 0 }
+.channels button:hover { color: var(--ink) }
+.channels button[aria-current="true"] { color: var(--void); background: var(--ink) }
+.channels .hz { font-size: 12px; font-variant-numeric: tabular-nums }
+.channels .nm { font-family: var(--display); font-size: 14px; letter-spacing: .06em; overflow-wrap: anywhere }
+.channels .yr { font-size: 11px; letter-spacing: .1em; font-variant-numeric: tabular-nums }
+.channels .soon { font-size: 9px; letter-spacing: .2em; border: 1px solid currentColor; padding: 2px 6px; margin-left: 8px; vertical-align: 2px }
+.labels { display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--dim) }
+.labels b { color: var(--ink); font-weight: 400 }
+
+/* el artista */
+.artist { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: clamp(24px, 5vw, 64px); align-items: center }
+.portrait { position: relative; margin: 0; aspect-ratio: 4/5; max-width: 100%; overflow: hidden; border: 1px solid var(--ghost) }
+.portrait img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15) brightness(.9); display: block }
+.portrait::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(5,5,5,.35) 0 1px, transparent 1px 4px); animation: scan 7s linear infinite }
+@keyframes scan { to { background-position: 0 120px } }
+.portrait figcaption { position: absolute; left: 12px; bottom: 10px; z-index: 2; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink); text-shadow: 0 0 8px var(--void) }
+.verses { display: grid; gap: 14px }
+.verses p { margin: 0; font-family: var(--voice); font-size: clamp(26px, 3.4vw, 44px); line-height: 1.08; font-weight: 300 }
+.verses p:nth-child(2) { font-style: italic; color: var(--dim) }
+.verses .note { font: 300 14px/1.7 var(--data); color: var(--dim); max-width: 52ch; margin-top: 14px }
+.verses .note b { color: var(--ink); font-weight: 400 }
+
+/* bitácora */
+.next { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 20px; align-items: center; border: 1px solid var(--ink); padding: 22px 24px }
+.next small { font-size: 10px; letter-spacing: .24em; color: var(--dim) }
+.next h4 { margin: 4px 0 0; font-family: var(--display); font-size: clamp(26px, 4vw, 44px); font-weight: 700; letter-spacing: .02em }
+.next p { margin: 2px 0 0; color: var(--dim); font-size: 13px }
+.count { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; letter-spacing: .1em; color: var(--dim) }
+.count strong { display: block; font-family: var(--display); font-size: 28px; color: var(--ink); font-weight: 400 }
+.log { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ghost) }
+.log li { display: grid; grid-template-columns: 110px 120px minmax(0,1fr) auto; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--ghost); font-size: 13px }
+.log .d { font-variant-numeric: tabular-nums; color: var(--ink) }
+.log .ago { font-size: 10px; letter-spacing: .14em; color: var(--dim); font-variant-numeric: tabular-nums }
+.log .v { min-width: 0 }
+.log .v b { font-family: var(--display); font-weight: 400; font-size: 13px; letter-spacing: .06em; margin-right: 8px }
+.log .v span { color: var(--dim) }
+.log .k { font-size: 10px; letter-spacing: .2em; color: var(--dim) }
+.log a { font-size: 10px; letter-spacing: .2em; color: var(--ink) }
+
+/* canal abierto */
+.channel { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1px; background: var(--ghost); border: 1px solid var(--ghost) }
+.channel > div { background: var(--void); padding: 26px; display: grid; gap: 10px; min-width: 0 }
+.channel small { font-size: 10px; letter-spacing: .24em; color: var(--dim) }
+.channel .addr { font-family: var(--display); font-size: clamp(15px, 2vw, 22px); letter-spacing: .02em; overflow-wrap: anywhere; user-select: all }
+.copy { justify-self: start; font: 400 10px/1 var(--data); letter-spacing: .2em; text-transform: uppercase; background: none; color: var(--ink);
+  border: 1px solid var(--ghost); padding: 10px 14px; cursor: pointer }
+.copy:hover { border-color: var(--ink) }
+
+footer { padding-block: 14vh 40px; display: grid; gap: 28px }
+footer .sig { font-family: var(--voice); font-style: italic; font-size: clamp(28px, 4vw, 48px); line-height: 1.05; margin: 0; max-width: 20ch }
+footer .row { display: flex; flex-wrap: wrap; gap: 14px 32px; justify-content: space-between; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--dim);
+  border-top: 1px solid var(--ghost); padding-top: 18px }
+footer .row nav { display: flex; gap: 18px; flex-wrap: wrap }
+footer .row a { color: var(--dim); text-decoration: none }
+footer .row a:hover { color: var(--ink) }
+
+/* el decodificador */
+.scramble { white-space: pre-wrap }
+
+@media (max-width: 820px) {
+  .thesis, .tuner, .artist, .channel { grid-template-columns: minmax(0,1fr) }
+  .head { grid-template-columns: minmax(0,1fr); gap: 6px }
+  .etym { grid-template-columns: minmax(0,1fr) }
+  .status nav { display: none }
+  .log li { grid-template-columns: 82px minmax(0,1fr) auto; }
+  .log .ago { display: none }
+  .next { grid-template-columns: minmax(0,1fr) }
+  .count { text-align: left }
+  .portrait { max-width: 420px }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important }
+  html { scroll-behavior: auto }
+}
+</style>
+</head>
+<body>
+
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="status">
+  <div class="wrap">
+    <span class="mark"><img src="../assets/rr.webp" alt="" width="26" height="26"> ROMMUSER</span>
+    <nav aria-label="Secciones">
+      <a href="#sintonizar">Sintonizar</a>
+      <a href="#origen">Origen</a>
+      <a href="#bitacora">Bitácora</a>
+      <a href="#canal">Canal</a>
+    </nav>
+    <span class="live" id="clock">3000.10.22 · 00:00:00</span>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="hero" aria-labelledby="w">
+      <div class="boot" aria-label="Encabezado de la transmisión">
+        <span>Transmisión recibida · <b>Año 3000</b> → <b>2026</b></span>
+        <span>Origen de la señal · <b>Costa Rica, Tierra</b> · 9.93° N 84.08° W</span>
+        <span>Integridad · <b id="integ">99.7%</b> · Decodificando</span>
+      </div>
+
+      <h1 class="word" id="w" aria-label="ROMMUSER"><span class="scramble" data-text="ROM">ROM</span><span class="scramble" data-text="MUSE">MUSE</span><span class="u scramble" tabindex="0" data-text="USER">USER</span></h1>
+
+      <div class="etym">
+        <div><small>01 · LA MÁQUINA</small><strong>ROM</strong><p>Memoria que no se borra. Todo lo que ya sonó.</p></div>
+        <div><small>02 · LA IDEA</small><strong>MUSE</strong><p>La música ya existe. Solo hay que sintonizarla.</p></div>
+        <div class="user-cell"><small>03 · EL HUMANO</small><strong>USER</strong><p>Tú. El cuerpo donde la frecuencia se vuelve real.</p></div>
+      </div>
+
+      <div class="thesis">
+        <h2>Cierra los ojos. Siente. Esta música viajó mil años para encontrarte.</h2>
+        <div class="side">
+          <span class="genre">House y techno, con alma melódica</span>
+          <p>DJ y productor desde Costa Rica. ROMMUSER no compone, sintoniza. Recibe lo que ya vibra y lo trae a la tierra para que te olvides de todo un rato.</p>
+          <div class="cta">
+            <a class="btn" href="#sintonizar">Escuchar</a>
+            <button class="btn ghost" id="resonate" type="button" aria-pressed="false">Activar resonancia</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="sintonizar" aria-labelledby="h-sint">
+      <div class="head"><small>Canales · 09</small><h3 id="h-sint">Encuentra tu frecuencia</h3></div>
+      <div class="tuner">
+        <div class="scope">
+          <canvas id="scope" aria-hidden="true"></canvas>
+          <div class="readout" aria-live="polite">
+            <span class="freq" id="r-freq">111.1 Hz</span>
+            <span class="t" id="r-title">Pieces</span>
+            <span class="meta" id="r-meta">DENAR RCRDS · con Gosve · 11.11.2026</span>
+          </div>
+          <label class="meta" for="dial" style="font-size:10px;letter-spacing:.2em;color:var(--dim)">GIRAR EL DIAL</label>
+          <input class="dial" id="dial" type="range" min="0" max="8" step="1" value="0">
+          <div class="cta"><a class="btn" id="r-link" href="https://link.tracks.id/dItL" target="_blank" rel="noopener">Pre-save</a></div>
+        </div>
+        <ul class="channels" id="channels"></ul>
+      </div>
+      <div class="labels" aria-label="Firmado en">Firmado en · <b>DENAR RCRDS</b><b>Electric Eden</b><b>Late Hours</b><b>HouseYouNite</b><b>LVLD Music</b><b>Jendex Records</b></div>
+    </section>
+
+    <section class="block" id="origen" aria-labelledby="h-orig">
+      <div class="head"><small>El artista</small><h3 id="h-orig">Antes del sonido, el vacío</h3></div>
+      <div class="artist">
+        <figure class="portrait">
+          <img src="../assets/portrait.webp" alt="Retrato de ROMMUSER en blanco y negro" width="1080" height="1350" loading="lazy">
+          <figcaption>Registro visual · Tierra · c. 2026</figcaption>
+        </figure>
+        <div class="verses">
+          <p>Todo vibra.</p>
+          <p>Tú lo haces real.</p>
+          <p>El espacio. La música. Tú.</p>
+          <div class="note"><b>10+ años</b> de producción musical y <b>5+</b> de DJ. <b>7 originales y un remix</b> firmados. Una selección que conecta Costa Rica con sonidos internacionales, y cada set encuentra su camino en la pista.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="bitacora" aria-labelledby="h-bit">
+      <div class="head"><small>Bitácora de la Tierra</small><h3 id="h-bit">Un espacio compartido</h3></div>
+      <div class="next">
+        <div>
+          <small>PRÓXIMO ATERRIZAJE</small>
+          <h4>MAMBO</h4>
+          <p>Casa Grande · Costa Rica · 13.11.2026</p>
+        </div>
+        <div class="count" id="count"><strong>—</strong>para la señal</div>
+      </div>
+      <ul class="log" id="log"></ul>
+    </section>
+
+    <section class="block" id="canal" aria-labelledby="h-can">
+      <div class="head"><small>Abrir canal</small><h3 id="h-can">Hablemos de una fecha</h3></div>
+      <div class="channel">
+        <div><small>BOOKINGS</small><span class="addr" id="m1">bookings@rommuser.com</span><button class="copy" type="button" data-copy="m1">Copiar</button></div>
+        <div><small>CONTACTO GENERAL</small><span class="addr" id="m2">contact@rommuser.com</span><button class="copy" type="button" data-copy="m2">Copiar</button></div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="wrap">
+    <p class="sig">Este sitio fue escrito en el año 3000 y enviado de vuelta. Llegó a tiempo.</p>
+    <div class="row">
+      <span>© 2026 / 3000 · ROMMUSER · Costa Rica</span>
+      <nav aria-label="Plataformas">
+        <a href="https://open.spotify.com/artist/0mwQErvVjNdLmpcmIaikFb" target="_blank" rel="noopener">Spotify</a>
+        <a href="https://music.apple.com/cr/artist/rommuser/1650613442" target="_blank" rel="noopener">Apple Music</a>
+        <a href="https://www.beatport.com/artist/rommuser/1100031" target="_blank" rel="noopener">Beatport</a>
+        <a href="https://soundcloud.com/rommuser" target="_blank" rel="noopener">SoundCloud</a>
+        <a href="https://instagram.com/rommuser" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://rommuser.com/" target="_blank" rel="noopener">rommuser.com (2026)</a>
+      </nav>
+    </div>
+  </footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
