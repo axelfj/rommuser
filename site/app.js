@@ -36,6 +36,16 @@ if(releaseList){
   });
 }
 
+// The card next to the list always shows the newest release that is already out.
+const latestTrack=document.querySelector('#originales .tracks .track:not(.upcoming)');
+const latestPlay=document.querySelector('.latest-play');
+if(latestTrack&&latestPlay){
+  const title=latestTrack.querySelector('strong').textContent;
+  Object.keys(latestPlay.dataset).filter(key=>key!=='track').forEach(key=>delete latestPlay.dataset[key]);
+  Object.entries(latestTrack.dataset).filter(([key])=>!['track','release'].includes(key)).forEach(([key,value])=>{latestPlay.dataset[key]=value});
+  latestPlay.dataset.track=title;
+  document.querySelector('.latest-title').textContent=title;
+}
 const tabs=[...document.querySelectorAll('[role="tab"]')];function chooseTab(tab){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected})}tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>chooseTab(tab));tab.addEventListener('keydown',event=>{let n=i;if(event.key==='ArrowRight')n=(i+1)%tabs.length;else if(event.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.length-1;else return;event.preventDefault();chooseTab(tabs[n]);tabs[n].focus()})});const listenDialog=document.getElementById('listen-dialog');const listenPlatforms=['amazon','apple','bandcamp','beatport','deezer','soundcloud','spotify','youtube'].map(key=>({key,element:document.getElementById('listen-'+key)})).filter(p=>p.element).map(p=>({...p,defaultHref:p.element.href,defaultLabel:p.element.querySelector('span').textContent}));
 document.querySelectorAll('.music-choice:not(.presave)').forEach(b=>b.addEventListener('click',e=>{
   e.preventDefault();
@@ -171,7 +181,7 @@ if (fanForm) {
       fanForm.reset();
       syncFanLanguage();
       syncFanRef();
-      fanStatus.textContent = tr('Solicitud enviada. No podemos confirmar el registro desde esta página.');
+      fanStatus.textContent = tr('Listo. Te escribimos con lo próximo.');
     } catch {
       fanStatus.textContent = tr('No pudimos confirmar el envío. Inténtalo otra vez.');
     } finally {

@@ -58,6 +58,19 @@ describe('rommuser.com', () => {
     expect(app).toContain("element.hidden=isTrack&&!href");
   });
 
+  it('un booker encuentra BOOKINGS, un set y los datos del artista; el Golden Circle va después de la música', () => {
+    for (const [path, set] of [['index.html', 'VER UN SET'], ['en/index.html', 'WATCH A SET']]) {
+      const html = read(path);
+      expect(html).toContain('<a href="#contacto">BOOKINGS</a>');
+      expect(html).not.toContain('>CONTACTO</a>');
+      expect(html).toContain('href="https://youtu.be/HbsjPDnovKE?t=105" target="_blank" rel="noopener noreferrer">' + set + '</a>');
+      expect(html).toMatch(/class="artist-facts".*EPK.*RIDER.*BOOKINGS/s);
+      expect(html.indexOf('id="musica"')).toBeLessThan(html.indexOf('id="lista"'));
+      expect(html).not.toMatch(/docs\.google\.com\/document\/d\/[\w-]+\/edit/);
+    }
+    expect(read('index.html')).toMatch(/class="button light music-choice latest-play"[^>]*data-track="HOLY"/);
+  });
+
   // Regla del sitio: una sola etiqueta por acción en todo rommuser.com, en cada idioma.
   it.each([
     ['index.html', { presave: 'PRE-SAVE', upcoming: 'PRÓXIMAMENTE', listen: 'ESCUCHAR' }],
