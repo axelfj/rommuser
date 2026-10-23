@@ -23,22 +23,12 @@ function setup(reduce) {
   const pointer = {clientX:150,clientY:100,target:{closest:()=>null}};
   return { events, classes, pointer, frames:()=>frames, bullets:()=>bullets, tick:now=>nextFrame(now) };
 }
-it('shows a static ship in reduced motion and animates only after an explicit shot', () => {
-  const s=setup(true);
-  s.events.pointermove(s.pointer);
-  expect(s.classes.has('ship-active')).toBe(true);
-  expect(s.frames()).toBe(0);
-  s.events.pointerdown(s.pointer);
-  expect(s.frames()).toBe(1);
-  s.tick(100);
-  expect(s.bullets()).toBeGreaterThan(0);
-  s.events.pointerleave();
+it('keeps the native cursor: the scene has no pointer game', () => {
+  const s=setup(false);
+  expect(Object.keys(s.events)).toEqual([]);
   expect(s.classes.has('ship-active')).toBe(false);
 });
-it('restores the native cursor over the motion control in reduced motion', () => {
-  const s=setup(true);
-  s.events.pointermove(s.pointer);
-  s.events.pointermove({...s.pointer,target:{closest:()=>({})}});
-  expect(s.classes.has('ship-active')).toBe(false);
-  expect(s.frames()).toBe(0);
+it('stays still in reduced motion and animates otherwise', () => {
+  expect(setup(true).frames()).toBe(0);
+  expect(setup(false).frames()).toBeGreaterThan(0);
 });

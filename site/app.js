@@ -21,15 +21,16 @@ const releaseList=document.querySelector('#originales .tracks');
 if(releaseList){
   const releaseYears=new Map();
   [...releaseList.children].forEach(track=>{
-    const year=track.querySelector('time')?.dateTime.slice(0,4);
+    // Announced tracks without a date (IDs) get their own group above the years.
+    const year=track.querySelector('time')?.dateTime.slice(0,4)||(track.classList.contains('track-id')?'ID':'');
     if(!year)return;
     if(!releaseYears.has(year))releaseYears.set(year,[]);
     releaseYears.get(year).push(track);
   });
   [...releaseYears].sort(([a],[b])=>b.localeCompare(a)).forEach(([year,tracks],index)=>{
-    const group=document.createElement('details');group.className='release-year';group.open=index===0;
+    const group=document.createElement('details');group.className='release-year';group.open=index===0||(index===1&&releaseYears.has('ID'));
     const summary=document.createElement('summary');
-    const label=document.createElement('span');label.textContent=year;
+    const label=document.createElement('span');label.textContent=year==='ID'?tr('PRÓXIMAMENTE'):year;
     const count=document.createElement('span');count.className='release-count';count.textContent=tracks.length+' '+tr(tracks.length===1?'TRACK':'TRACKS');
     summary.append(label,count);group.append(summary,...tracks);releaseList.append(group);
   });

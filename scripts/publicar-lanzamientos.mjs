@@ -18,8 +18,8 @@ const escape = (text) => text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').rep
 let html = readFileSync(page, 'utf8');
 const revealed = [];
 for (const release of releases.filter((r) => r.fecha <= today).sort((a, b) => a.fecha.localeCompare(b.fecha))) {
-  // An upcoming release is a disabled button, or a pre-save link once the label sends one.
-  const upcoming = new RegExp(`<button class="track music-choice upcoming" type="button" disabled data-release="${release.fecha}">(.*?)</button>|<a class="track music-choice upcoming presave" [^>]*data-release="${release.fecha}">(.*?)</a>`, 's');
+  // An upcoming release is an "ID" button (or an older disabled one), or a pre-save link once the label sends one.
+  const upcoming = new RegExp(`<button class="track music-choice upcoming" type="button" (?:disabled |data-track="ID" )data-release="${release.fecha}">(.*?)</button>|<a class="track music-choice upcoming presave" [^>]*data-release="${release.fecha}">(.*?)</a>`, 's');
   const match = html.match(upcoming);
   if (!match) continue; // already out
   const link = release.spotify ? ` data-spotify="${escape(release.spotify)}"` : '';
