@@ -29,11 +29,11 @@ it('never posts without a token', async () => {
   expect(c.fetch).not.toHaveBeenCalled();
   expect(c.status.textContent).toContain('verificación');
 });
-it('submits one token, reports opaque receipt honestly, and resets before retry', async () => {
+it('submits one token, confirms calmly, and resets before retry', async () => {
   const c = client(); c.callbacks.callback('single-use-token');
   await c.submit();
   expect(c.fetch.mock.calls[0][1].body.get('cf-turnstile-response')).toBe('single-use-token');
-  expect(c.status.textContent).toContain('No podemos confirmar');
+  expect(c.status.textContent).toContain('Listo');
   expect(c.turnstile.reset).toHaveBeenCalledWith('widget-1');
   await c.submit();
   expect(c.fetch).toHaveBeenCalledTimes(1);

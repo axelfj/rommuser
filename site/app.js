@@ -40,22 +40,19 @@ const tabs=[...document.querySelectorAll('[role="tab"]')];function chooseTab(tab
 document.querySelectorAll('.music-choice:not(.presave)').forEach(b=>b.addEventListener('click',e=>{
   e.preventDefault();
   const isTrack=b.dataset.track!=='MÚSICA DE ROMMUSER';
+  // A track with no links yet (an ID) has nothing to play: send the fan to the Golden Circle instead of an empty list.
+  if(isTrack&&!listenPlatforms.some(({key})=>b.dataset[key])){
+    const signup=document.getElementById('lista');
+    signup?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    document.getElementById('fan-email')?.focus({preventScroll:true});
+    return;
+  }
+  // Only platforms where the track really is are shown.
   listenPlatforms.forEach(({key,element,defaultHref,defaultLabel})=>{
     const href=b.dataset[key];
-    const pending=isTrack&&!href;
-    element.hidden=false;
-    if(pending){
-      element.removeAttribute('href');
-      element.setAttribute('aria-disabled','true');
-      element.setAttribute('role','link');
-      element.setAttribute('tabindex','-1');
-    }else{
-      element.href=href||defaultHref;
-      element.removeAttribute('aria-disabled');
-      element.removeAttribute('role');
-      element.removeAttribute('tabindex');
-    }
-    element.querySelector('span').textContent=pending?tr('ENLACE PENDIENTE'):href?tr(key==='beatport'||key==='bandcamp'?'COMPRAR':'ESCUCHAR'):defaultLabel;
+    element.hidden=isTrack&&!href;
+    element.href=href||defaultHref;
+    element.querySelector('span').textContent=href?tr(key==='beatport'||key==='bandcamp'?'COMPRAR':'ESCUCHAR'):defaultLabel;
   });
   document.getElementById('listen-title').dataset.original=b.dataset.track;
   document.getElementById('listen-title').textContent=tr(b.dataset.track);
@@ -174,7 +171,7 @@ if (fanForm) {
       fanForm.reset();
       syncFanLanguage();
       syncFanRef();
-      fanStatus.textContent = tr('Solicitud enviada. No podemos confirmar el registro desde esta página.');
+      fanStatus.textContent = tr('Listo. Te escribimos con lo próximo.');
     } catch {
       fanStatus.textContent = tr('No pudimos confirmar el envío. Inténtalo otra vez.');
     } finally {

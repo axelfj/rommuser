@@ -43,6 +43,36 @@ describe('rommuser.com', () => {
     expect(read('en/index.html')).toContain('<strong>ID</strong><small>ID</small>');
   });
 
+  it('el correo de bookings llega con los datos que hace falta para cotizar, en cada idioma', () => {
+    const es = decodeURIComponent(read('index.html').match(/href="mailto:bookings@rommuser\.com\?([^"]+)"/)[1]);
+    const en = decodeURIComponent(read('en/index.html').match(/href="mailto:bookings@rommuser\.com\?([^"]+)"/)[1]);
+    for (const field of ['Fecha:', 'Ciudad y venue:', 'Capacidad:', 'Presupuesto:']) expect(es).toContain(field);
+    for (const field of ['Date:', 'City and venue:', 'Capacity:', 'Budget:']) expect(en).toContain(field);
+  });
+
+  it('la ventana de escuchar pone Spotify primero y no muestra plataformas sin enlace', () => {
+    const ids = [...read('index.html').matchAll(/id="listen-([a-z]+)"/g)].map((m) => m[1]).filter((id) => !['dialog', 'title'].includes(id));
+    expect(ids.slice(0, 3)).toEqual(['spotify', 'apple', 'soundcloud']);
+    const app = read('app.js');
+    expect(app).not.toContain('ENLACE PENDIENTE');
+    expect(app).toContain("element.hidden=isTrack&&!href");
+  });
+
+  it('BOOKINGS, sin credenciales escritas, Golden Circle después de la música, sin repetir enlaces en la página', () => {
+    for (const path of ['index.html', 'en/index.html']) {
+      const html = read(path);
+      const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
+      expect(html).toContain('<a href="#contacto">BOOKINGS</a>');
+      expect(html).not.toContain('>CONTACTO</a>');
+      expect(html).not.toContain('originales y un remix firmados');
+      expect(html.indexOf('id="musica"')).toBeLessThan(html.indexOf('id="lista"'));
+      expect(html).not.toMatch(/docs\.google\.com\/document\/d\/[\w-]+\/edit/);
+      // Every outbound link (EPK, rider, set videos, mailto) appears once in the page body.
+      const hrefs = [...main.matchAll(/<a [^>]*href="((?:https|mailto)[^"]+)"/g)].map((m) => m[1]);
+      expect(hrefs.filter((h, k) => hrefs.indexOf(h) !== k)).toEqual([]);
+    }
+  });
+
   // Regla del sitio: una sola etiqueta por acción en todo rommuser.com, en cada idioma.
   it.each([
     ['index.html', { presave: 'PRE-SAVE', upcoming: 'PRÓXIMAMENTE', listen: 'ESCUCHAR' }],
