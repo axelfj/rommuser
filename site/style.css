@@ -403,8 +403,5 @@ nav a.nav-external svg{flex:none}
 .artist-home .fan-strip .fan-form input[type=email]{font-size:16px}
 /* An ID has nothing to play yet: same row format, no play mark. */
 .artist-home .tracks .track.upcoming:not(.presave) .track-type::before{display:none}
-/* The credentials line, right under the animation. */
-.artist-home .artist-facts{display:flex;flex-direction:column;align-items:center;gap:14px;max-width:920px;margin:40px auto 0;padding-top:28px;border-top:1px solid var(--line);text-align:center}
-.artist-home .artist-facts p{font-size:15px;line-height:1.6}
 /* Nothing on the page reads smaller than 12px. */
 html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs button,.release-count,.show-count,.tracks .track-n,.tracks .track-info small,.tracks .release-date,.tracks .track .track-type,.music-labels .eyebrow,.fan-strip h2,.fan-strip .fan-form .button,.show-row time,.show-row p,.show-row>span,.show-video,.cosmic-heading .eyebrow,.motion-control,.cosmic-scene figcaption span,.contact-entry h3,.universe-footer>span){font-size:12px!important}

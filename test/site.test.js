@@ -58,13 +58,13 @@ describe('rommuser.com', () => {
     expect(app).toContain("element.hidden=isTrack&&!href");
   });
 
-  it('BOOKINGS, credenciales y Golden Circle después de la música, sin repetir enlaces en la página', () => {
+  it('BOOKINGS, sin credenciales escritas, Golden Circle después de la música, sin repetir enlaces en la página', () => {
     for (const path of ['index.html', 'en/index.html']) {
       const html = read(path);
       const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
       expect(html).toContain('<a href="#contacto">BOOKINGS</a>');
       expect(html).not.toContain('>CONTACTO</a>');
-      expect(html).toMatch(/class="artist-facts"><p>[^<]+<\/p><\/div>/);
+      expect(html).not.toContain('originales y un remix firmados');
       expect(html.indexOf('id="musica"')).toBeLessThan(html.indexOf('id="lista"'));
       expect(html).not.toMatch(/docs\.google\.com\/document\/d\/[\w-]+\/edit/);
       // Every outbound link (EPK, rider, set videos, mailto) appears once in the page body.
