@@ -43,6 +43,21 @@ describe('rommuser.com', () => {
     expect(read('en/index.html')).toContain('<strong>ID</strong><small>ID</small>');
   });
 
+  // Regla del sitio: una sola etiqueta por acción en todo rommuser.com, en cada idioma.
+  it.each([
+    ['index.html', { presave: 'PRE-SAVE', upcoming: 'PRÓXIMAMENTE', listen: 'ESCUCHAR' }],
+    ['en/index.html', { presave: 'PRE-SAVE', upcoming: 'COMING SOON', listen: 'LISTEN' }],
+  ])('%s usa la misma etiqueta para la misma acción en cada lanzamiento', (path, labels) => {
+    const html = read(path);
+    const rows = [...html.matchAll(/<(a|button) class="track music-choice([^"]*)"[^>]*>.*?<span class="track-type">([^<]*)<\/span><\/\1>/gs)];
+    expect(rows.length).toBeGreaterThan(0);
+    for (const [, , classes, label] of rows) {
+      const action = classes.includes('presave') ? 'presave' : classes.includes('upcoming') ? 'upcoming' : 'listen';
+      expect(label).toBe(labels[action]);
+    }
+    for (const synonym of ['PREVENTA', 'PRE-ORDER', 'PREORDER', 'PRE-GUARDAR', 'VER LANZAMIENTO', 'VIEW RELEASE']) expect(html).not.toContain(synonym);
+  });
+
   it('acredita los sellos confirmados para Never Be y Echoes', () => {
     for (const path of ['index.html', 'en/index.html']) {
       expect(read(path)).toContain('<strong>NEVER BE</strong><small>HOUSE OF BOOGIE</small>');
