@@ -1,2 +1,3 @@
+/ /en/ 302
 # Only the production Pages hostname; preview hosts are protected separately with Access.
 https://rommuser-web.pages.dev/* https://rommuser.com/:splat 301

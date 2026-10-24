@@ -12,7 +12,7 @@ export const ORIGIN = 'https://rommuser.com';
 // Spanish source -> English twin. Every link to a Spanish page is rewritten to its twin.
 export const PAGES = [
   {
-    es: 'index.html', en: 'en/index.html', esPath: '/', enPath: '/en/',
+    es: 'index.html', en: 'en/index.html', esPath: '/es/', enPath: '/en/',
     description: 'ROMMUSER, house and techno DJ and producer with a melodic soul from Costa Rica. Releases, live sets and bookings for clubs, festivals and events.',
     ogDescription: 'House and techno, with a melodic soul. Music, live sets and bookings from Costa Rica.',
     ogImageAlt: 'ROMMUSER, DJ and producer from Costa Rica',
@@ -127,6 +127,9 @@ export function buildFromDisk() {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const spanishHome = readFileSync(join(siteDir, 'index.html'), 'utf8').replace(/ (src|href)="(?![a-z]+:|#|\/)([^"]+)"/g, ' $1="/$2"');
+  mkdirSync(join(siteDir, 'es'), { recursive: true });
+  writeFileSync(join(siteDir, 'es/index.html'), spanishHome);
   for (const { page, html, missing } of buildFromDisk()) {
     mkdirSync(dirname(join(siteDir, page.en)), { recursive: true });
     writeFileSync(join(siteDir, page.en), html);
