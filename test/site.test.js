@@ -28,6 +28,14 @@ describe('rommuser.com', () => {
     expect(read('sitemap.xml')).toContain(`<loc>https://rommuser.com${page.enPath}</loc>`);
   });
 
+  it('English is the default entry and Spanish remains explicitly accessible', () => {
+    expect(read('_redirects')).toMatch(/^\/ \/en\/ 302/m);
+    expect(read('es/index.html')).toContain('<html lang="es">');
+    expect(read('es/index.html')).toContain('href="/style.css"');
+    expect(read('en/index.html')).toContain('href="/es/" hreflang="es"');
+    expect(read('i18n.js')).not.toContain('navigator.languages');
+  });
+
   it('la política de seguridad deja que el formulario del Golden Circle envíe', () => {
     const endpoint = read('index.html').match(/class="fan-form" data-endpoint="([^"]+)"/)[1];
     const connect = read('_headers').match(/connect-src ([^;]+);/)[1].split(' ');
