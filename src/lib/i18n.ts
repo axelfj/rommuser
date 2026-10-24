@@ -1,5 +1,4 @@
-// Idioma de la página: español por defecto, inglés si el navegador lo pide o
-// si la persona lo elige. Mismo criterio y misma clave que rommuser.com.
+// English is the public default. Spanish is an explicit saved preference.
 
 export type Lang = 'es' | 'en';
 
@@ -26,9 +25,7 @@ export function preferredLang(): Lang {
   } catch {
     /* sin almacenamiento: seguimos con el navegador */
   }
-  const langs = navigator.languages?.length ? navigator.languages : [navigator.language || 'es'];
-  const match = langs.find((l) => /^(es|en)(-|$)/i.test(l));
-  return match?.toLowerCase().startsWith('en') ? 'en' : 'es';
+  return 'en';
 }
 
 export function saveLang(l: Lang) {
