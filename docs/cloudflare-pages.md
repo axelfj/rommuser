@@ -15,3 +15,9 @@ El repo tiene dos sitios. En Cloudflare son dos proyectos de Pages conectados al
   regla en Rules → Redirect Rules (Hostname = www.rommuser.com → `https://rommuser.com${uri}`, 301).
 
 Netlify sigue funcionando con `netlify.toml` y `site/netlify.toml` mientras dure la prueba.
+
+## Public language
+
+The default homepage redirects to `/en/`. Spanish is explicitly available at `/es/`. `site/index.html` remains the Spanish source; run `npm run site:en` after copy changes to regenerate English pages and the Spanish secondary homepage. Browser language does not override this policy.
+
+Editorial rules and completion evidence: [brand-policy.md](brand-policy.md).
