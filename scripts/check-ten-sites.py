@@ -21,7 +21,19 @@ for f in files:
  for a in c.assets:
   if a.startswith('/'):assert Path('site'+a).is_file(),(f,a)
  assert 'bookings@rommuser.com' in f.read_text()
-gallery=Path('site/preview/propuestas/index.html');assert gallery.read_text().count('Navegar propuesta ↗')==10
+gallery=Path('site/preview/propuestas/index.html');assert gallery.read_text().count('Navegar propuesta ↗')==11
+for lang in ['es','en']:
+ f=Path(f'site/preview/umbral-interactivo/{lang}/index.html')
+ c=Check();c.feed(f.read_text())
+ assert c.h1==1 and c.scripts==1 and c.robots=='noindex,nofollow',f
+ assert len(c.ids)==len(set(c.ids)),f
+ for h in c.hrefs:
+  if h.startswith('#'):assert h[1:] in c.ids,(f,h)
+  elif h.startswith('/preview/'):assert Path('site'+h+'index.html').exists(),(f,h)
+ for a in c.assets:
+  if a.startswith('/'):assert Path('site'+a).is_file(),(f,a)
+ assert 'data:image' not in f.read_text() and '<style>' not in f.read_text(),f
+assert Path('site/preview/umbral-interactivo/app.js').is_file()
 before=hashlib.sha256(gallery.read_bytes()).digest();subprocess.run(['python','scripts/build-ten-sites.py'],check=True);assert before==hashlib.sha256(gallery.read_bytes()).digest(),'generator not idempotent'
 print('20 ES/EN pages: anchors, unique IDs, local assets, language/concept links, noindex, no runtime JS and repeatable generation passed.')
 print('HTML bytes:',min(f.stat().st_size for f in files),'-',max(f.stat().st_size for f in files));print('Shared CSS:',Path('site/preview/live/layouts.css').stat().st_size,'bytes; existing portrait:',Path('site/assets/portrait.webp').stat().st_size,'bytes')
