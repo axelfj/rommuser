@@ -10,11 +10,11 @@ The new receiver.css replaces night.css on the artist homepage. Shared style.css
 
 ## Visual direction
 
-El receptor is an imagined sculptural listening chamber: black stone for physical weight, brushed metal for resonance, one white slit for the signal. Generated specifically for this design study, not a photo of the artist or a real show. AI provenance is disclosed in the footer. No claim of legally exclusive imagery.
+Axel 2026-10-26: the hero uses his real portrait, not a generated image. The generated "El receptor" sculpture (receiver-v1.webp) and its AI credit were removed. Every person-facing image on the site must be a real photo of ROMMUSER.
 
 The composition moves from black artwork to bone catalog, black dance floor, bone Secret Rooms, real artist portrait and interactive signal, then bookings. Serif italics introduce a softer physical rhythm alongside the existing geometric type. Original artist assets remain recognizable.
 
-Artwork: site/assets/receiver-v1.webp, 1536 x 1024, approximately 69 KB. Created with the built-in image generation tool, then compressed to WebP. Concept prompt: original monochrome fine-art sculpture, asymmetrical obsidian and brushed-silver ribbons around a hollow listening chamber, one thin bone-white vertical slit, object on the right and negative space left; no text, logos, people, robots, planets or neon.
+Former artwork (removed): site/assets/receiver-v1.webp, 1536 x 1024, approximately 69 KB. Created with the built-in image generation tool, then compressed to WebP. Concept prompt: original monochrome fine-art sculpture, asymmetrical obsidian and brushed-silver ribbons around a hollow listening chamber, one thin bone-white vertical slit, object on the right and negative space left; no text, logos, people, robots, planets or neon.
 
 ## Content audit
 
