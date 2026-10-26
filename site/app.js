@@ -21,7 +21,6 @@ const releaseList=document.querySelector('#originales .tracks');
 if(releaseList){
   const releaseYears=new Map();
   [...releaseList.children].forEach(track=>{
-    if(track.classList.contains('upcoming'))return;
     // Announced tracks without a date (IDs) get their own group above the years.
     const year=track.querySelector('time')?.dateTime.slice(0,4)||(track.classList.contains('track-id')?'ID':'');
     if(!year)return;
