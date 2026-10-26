@@ -40,7 +40,8 @@ for lang in ['es','en']:
   else:
    for key,label2 in [('spotify','Spotify'),('apple','Apple Music'),('soundcloud','SoundCloud'),('beatport','Beatport'),('youtube','YouTube'),('bandcamp','Bandcamp')]:
     if n.a.get('data-'+key):links.append(ext(n.a['data-'+key],label2))
-  action=f'<details class="listen"><summary>{t("Escuchar","Listen")} ↗</summary><div>{"".join(links)}</div></details>' if links else f'<span class="soon">{t("Próximamente","Coming soon")}</span>'
+  action_label=n.all(lambda x:x.cls('track-type'))[0].text() if n.a.get('href') else t('Escuchar','Listen')
+  action=f'<details class="listen"><summary>{e(action_label)} ↗</summary><div>{"".join(links)}</div></details>' if links else f'<span class="soon">{t("Próximamente","Coming soon")}</span>'
   tracklist+=f'<article class="track"><div><h3>{e(title)}</h3><p>{e(label)}</p></div><span class="date">{e(date)}</span>{action}</article>'
  shows=''
  for n in doc.all(lambda n:n.cls('show-row')):
