@@ -20,7 +20,7 @@ export const PAGES = [
   },
   {
     es: 'estudio/index.html', en: 'en/studio/index.html', esPath: '/estudio/', enPath: '/en/studio/',
-    description: 'House and techno mixing and mastering by ROMMUSER, a producer with 10+ years and 7 signed originals. Mixing from USD 250, mastering USD 50 and ghost production on request.',
+    description: 'House and techno mixing and mastering by ROMMUSER, a Costa Rican DJ and producer signed to DENAR RCRDS, Electric Eden and LVLD Music. Mixing from USD 250, mastering USD 50 and ghost production on request.',
     ogTitle: 'ROMMUSER Studio | Mixing, mastering and ghost production',
     ogDescription: 'Mixing from USD 250, mastering USD 50 and ghost production for house and techno.',
     ogImageAlt: 'ROMMUSER, DJ and producer from Costa Rica',
