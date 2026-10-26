@@ -1,0 +1,132 @@
+/* The Receiver — complete artist presentation. Shared functional styles stay in style.css. */
+.artist-home{--night:#0b0b0b;--bone:#eeeae2;--line:#ffffff24;--red:#c2bdb3;--muted:#a5a099;background:var(--night);color:var(--bone);font-family:Poppins,Arial,sans-serif}
+.artist-home::after,.artist-home .astro,.artist-home .hero::before{display:none}
+.artist-home ::selection{background:var(--bone);color:var(--night)}
+.artist-home>header{height:76px;background:#0b0b0bf5;border-bottom:1px solid var(--line);backdrop-filter:none;padding:0 4.5%;z-index:30}
+.artist-home>header .brand img{width:42px;height:42px}
+.artist-home>header nav a{font-size:10px;letter-spacing:.16em}
+.artist-home .button,.artist-home .text-link{font-size:11px;letter-spacing:.12em;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.artist-home .button{border:1px solid var(--bone);background:var(--bone);color:var(--night);border-radius:0;padding:14px 24px}
+.artist-home .text-link{border:0;border-bottom:1px solid currentColor;padding:8px 0;line-height:1.5}
+.artist-home a:focus-visible,.artist-home button:focus-visible{outline:2px solid currentColor;outline-offset:5px}
+.artist-home .receiver-hero{height:calc(100svh - 76px);min-height:620px;max-height:1000px;max-width:none;padding:32px 4.5%;position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;border-bottom:1px solid var(--line)}
+.artist-home .receiver-hero>.receiver-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-1;pointer-events:none}
+.artist-home .hero-top{display:flex;justify-content:space-between;gap:20px;margin:0;padding:0}
+.artist-home .hero-top .eyebrow{font:10px/1.5 monospace;letter-spacing:.16em;color:#d1ccc3}
+.receiver-heading{width:65%;margin:50px 0}
+.receiver-heading>.eyebrow{font:11px/1.5 monospace;letter-spacing:.1em;margin-bottom:22px}
+.artist-home .receiver-hero h1{font:700 clamp(65px,11.5vw,185px)/.8 'League Spartan',Arial,sans-serif;letter-spacing:-.065em;margin:0 0 30px;white-space:nowrap}
+.receiver-invitation{font:italic clamp(25px,3.2vw,48px)/1.2 Georgia,serif;max-width:420px}
+.receiver-heading .actions{margin-top:36px;display:flex;gap:28px;flex-wrap:wrap}
+.hero-bottom{display:flex;justify-content:space-between;gap:20px;align-items:end;font:10px/1.5 monospace;letter-spacing:.1em;color:#c4bfb7}
+.hero-bottom a{padding:12px 0}
+.world-index{display:flex;flex-wrap:wrap;gap:10px 32px;padding:16px 4.5%;font:10px/1.5 monospace;letter-spacing:.12em;border-bottom:1px solid var(--line)}
+.world-index>span{margin-right:auto;align-self:center;color:var(--muted)}
+.world-index a{display:flex;align-items:center;min-height:44px}
+.artist-home .section{max-width:none;padding:90px 7%;border-bottom:1px solid var(--line);position:relative}
+.artist-home .section-label{font:10px/1.5 monospace;letter-spacing:.16em;padding:0;margin:0 0 34px;display:flex;gap:14px;align-items:center;color:var(--muted)}
+.artist-home .section-label::before{content:'';height:1px;width:28px;background:currentColor;flex:none}
+.artist-home .section-label span{margin:0;max-width:none;text-align:left}
+.artist-home .section-heading{display:flex;align-items:end;justify-content:space-between;gap:32px;margin-bottom:42px}
+.artist-home .section-heading h2,.artist-home .room-copy h2,.artist-home .artist-intro h2{font:700 clamp(44px,6.4vw,96px)/.98 'League Spartan',Arial,sans-serif;letter-spacing:-.04em;margin:0}
+.artist-home h2 em,.booking-statement em{font-family:Georgia,serif;font-weight:400;letter-spacing:-.055em;line-height:1.05}
+.artist-home .section-heading>p{max-width:360px;font-size:14px;line-height:1.8;text-align:left;margin:0}
+/* The archive is the original, including its exact dates, destinations and dialogs. */
+.artist-home .music{background:var(--bone);color:var(--night);--line:#0b0b0b30;--muted:#55514b}
+.artist-home .music-tabs{border-bottom:1px solid var(--line);gap:30px;margin:0 0 28px}
+.artist-home .music-tabs button{color:#55514b;background:none;border:0;border-bottom:2px solid transparent;padding:16px 0;min-height:48px;font:11px monospace;letter-spacing:.1em}
+.artist-home .music-tabs button[aria-selected=true]{color:#0b0b0b;border-bottom-color:#0b0b0b}
+.artist-home .music-layout{display:grid;grid-template-columns:minmax(200px,.65fr) minmax(0,1.35fr);gap:6%;align-items:start}
+.artist-home .music-layout .record-block{background:#151515;color:var(--bone);min-height:460px;padding:35px;border:0;position:sticky;top:105px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.artist-home .record-block::before{content:'';position:absolute;inset:25px;border:1px solid #eeeae22a;border-radius:50%;background:none;opacity:1;pointer-events:none}
+.artist-home .music-layout .record-block img{width:170px;height:170px;padding:20px;max-width:80%;object-fit:contain;border-radius:0;background:none;box-shadow:none;animation:none;position:relative;margin-bottom:24px}
+.artist-home .record-block h3{font-size:35px;margin:10px 0 25px}
+.artist-home .record-block .eyebrow{font-size:10px;color:var(--muted)}
+.artist-home .tracks{min-width:0}
+.artist-home .track{color:#111;background:transparent;border-bottom:1px solid var(--line);padding:18px 0;gap:16px;min-height:90px;grid-template-columns:28px minmax(0,1fr) auto;align-items:center}
+.artist-home .track:hover{background:#0b0b0b08}
+.artist-home .track-info strong{font-size:clamp(18px,1.8vw,28px);letter-spacing:-.02em}
+.artist-home .track-info small{color:#55514b;white-space:normal;line-height:1.6;margin-top:5px}
+.artist-home .track .release-date{grid-column:2;color:#55514b;margin-top:-10px}
+.artist-home .track .track-type{grid-column:3;grid-row:1/3;color:#111;font-size:10px!important;border-bottom:1px solid #777;padding:5px 0}
+.artist-home .release-year{border-bottom:1px solid var(--line)}
+.artist-home .release-year summary{padding:18px 0;min-height:50px;font:11px monospace;color:#111}
+.artist-home .release-year summary:focus-visible{outline:2px solid #111}
+.artist-home .release-count,.artist-home .track-n{color:#55514b}
+.artist-home .music-labels{margin-top:36px;border-top:1px solid var(--line);padding-top:24px}
+.artist-home .music-labels .label-list{display:flex;flex-wrap:wrap;gap:20px 30px;justify-content:flex-start}
+.artist-home .music-labels .label-list li{color:#494640;white-space:normal;font-size:12px}
+.artist-home .label-flag{display:none}
+.artist-home .collection-card{background:transparent;color:inherit;border:1px solid var(--line);padding:28px;min-height:220px}
+.artist-home .collection-card h3{font-size:32px;line-height:1.1;margin:16px 0}
+.artist-home .music .collection-card:hover{background:#11111108}
+.artist-home .fan-strip{max-width:none;margin:0;padding:28px 7%;background:#d9d4ca;color:#111;border:0;gap:20px}
+.artist-home .fan-strip h2{font:12px monospace;letter-spacing:.1em}
+.artist-home .fan-strip-copy{color:#48443e;font-size:12px}
+.artist-home .fan-strip input[type=email]{color:#111;border:1px solid #69645d;background:transparent;min-height:44px}
+.artist-home .fan-strip input::placeholder{color:#57524b}
+.artist-home .fan-strip .button{background:#111;color:var(--bone);min-height:44px}
+/* Live remains a dated archive; a set video belongs to its actual show. */
+.artist-home .next-show{background:none;border:1px solid #eeeae26b;box-shadow:none;padding:30px;gap:30px;margin:32px 0 42px}
+.artist-home .next-show h3{font-size:clamp(32px,4vw,58px);line-height:1.05}
+.artist-home .next-label::before,.artist-home .next-label::after{display:none}
+.artist-home .show-history-label{font:10px monospace;letter-spacing:.15em;color:var(--muted);margin-bottom:15px}
+.artist-home .show-row{grid-template-columns:110px minmax(0,1fr) 80px;padding:24px 4px;border-bottom:1px solid var(--line);align-items:start}
+.artist-home .show-row h3{font-size:clamp(21px,2.5vw,34px);line-height:1.1;letter-spacing:-.02em}
+.artist-home .show-row p{color:var(--muted);font-size:12px;line-height:1.6;margin-top:6px}
+.artist-home .show-row time{font:12px monospace;color:var(--muted);padding-top:5px}
+.artist-home .show-row .show-video{display:inline-block;padding:12px 0;margin-top:8px;min-height:44px;color:var(--bone)}
+.artist-home .show-year summary{font:11px monospace;padding:16px 0;min-height:50px}
+/* Secret Rooms: an architectural threshold, not a fabricated venue image. */
+.artist-home .secret-room{background:var(--bone);color:#111;--muted:#55514b;--line:#11111130}
+.room-layout{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:10%;padding-top:10px}
+.room-door{height:500px;max-width:350px;width:85%;background:#111;position:relative;margin:auto;border:1px solid #111;overflow:hidden}
+.room-door::before{content:'';position:absolute;inset:20px;border:1px solid #eeeae230}
+.room-door img{position:absolute;left:40px;top:40px;width:50px;height:50px;object-fit:contain}
+.door-line{position:absolute;top:0;bottom:0;right:25%;width:2px;background:#eeeae2;transform:skewY(-12deg)}
+.door-caption{position:absolute;bottom:35px;left:35px;color:#eeeae2;font:10px monospace;letter-spacing:.15em}
+.room-copy>.eyebrow{font:10px monospace;letter-spacing:.12em;margin-bottom:25px;color:#55514b}
+.room-copy>p:not(.eyebrow){font-size:15px;line-height:1.9;margin-top:26px;max-width:430px}
+.room-copy .room-history{font-size:11px!important;color:#55514b}
+.room-copy .text-link{margin-top:24px;color:#111}
+/* Art, then artist: keep the real person visible beside the sonic vocabulary. */
+.artist-home .cosmic-artist{background:#0b0b0b}
+.artist-intro{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:8%;align-items:center;margin-bottom:100px}
+.artist-intro figure{margin:0;position:relative}
+.artist-intro figure img{display:block;width:100%;height:auto;max-height:600px;object-fit:cover;filter:grayscale(1);border:1px solid var(--line)}
+.artist-intro figcaption{font:10px monospace;color:var(--muted);margin-top:15px;letter-spacing:.1em}
+.artist-intro .eyebrow{font:10px monospace;margin-bottom:28px;color:var(--muted)}
+.artist-home .artist-intro h2{font-size:clamp(36px,4.5vw,70px)}
+.artist-intro p:not(.eyebrow){font-size:14px;line-height:1.9;color:#bcb6ad;margin-top:30px;max-width:590px}
+.artist-intro .artist-manifesto{color:var(--bone)!important;border-left:1px solid var(--bone);padding-left:22px}
+.artist-home .cosmic-heading{text-align:left;margin:0 0 30px}
+.artist-home .cosmic-heading h2{font:700 clamp(45px,8vw,120px)/.95 'League Spartan',Arial,sans-serif;letter-spacing:-.045em;margin:18px 0}
+.cosmic-heading>.eyebrow{font:10px monospace;color:var(--muted);letter-spacing:.1em}
+.signal-intro{font-size:14px;color:var(--muted)}
+.tuning-controls{display:flex;gap:0;border-block:1px solid var(--line);margin:25px 0 0}
+.tuning-controls button{flex:1;min-height:55px;padding:16px 10px;border:0;border-bottom:2px solid transparent;background:none;color:var(--muted);font:11px monospace;letter-spacing:.1em}
+.tuning-controls button[aria-pressed=true]{color:var(--bone);border-bottom-color:var(--bone)}
+.signal-stories{padding:30px 0;min-height:175px;max-width:650px}
+.signal-stories [hidden]{display:none}
+.signal-stories .eyebrow{font:10px monospace;color:var(--muted)}
+.signal-stories p{font:italic clamp(23px,3vw,37px)/1.3 Georgia,serif;margin:12px 0 20px}
+.artist-home .cosmic-scene{height:270px;max-height:none;border-block:1px solid var(--line);margin:0;overflow:hidden}
+.artist-home .cosmic-scene::before{display:none}
+.artist-home .cosmic-scene figcaption{bottom:18px;color:var(--muted)}
+.artist-home .motion-control{top:14px;right:14px;min-height:44px;font:10px monospace}
+.artist-home .contact.contact-simple{background:var(--bone);color:#111}
+.artist-home .contact::before{display:none}
+.booking-statement{font:700 clamp(64px,11vw,160px)/.9 'League Spartan',Arial,sans-serif;letter-spacing:-.055em;margin-bottom:65px}
+.artist-home #contacto .contact-directory{border-top:1px solid #11111130;padding-top:30px;gap:30px}
+.artist-home #contacto .contact-entry h3{color:#55514b;font:10px monospace;letter-spacing:.15em}
+.artist-home #contacto .contact-direct-links a{color:#111;overflow-wrap:anywhere}
+.artist-home .universe-footer{padding:30px 4.5%;gap:20px;max-width:none;border:0}
+.art-credit{font:10px monospace;color:var(--muted);letter-spacing:0}
+.artist-home dialog{background:#111;color:var(--bone);border:1px solid #eeeae250;max-width:min(600px,92vw)}
+@media(min-width:1700px){.artist-home .section,.artist-home .fan-strip{padding-left:calc((100vw - 1450px)/2);padding-right:calc((100vw - 1450px)/2)}}
+@media(max-width:1000px){.artist-home .section{padding:70px 5%}.artist-home .music-layout{grid-template-columns:minmax(180px,.6fr) minmax(0,1.4fr);gap:30px}.artist-home .music-layout .record-block{min-height:360px;padding:20px}.artist-intro{gap:5%}.room-door{height:430px}.receiver-heading{width:80%}.artist-home .receiver-hero{min-height:650px}.artist-home .receiver-hero>.receiver-art{object-position:60% center}}
+@media(max-width:900px){.artist-home>header nav{background:#0b0b0b;border-color:var(--line)}.artist-home>header nav a{min-height:44px;display:flex;align-items:center}.artist-home>header nav a.nav-external{padding-left:8px}.artist-home .section-heading{display:block}.artist-home .section-heading>p{margin-top:24px}.artist-home .next-show{padding:24px;gap:20px}}
+@media(max-width:620px){
+.artist-home>header{height:66px}.artist-home>header .brand img{width:35px;height:35px}.artist-home .receiver-hero{height:calc(100svh - 66px);min-height:680px;max-height:900px;padding:22px 5%}.artist-home .receiver-hero>.receiver-art{height:65%;top:30px;object-fit:cover;object-position:83% center;opacity:.9}.artist-home .hero-top .eyebrow{font-size:8px;letter-spacing:.08em}.receiver-heading{width:100%;margin:auto 0 45px;padding-top:360px}.receiver-heading>.eyebrow{font-size:9px;margin-bottom:17px;max-width:250px}.artist-home .receiver-hero h1{font-size:15.5vw;letter-spacing:-.06em;margin-bottom:18px}.receiver-invitation{font-size:27px;max-width:280px}.receiver-heading .actions{margin-top:24px;gap:25px}.hero-bottom{font-size:8px;gap:15px}.hero-bottom a{max-width:130px}.world-index{padding:12px 5%;gap:0 20px}.world-index>span{flex-basis:100%;padding:12px 0;font-size:9px}.world-index a{font-size:9px}.artist-home .section{padding:58px 5%}.artist-home .section-label{margin-bottom:26px}.artist-home .section-heading h2{font-size:15vw}.artist-home .music-layout{display:block}.artist-home .music-layout .record-block{display:none}.artist-home .music-tabs{gap:22px}.artist-home .music-tabs button{font-size:10px}.artist-home .track{grid-template-columns:22px minmax(0,1fr) auto;gap:12px;padding:18px 0}.artist-home .track-info strong{font-size:18px}.artist-home .track-info small{font-size:10px!important;max-width:190px}.artist-home .track .track-type{font-size:8px!important}.artist-home .track .release-date{font-size:10px!important}.artist-home .music-labels .label-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.artist-home .music-labels .label-list li{font-size:11px!important}.artist-home .music-labels .label-list .label-tier-1{grid-column:auto}.artist-home .fan-strip{padding:26px 5%;display:flex;flex-direction:column;align-items:stretch}.artist-home .fan-form-row{display:flex;gap:10px}.artist-home .fan-form input[type=email]{min-width:0;flex:1;width:100%}.artist-home .fan-form .button{padding:10px 14px}.artist-home .next-show{display:flex;flex-direction:column;align-items:flex-start;text-align:left}.artist-home .next-show h3{font-size:38px}.artist-home .show-row{grid-template-columns:64px minmax(0,1fr);gap:14px;text-align:left}.artist-home .show-row>span{grid-column:2;font-size:10px!important}.artist-home .show-row h3{font-size:24px}.artist-home .show-row time{font-size:10px!important}.artist-home .show-row p{font-size:11px!important}.room-layout{grid-template-columns:1fr;gap:35px}.room-door{height:320px;max-width:230px;width:75%}.artist-home .room-copy h2{font-size:20vw}.room-copy>p:not(.eyebrow){font-size:14px}.artist-intro{grid-template-columns:1fr;gap:35px;margin-bottom:65px}.artist-intro figure{max-width:85%;margin:auto}.artist-home .artist-intro h2{font-size:11vw}.artist-home .cosmic-heading h2{font-size:17vw}.tuning-controls button{font-size:10px}.signal-stories{min-height:200px}.artist-home .cosmic-scene{height:220px}.booking-statement{font-size:21vw;margin-bottom:40px}.artist-home #contacto .contact-directory{grid-template-columns:1fr;gap:30px}.artist-home .universe-footer{padding:30px 5%;flex-wrap:wrap}.art-credit{flex-basis:100%}.artist-home .collection-card{padding:22px;min-height:180px}}
+@media(prefers-reduced-motion:reduce){.artist-home *{scroll-behavior:auto;animation:none!important;transition:none!important}}
+@media(forced-colors:active){.receiver-art,.room-door{display:none}.artist-home .button,.tuning-controls button{border:1px solid ButtonText}.artist-home .receiver-hero{background:Canvas}}
