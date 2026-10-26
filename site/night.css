@@ -1,70 +1,112 @@
-/* Nocturnal editorial direction. Scoped to the artist site; shared studio styles stay intact. */
-.artist-home{--night:#090909;--bone:#eeeae1;--red:#e33234;--line:#ffffff29;background:var(--night);font-family:Arial,Helvetica,sans-serif}
-.artist-home ::selection{background:var(--red);color:var(--bone)}
-.artist-home h1,.artist-home h2,.artist-home h3{font-family:'League Spartan',Arial,sans-serif}
-.artist-home>header{position:sticky;top:0;z-index:30;background:#090909ed;backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding-inline:4%}
-.artist-home>header nav a{font-size:10px;letter-spacing:.16em}
-.artist-home .language-toggle{font-size:11px;border:1px solid var(--line)}
-.artist-home .hero{position:relative;isolation:isolate;min-height:calc(100svh - 94px);padding:24px 4% 40px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
-.artist-home .hero:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#090909 1%,#090909ee 23%,transparent 70%),linear-gradient(0deg,#090909,transparent 48%)}
-.artist-home .hero-top{z-index:2;align-items:center;opacity:.8}
-.artist-home .hero-top .eyebrow{font-size:10px;letter-spacing:.23em}
-.artist-home .hero h1{position:relative;z-index:2;font-size:clamp(70px,16.1vw,280px);line-height:.85;letter-spacing:-.065em;margin:32px 0 18px;width:100%;mix-blend-mode:screen}
-.artist-home .hero-grid{display:block;margin-top:auto;padding-top:55px}
-.artist-home .hero-copy{position:relative;z-index:2;padding:0;max-width:540px}
-.artist-home .hero-copy>.eyebrow{font-size:10px;letter-spacing:.16em;border:0;padding:0;color:#ff7778}
-.artist-home .hero h2{font-size:clamp(46px,5.2vw,82px);max-width:510px;line-height:.95;margin:20px 0}
-.artist-home .hero h2 span{border:0;color:var(--red);display:block}
-.artist-home .hero-copy>p:not(.eyebrow){font-size:14px;line-height:1.65;color:#c1bdb7;max-width:290px}
-.artist-home .hero .portrait{position:absolute;z-index:-2;inset:0 0 0 35%;height:100%;min-height:0;margin:0;overflow:hidden}
-.artist-home .hero .portrait img{object-position:center 32%;filter:grayscale(1) contrast(1.1);opacity:.8}
-.artist-home .portrait figcaption{right:6%;left:auto;bottom:32px;background:none;font:9px monospace;letter-spacing:.2em;writing-mode:vertical-rl;color:#ddd}
-.hero-orbit{position:absolute;z-index:-1;width:58vw;height:58vw;right:-8vw;top:15%;border:1px solid #e3323466;border-radius:50%;box-shadow:0 0 100px #e3323420,inset 0 0 100px #e3323420;pointer-events:none}
-.hero-orbit:before,.hero-orbit:after{content:'';position:absolute;inset:8%;border:1px solid #e3323433;border-radius:50%}.hero-orbit:after{inset:20%;border-style:dashed}
-.artist-home .actions{margin-top:28px;gap:30px}
-.artist-home .button{font-size:10px;letter-spacing:.15em;padding:16px 28px;min-height:48px}
-.artist-home .text-link{font-size:10px;letter-spacing:.15em}
-.artist-home .signal{padding:12px 0;background:var(--bone);color:var(--night);border:0}
-.artist-home .signal div{font-size:15px;letter-spacing:.2em}
-.artist-home .section{padding:100px 6%;border-bottom:1px solid var(--line)}
-.artist-home .section-label{margin-bottom:40px;align-items:center;font-size:10px;letter-spacing:.2em;color:#aaa69f}
-.artist-home .section-label:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:12px}
+/* Sombra y señal. Artist home only: studio and store keep style.css as is.
+   Treatment fixed: Noche blacks, Hueso highlights, film grain, one hue (the existing red) used sparingly.
+   Sombra = the person (portrait in hard light with a long-exposure ghost). Señal = abstract white geometry (orbiting spheres). */
+.artist-home{--night:#121212;--bone:#EBE8E2;--red:#C81D25;--mint:#8f8b85;--line:#ffffff1f;--muted:#a19d96;--grain:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.9%22%20numOctaves%3D%223%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url%28%23g%29%22%2F%3E%3C%2Fsvg%3E");background:var(--night)}
+.artist-home ::selection{background:var(--bone);color:var(--night)}
+
+/* Film grain over the whole page, like the photos. */
+.artist-home::after{content:'';position:fixed;inset:0;z-index:50;pointer-events:none;background:var(--grain) 0 0/170px 170px;opacity:.06;mix-blend-mode:overlay}
+.artist-home .hero::before{display:none}
+
+.artist-home>header{background:#121212e6;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+.artist-home>header nav a{font-size:12px;letter-spacing:.18em}
+
+/* SOMBRA: the hero. */
+.artist-home .hero{overflow:hidden;padding-bottom:64px}
+.artist-home .hero-top{position:relative;z-index:2;color:var(--muted)}
+.artist-home .hero-top .eyebrow{font-size:11px;letter-spacing:.24em}
+.artist-home .hero h1{position:relative;z-index:2;letter-spacing:-.06em;line-height:.86;margin:30px 0 34px}
+.artist-home .hero-grid{position:relative}
+.artist-home .hero-copy{position:relative;z-index:2;padding-bottom:0}
+.artist-home .hero-copy>.eyebrow.red{font-size:12px;letter-spacing:.2em;border-left-width:3px}
+.artist-home .hero h2 span{border-bottom-width:6px}
+.artist-home .hero-copy>p:not(.eyebrow){color:#cfcbc4}
+.artist-home .hero-copy .hero-bio{color:var(--muted);font-style:italic;opacity:1}
+.artist-home .hero .portrait{position:relative;z-index:1;background:#000;isolation:isolate}
+.artist-home .hero .portrait img{filter:grayscale(1) contrast(1.4) brightness(.68);object-position:center 30%}
+/* Long exposure: a blurred copy of the same frame drifts beside him. */
+.artist-home .hero .portrait::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:url('assets/portrait.webp') center 30%/cover;filter:grayscale(1) contrast(1.5) brightness(.9) blur(7px);mix-blend-mode:lighten;opacity:.3;transform:translateX(-7%);animation:exposure 9s ease-in-out infinite alternate}
+/* One hard light from above, everything else falls into Noche. */
+.artist-home .hero .portrait::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 50% 56% at 60% 34%,transparent 35%,#121212b0 72%,#121212 100%),linear-gradient(0deg,#121212 0,transparent 30%)}
+.artist-home .portrait figcaption{z-index:3;background:none;color:var(--muted);font-size:10px;letter-spacing:.28em;left:22px;bottom:20px}
+@keyframes exposure{from{transform:translateX(-8%)}to{transform:translateX(-3%)}}
+
+/* SEÑAL: phase spheres orbiting behind the name. */
+.artist-home .hero>.hero-signal{position:absolute;z-index:0;right:-6vw;top:-4vw;width:min(62vw,820px);aspect-ratio:1;pointer-events:none;opacity:.8}
+.artist-home .hero-signal i{position:absolute;inset:0;border:1px solid #ebe8e21c;border-radius:50%;animation:orbit 38s linear infinite}
+.hero-signal i:nth-child(2){inset:14%;animation-duration:26s;animation-direction:reverse}
+.hero-signal i:nth-child(3){inset:30%;border-style:dashed;border-color:#ebe8e214;animation-duration:17s}
+.hero-signal i::before{content:'';position:absolute;top:-7px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#ebe8e2 40%,#6f6c67 100%);box-shadow:0 0 22px #ebe8e266}
+.hero-signal i:nth-child(2)::before{top:auto;bottom:-5px;width:10px;height:10px;margin-left:-5px}
+.hero-signal i:nth-child(3)::before{width:6px;height:6px;top:-3px;margin-left:-3px;box-shadow:0 0 10px #ebe8e299}
+@keyframes orbit{to{transform:rotate(360deg)}}
+
+.artist-home .actions{margin-top:30px}
+.artist-home .button{letter-spacing:.16em;font-size:12px}
+.artist-home .text-link{letter-spacing:.16em;font-size:12px}
+
+/* The marquee becomes a thin transmission line, not a red band. */
+.artist-home .signal{background:var(--night);color:var(--muted);border-block:1px solid var(--line);padding:13px 0}
+.artist-home .signal div{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.32em;font-weight:400}
+
+.artist-home .section{border-bottom:1px solid var(--line)}
+.artist-home .section-label{color:var(--muted);letter-spacing:.24em;font-size:11px;align-items:center}
 .artist-home .section-label span{margin-right:auto;text-align:left;max-width:none}
-.artist-home .section-heading h2{font-size:clamp(48px,7vw,110px);letter-spacing:-.055em;max-width:900px;line-height:.94}
-.artist-home .music-tabs{gap:24px;border-bottom:1px solid var(--line);margin-bottom:40px}
-.artist-home .music-tabs button{border:0;border-bottom:2px solid transparent;padding:16px 0;background:none;color:#a8a49f;font-size:10px;letter-spacing:.12em}
-.artist-home .music-tabs button[aria-selected=true]{color:var(--bone);background:none;border-bottom-color:var(--red)}
-.artist-home .music-layout{grid-template-columns:.8fr 1.2fr;gap:6%;align-items:start}
-.artist-home .music-layout .record-block{position:sticky;top:90px;align-self:start;border:1px solid var(--line);padding:35px 20px;min-height:430px;background:radial-gradient(ellipse at 50% 20%,#382020,#101010 65%);overflow:hidden}
-.artist-home .record-block:before{background:repeating-radial-gradient(circle at 50% 41%,transparent 0 5px,#ffffff09 6px 7px);opacity:1}
-.artist-home .music-layout .record-block img{width:230px;height:230px;border-radius:50%;padding:65px;object-fit:contain;background:#0c0c0c;border:1px solid #ffffff25;box-shadow:0 0 0 15px #090909,0 0 0 16px #ffffff16,0 0 0 30px #0d0d0d,0 0 0 31px #ffffff0c;margin:20px 0 40px}
-.artist-home .record-block .eyebrow{font-size:9px;letter-spacing:.3em;color:#aaa}
-.artist-home .music-layout .record-block h3{font-size:36px;margin:10px 0 22px}
-.artist-home .release-year summary,.artist-home .show-year summary{font-family:monospace;font-size:12px;letter-spacing:.08em;padding-block:18px}
-.artist-home .music-choice.track{padding:22px 0;gap:16px;background:transparent;transition:background .2s,padding .2s}
-.artist-home .music-choice.track:hover{background:#ffffff06;padding-left:10px}
-.artist-home .tracks .track-info strong{font-size:clamp(22px,2.5vw,36px);letter-spacing:-.035em;line-height:1}
-.artist-home .tracks .track-info small{font-family:monospace;font-size:9px;letter-spacing:.06em;color:#aaa69f;margin-top:8px}
-.artist-home .track-n,.artist-home .release-date{color:#aaa69f;font-family:monospace!important;font-size:10px!important}
-.artist-home .music-choice .track-type{font-size:9px!important;letter-spacing:.06em;border:0;padding:8px 0;background:none;color:#ff7778}
-.artist-home .music-labels{margin-top:65px;padding-top:28px;border-top:1px solid var(--line)}
-.artist-home .label-list{gap:20px 32px}.artist-home .label-list li{font-size:12px;color:#aaa69f}.artist-home .label-flag{display:none}
-.artist-home .collection-card{background:#111;border:1px solid var(--line);padding:35px;min-height:220px}.artist-home .collection-card:hover{border-color:var(--red)}
-.artist-home .fan-strip{margin:0;padding:38px 6%;background:#181613;border-block:1px solid #a78b5d55;gap:24px}
-.artist-home .fan-strip h2{font-size:28px;color:#d9bf8e;letter-spacing:-.02em}.artist-home .fan-strip-copy{font-size:12px;color:#bbb4a7}
-.artist-home .fan-form-row{border-color:#a78b5d66}.artist-home .fan-form input[type=email]{font-family:Arial,sans-serif;font-size:14px}.artist-home .fan-form .button{background:#d9bf8e;border-color:#d9bf8e;color:#111}
-.artist-home .live .section-heading{align-items:end}.artist-home .live .section-heading h2{max-width:700px}.artist-home .live .section-heading p{font-size:13px;color:#aaa69f;max-width:280px}
-.artist-home .next-show{margin-top:48px;background:transparent;border:1px solid var(--red);border-left:5px solid var(--red);padding:36px}.artist-home .next-show h3{font-size:70px}.artist-home .next-show .eyebrow{font-size:10px;color:#ff7778}.artist-home .next-show time{font-size:44px}.artist-home .next-show .button{background:var(--red);color:var(--bone);border-color:var(--red)}
-.artist-home .show-row{padding:24px 0}.artist-home .show-row h3{font-size:30px}.artist-home .show-row p{color:#aaa69f;font-size:12px}.artist-home .show-row time{font:12px monospace}
-.artist-home .cosmic-artist{background:radial-gradient(ellipse at 50% 75%,#261012,transparent 65%);padding-bottom:80px}
-.artist-home .cosmic-heading h2{font-size:clamp(50px,7.8vw,115px);letter-spacing:-.05em}.artist-home .cosmic-heading h2 span{color:#99958e;border:0}.artist-home .cosmic-heading .eyebrow{font:10px monospace;letter-spacing:.2em;color:#aaa69f}.artist-home .cosmic-scene{border-block:1px solid var(--line);margin-top:45px}.artist-home .cosmic-after p{font-size:19px;line-height:1.6}
-.artist-home .contact.contact-simple{padding:85px 6% 65px;background:var(--bone);color:var(--night)}
-.booking-statement{font-family:'League Spartan',Arial,sans-serif;font-size:clamp(65px,13vw,200px);font-weight:700;letter-spacing:-.06em;line-height:.82;margin-bottom:70px}.booking-statement span{color:var(--red)}
-.artist-home .contact-entry h3{font-size:11px;letter-spacing:.13em;color:#5b5752}.artist-home .contact-direct-links a{font-size:clamp(13px,1.6vw,22px);text-decoration:none;border-bottom:1px solid #09090940;padding-block:10px;overflow-wrap:anywhere}.artist-home .contact-direct-links a:hover{border-color:var(--red);color:#a61920}
-.artist-home .contact a:focus-visible{outline-color:var(--red)}
-.artist-home .compact-footer{padding:34px 6%;gap:30px}.artist-home .compact-footer .brand{font-size:28px}.artist-home .footer-icons{gap:20px}.artist-home .footer-icons img{width:20px;height:20px}.artist-home #footer-year{font:9px monospace;letter-spacing:.1em;color:#aaa69f}
-.artist-home dialog{background:#121212;border:1px solid #ffffff40;color:var(--bone)}
-@media(min-width:1600px){.artist-home .hero{min-height:850px}.artist-home .hero h1{font-size:16.1vw}}
-@media(max-width:900px){.artist-home .hero{min-height:780px}.artist-home .hero .portrait{left:18%}.artist-home .section{padding:72px 5%}.artist-home .music-layout{grid-template-columns:1fr}.artist-home .music-layout .record-block{position:relative;top:auto;min-height:0;padding:25px;display:grid;grid-template-columns:150px 1fr;gap:12px 35px;align-items:center;text-align:left}.artist-home .music-layout .record-block img{grid-row:span 3;width:130px;height:130px;padding:35px;margin:10px}.artist-home .record-block .button{justify-self:start}.artist-home .music-layout .record-block h3{margin:0}.artist-home .live .section-heading{display:block}.artist-home .live .section-heading p{margin-top:24px;max-width:420px}}
-@media(max-width:620px){.artist-home>header{height:70px}.artist-home>header nav{top:70px;background:#090909;padding:22px 5%}.artist-home>header nav a{font-size:13px;padding:12px}.artist-home .hero{min-height:760px;min-height:calc(100svh - 70px);padding:20px 5% 38px;justify-content:flex-start}.artist-home .hero-top .eyebrow{font-size:8px}.artist-home .hero h1{font-size:15.8vw;margin-top:30px;letter-spacing:-.065em}.artist-home .hero .portrait{inset:50px -24% 0 7%;height:auto}.artist-home .hero .portrait img{object-position:50% 20%;opacity:.7}.artist-home .hero:after{background:linear-gradient(0deg,#090909 1%,#090909d9 25%,#09090922 70%)}.artist-home .hero-grid{padding-top:210px;margin-top:auto}.artist-home .hero h2{font-size:clamp(46px,12vw,68px);max-width:340px}.artist-home .hero-copy>.eyebrow{font-size:8px;letter-spacing:.12em}.artist-home .hero-copy>p:not(.eyebrow){font-size:12px;max-width:260px}.artist-home .portrait figcaption{display:none}.hero-orbit{width:110vw;height:110vw;top:22%;right:-30vw}.artist-home .section{padding:62px 5%}.artist-home .section-heading h2{font-size:13vw}.artist-home .section-label{margin-bottom:28px}.artist-home .music-tabs{gap:20px}.artist-home .music-tabs button{font-size:9px}.artist-home .music-layout .record-block{grid-template-columns:100px 1fr;gap:10px 25px;padding:22px 15px}.artist-home .music-layout .record-block img{width:85px;height:85px;padding:24px}.artist-home .music-layout .record-block h3{font-size:27px}.artist-home .record-block .button{font-size:9px;padding:10px 18px}.artist-home .music-choice.track{padding:19px 0;gap:8px 12px}.artist-home .tracks .track-info strong{font-size:25px}.artist-home .tracks .track-info small{font-size:9px}.artist-home .music-choice .track-type{padding:8px 0;min-height:44px}.artist-home .fan-strip{padding:30px 5%}.artist-home .next-show{padding:25px;gap:25px}.artist-home .next-show h3{font-size:58px}.artist-home .next-show time{font-size:35px}.artist-home .show-row{grid-template-columns:70px 1fr;gap:16px}.artist-home .show-row h3{font-size:25px}.artist-home .show-row time{font-size:10px}.artist-home .cosmic-heading h2{font-size:13vw}.artist-home .contact.contact-simple{padding:60px 5% 35px}.booking-statement{font-size:15.2vw;margin-bottom:45px}.artist-home .contact-directory{gap:30px}.artist-home .contact-direct-links a{font-size:16px}.artist-home .compact-footer{padding:30px 5%}.artist-home .footer-icons{flex-wrap:wrap}.artist-home .footer-icon-group{gap:18px}}
-@media(prefers-reduced-motion:reduce){.artist-home *{scroll-behavior:auto!important;transition:none!important}.artist-home .signal-track{animation:none!important}}
+.artist-home .section-label::before{flex:none;content:'';width:28px;height:1px;background:var(--bone);margin-right:14px;opacity:.6}
+.artist-home .section-heading h2{letter-spacing:-.05em;line-height:.92}
+
+/* Music: the record block is a dark pressing, not a red glow. */
+.artist-home .music-layout .record-block{border-color:var(--line);background:radial-gradient(circle at 50% 34%,#262626,#121212 62%);overflow:hidden}
+.artist-home .record-block::before{background:repeating-radial-gradient(circle at 50% 34%,transparent 0 5px,#ffffff08 6px 7px);opacity:1}
+.artist-home .music-layout .record-block img{border-radius:50%;background:#0b0b0b;padding:22%;box-shadow:0 0 0 1px #ffffff1a,0 0 0 14px #121212,0 0 0 15px #ffffff10;width:220px;height:220px;max-width:70%;object-fit:contain;margin:18px 0 30px;animation:spin 14s linear infinite}
+.artist-home .record-block .eyebrow{color:var(--muted);letter-spacing:.3em;font-size:11px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.artist-home .music-choice.track{transition:background-color .25s,padding-left .25s}
+@media(hover:hover){.artist-home .music-choice.track:hover{background:#ffffff06;padding-left:10px}}
+.artist-home .tracks .track-info small,.artist-home .track-n{color:var(--muted)}
+.artist-home .label-list li{color:var(--muted)}
+.artist-home .label-flag{filter:grayscale(1);opacity:.7}
+.artist-home .collection-card{background:#161616;border-color:var(--line)}
+
+/* Golden Circle stays in the same black and white, quieter. */
+.artist-home .fan-strip{background:#0d0d0d;border-block:1px solid var(--line)}
+.artist-home .fan-strip h2{letter-spacing:.02em}
+.artist-home .fan-strip-copy{color:var(--muted)}
+
+/* Live: the next date is an outlined frame, red only on the pulse. */
+.artist-home .next-show{background:transparent;border:1px solid var(--bone);box-shadow:inset 0 0 0 6px var(--night),inset 0 0 0 7px var(--line)}
+.artist-home .next-show .button.light{background:var(--bone);color:var(--night);border-color:var(--bone)}
+.artist-home .show-row p{color:var(--muted)}
+
+.artist-home .cosmic-artist{background:radial-gradient(ellipse at 50% 70%,#1e1e1e,transparent 65%)}
+.artist-home .cosmic-heading h2 span{color:var(--muted);border:0}
+
+/* Finale: the page turns to Hueso, like light at the end of the set. */
+.artist-home .contact.contact-simple{position:relative;background:var(--bone);color:var(--night);isolation:isolate}
+.artist-home .contact.contact-simple::before{content:'';position:absolute;inset:0;z-index:-1;background:var(--grain) 0 0/170px 170px;opacity:.12;mix-blend-mode:multiply;pointer-events:none}
+.booking-statement{font-family:'League Spartan',Arial,sans-serif;font-weight:700;font-size:clamp(60px,12.5vw,190px);line-height:.84;letter-spacing:-.06em;margin-bottom:64px}
+.booking-statement span{color:transparent;-webkit-text-stroke:2px var(--night)}
+.artist-home #contacto .contact-entry h3{color:#5b5752}
+.artist-home #contacto .contact-direct-links a{color:var(--night)}
+.artist-home #contacto .contact-direct-links a::after{color:var(--night)}
+.artist-home #contacto a:focus-visible{outline-color:var(--night)}
+.artist-home dialog{background:#141414;border:1px solid #ffffff33;color:var(--bone)}
+
+@media(max-width:900px){
+  .artist-home .hero>.hero-signal{width:100vw;right:-32vw;top:2vw}
+  .artist-home .hero .portrait{margin-top:28px}
+}
+@media(max-width:620px){
+  .artist-home::after{opacity:.05}
+  .artist-home .hero>.hero-signal{width:120vw;right:-50vw;top:10px;opacity:.45}
+  .artist-home .music-layout .record-block img{width:150px;height:150px}
+  .booking-statement{font-size:15vw;margin-bottom:40px}
+  .booking-statement span{-webkit-text-stroke-width:1.5px}
+}
+@media(prefers-reduced-motion:reduce){
+  .artist-home .hero-signal i,.artist-home .music-layout .record-block img,.artist-home .hero .portrait::before{animation:none}
+}
+@media(prefers-contrast:more),(forced-colors:active){
+  .artist-home::after,.artist-home .contact.contact-simple::before,.artist-home .hero .portrait::before,.hero-signal{display:none}
+  .booking-statement span{color:var(--night);-webkit-text-stroke:0}
+}
