@@ -16,7 +16,7 @@
 .artist-home .hero-top{position:relative;z-index:2;color:var(--muted)}
 .artist-home .hero-top .eyebrow{font-size:11px;letter-spacing:.24em}
 .artist-home .hero h1{position:relative;z-index:2;letter-spacing:-.06em;line-height:.86;margin:30px 0 34px}
-.artist-home .hero>.hero-grid{position:relative;z-index:auto}
+.artist-home .hero>.hero-grid{position:static;z-index:auto}
 .artist-home .hero-copy{position:relative;z-index:2;padding-bottom:0}
 .artist-home .hero-copy>.eyebrow.red{font-size:12px;letter-spacing:.2em;border-left-width:3px}
 .artist-home .hero h2 span{border-bottom-width:6px}
@@ -139,3 +139,84 @@
   .artist-home::after,.artist-home .contact.contact-simple::before,.artist-home .hero .portrait::before,.hero-signal,.astro{display:none}
   .booking-statement span{color:var(--night);-webkit-text-stroke:0}
 }
+
+/* Readable artist bio and live set cards. */
+.artist-home .cosmic-after>p{font-size:clamp(16px,2vw,21px);line-height:1.7;text-transform:none;letter-spacing:0}
+.artist-home .cosmic-after .hero-bio{margin-top:24px;color:var(--muted);font-size:16px}
+.artist-home .live-sets{margin-bottom:32px}
+.artist-home .live-sets h3{font-size:clamp(20px,3vw,32px);overflow-wrap:anywhere}
+/* ROMMUSER world: hard cuts, a single line of light, human scale. */
+.artist-home{--night:#101010;--bone:#eeeae3}
+.artist-home .hero{min-height:760px;height:calc(100svh - 40px);max-height:1100px;padding:38px 4.5% 42px;display:flex;flex-direction:column;justify-content:space-between}
+.artist-home .hero-top{z-index:4}
+.artist-home .hero h1{font-size:clamp(70px,15.7vw,250px);letter-spacing:-.065em;margin:20px 0;z-index:3;line-height:.8;pointer-events:none}
+.artist-home .hero-grid{position:static;display:block}
+.artist-home .hero-copy{position:relative;z-index:4;width:57%;padding:30px 0 0}
+.artist-home .hero-copy>.eyebrow.red{color:var(--bone);border:0;font-size:11px;letter-spacing:.12em}
+.artist-home .hero h2.world-title{font-size:clamp(38px,5vw,78px);line-height:.96;letter-spacing:-.045em;margin:18px 0 30px}
+.artist-home .hero h2.world-title span{border:0;color:var(--bone)}
+.artist-home .hero .portrait{position:absolute;inset:0 0 0 43%;height:100%;margin:0;min-height:0;border:0;background:#101010;z-index:0}
+.artist-home .hero .portrait img{height:100%;width:100%;object-fit:cover;object-position:45% 30%;filter:grayscale(1) contrast(1.18) brightness(.72)}
+.artist-home .portrait figcaption{right:30px;left:auto;bottom:34px;background:#101010;padding:8px 12px;font:10px monospace}
+.artist-home .hero .actions{margin-top:0;gap:28px}
+.artist-home .hero .button{background:var(--bone);color:var(--night);border-color:var(--bone)}
+.world-index{display:flex;align-items:center;gap:28px;padding:24px 4.5%;border-block:1px solid var(--line);font:11px/1.5 monospace;letter-spacing:.1em;flex-wrap:wrap}
+.world-index>span{margin-right:auto;color:var(--muted)}
+.world-index a{padding:8px 0}
+.world-index a:hover{color:#fff;text-decoration:underline;text-underline-offset:7px}
+.artist-home .section{padding-top:100px;padding-bottom:100px}
+.artist-home .section-heading h2{font-size:clamp(44px,7vw,110px);line-height:.92}
+.outline-word{color:transparent;-webkit-text-stroke:1px var(--bone)}
+.artist-home .record-block{position:relative;min-height:420px}
+.artist-home .music-layout .record-block{background:#151515}
+.artist-home .record-block::before{background:none;border:1px solid #eeeae333;inset:32px;transform:rotate(-8deg)}
+.artist-home .fan-strip{padding:30px 4.5%;background:var(--bone);color:var(--night)}
+.artist-home .fan-strip-copy{color:#42403b}
+.artist-home .fan-strip input{border-color:#555;color:var(--night);background:transparent}
+.artist-home .fan-strip input::placeholder{color:#555}
+.artist-home .fan-strip .button{background:var(--night);color:var(--bone)}
+.artist-home .live-sets{gap:20px;margin:38px 0 48px}
+.artist-home .live-sets .collection-card{min-height:260px;position:relative;overflow:hidden;justify-content:flex-end;border:1px solid var(--line);padding:30px;background:#171717}
+.artist-home .live-sets .collection-card::before{content:'↗';font:110px/.8 'League Spartan',Arial,sans-serif;position:absolute;right:24px;top:20px;color:#eeeae32a;transition:transform .3s}
+.artist-home .live-sets .collection-card:hover::before{transform:translate(6px,-6px)}
+.artist-home .live-sets h3{font-size:clamp(22px,3vw,42px);max-width:85%;line-height:1.05;position:relative;margin-bottom:28px}
+.artist-home .next-show{box-shadow:none;border:1px solid var(--bone)}
+.artist-home .secret-room{background:#eae6df;color:#111}
+.secret-room .section-label{color:#494640}
+.secret-room .section-label::before{background:#111}
+.room-layout{display:grid;grid-template-columns:1fr 1fr;gap:9%;align-items:center;padding-top:50px}
+.room-door{height:540px;max-width:400px;width:85%;margin:auto;background:#111;position:relative;border:1px solid #111}
+.room-door::before{content:'';position:absolute;inset:25px;border:1px solid #eeeae340}
+.room-door .door-line{position:absolute;right:19%;top:0;height:100%;width:3px;background:#eeeae3;transform:skewY(-14deg)}
+.room-mark{position:absolute;left:45px;top:45px;font:700 36px 'League Spartan',Arial,sans-serif;color:#eeeae3;letter-spacing:-.12em}
+.room-copy h2{font-size:clamp(45px,6vw,90px);line-height:.95;margin:24px 0 30px}
+.room-copy .outline-word{-webkit-text-stroke-color:#111}
+.room-copy>p:not(.eyebrow){max-width:420px;line-height:1.8}
+.room-copy .room-history{font-size:12px;color:#57534e;margin:22px 0 32px}
+.room-copy .text-link{display:inline-block;color:#111;border-color:#111}
+.artist-home .cosmic-artist{background:#101010}
+.artist-home .cosmic-heading{text-align:left;margin:36px 0}
+.artist-home .cosmic-heading h2{font-size:clamp(58px,12vw,170px);line-height:.9;margin:20px 0}
+.signal-intro{color:var(--muted);font-size:16px;margin-top:22px}
+.tuning-controls{display:flex;border-block:1px solid var(--line);margin:28px 0 0}
+.tuning-controls button{flex:1;background:none;border:0;padding:23px 12px;font:12px monospace;letter-spacing:.1em;border-bottom:2px solid transparent}
+.tuning-controls button[aria-pressed=true]{border-bottom-color:var(--bone);background:#eeeae30b}
+.signal-stories{min-height:168px;padding:28px 0;max-width:640px}
+.signal-stories [hidden]{display:none}
+.signal-stories p{font-size:clamp(20px,3vw,32px);line-height:1.35;margin:10px 0 18px}
+.signal-stories .eyebrow{font-size:10px;color:var(--muted)}
+.artist-home .cosmic-scene{height:320px;max-height:40vw;border-block:1px solid var(--line);margin:0}
+.artist-home .cosmic-scene::before{display:none}
+.artist-home .cosmic-scene figcaption{bottom:18px}
+.artist-home .cosmic-after{max-width:none;display:grid;grid-template-columns:1.2fr 1fr;gap:10%;margin-top:50px;text-align:left;align-items:start}
+.artist-home .cosmic-after>p{font:400 17px/1.8 Poppins,Arial,sans-serif}
+.artist-home .cosmic-after .hero-bio{border-left:1px solid var(--bone);padding-left:28px;margin-top:0;font:400 clamp(22px,3vw,36px)/1.25 'League Spartan',Arial,sans-serif;color:var(--bone)}
+.booking-statement{font-size:clamp(58px,11vw,165px);line-height:.9}
+@media(max-width:900px){
+.artist-home .hero{min-height:720px;max-height:920px}.artist-home .hero .portrait{left:28%;opacity:.8}.artist-home .hero-copy{width:85%;background:#101010;padding:22px 20px 22px 0;margin-left:0}.artist-home .hero h1{font-size:16vw}.room-layout{gap:7%}.room-door{height:440px;width:100%}
+}
+@media(max-width:620px){
+.artist-home .hero{min-height:720px;height:calc(100svh - 50px);max-height:850px;padding-top:24px;padding-bottom:24px;justify-content:flex-start}.artist-home .hero-top{margin-bottom:16px}.artist-home .hero h1{font-size:16vw;letter-spacing:-.06em;margin:10px 0}.artist-home .hero .portrait{left:18%;top:80px;bottom:160px;height:auto;opacity:.85}.artist-home .hero-copy{position:absolute;left:4.5%;bottom:24px;width:91%;padding:22px 0;background:#101010}.artist-home .hero h2.world-title{font-size:clamp(30px,8.5vw,48px);margin:14px 0 20px}.artist-home .hero-copy>.eyebrow.red{font-size:9px}.artist-home .portrait figcaption{display:none}.artist-home .hero .actions{gap:20px}.world-index{gap:8px 22px;padding-block:18px}.world-index>span{flex-basis:100%;margin-bottom:8px}.artist-home .section{padding-block:64px}.artist-home .section-heading h2{font-size:11vw}.artist-home .live-sets{grid-template-columns:1fr}.artist-home .live-sets .collection-card{min-height:210px}.room-layout{grid-template-columns:1fr;gap:40px}.room-door{height:300px;width:65%;max-width:240px}.room-copy h2{font-size:15vw}.artist-home .cosmic-heading h2{font-size:17vw}.tuning-controls button{font-size:10px;padding:20px 8px}.artist-home .cosmic-scene{max-height:none;height:240px}.artist-home .cosmic-after{grid-template-columns:1fr;gap:28px}.artist-home .cosmic-after>p{font-size:16px}.artist-home .fan-strip{padding-block:25px}.booking-statement{font-size:14vw}
+}
+@media(prefers-reduced-motion:reduce){.artist-home .live-sets .collection-card::before{transition:none}}
+@media(forced-colors:active){.outline-word{color:CanvasText;-webkit-text-stroke:0}.room-door{border:1px solid CanvasText}}

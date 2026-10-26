@@ -11,8 +11,10 @@ function setup(reduce) {
     classList: { toggle: (key, on) => on ? classes.add(key) : classes.delete(key) },
     addEventListener: (key, fn) => { events[key] = fn; } };
   const canvas = { getContext: () => ctx };
+  const controls = ['groove','tension','melody'].map(signal => ({dataset:{signal}, attrs:{}, addEventListener(_,fn){this.click=fn;},setAttribute(k,v){this.attrs[k]=v;}}));
+  const stories = controls.map(b=>({dataset:{story:b.dataset.signal},hidden:b.dataset.signal!=='groove'}));
   runInNewContext(source, {
-    document: { querySelector: () => scene, getElementById: () => canvas, addEventListener() {}, hidden:false },
+    document: { querySelectorAll: selector => selector === '[data-signal]' ? controls : selector === '[data-story]' ? stories : [], querySelector: () => scene, getElementById: () => canvas, addEventListener() {}, hidden:false },
     matchMedia: query => ({ matches: query.includes('reduced-motion') && reduce, addEventListener() {} }),
     Image: class { addEventListener() {} },
     IntersectionObserver: class { constructor(fn) {this.fn=fn;} observe() {this.fn([{isIntersecting:true}]);} },
@@ -21,7 +23,7 @@ function setup(reduce) {
     innerHeight:800, devicePixelRatio:1, tr: x => x,
   });
   const pointer = {clientX:150,clientY:100,target:{closest:()=>null}};
-  return { events, classes, pointer, frames:()=>frames, bullets:()=>bullets, tick:now=>nextFrame(now) };
+  return { controls, stories, events, classes, pointer, frames:()=>frames, bullets:()=>bullets, tick:now=>nextFrame(now) };
 }
 it('keeps the native cursor: the scene has no pointer game', () => {
   const s=setup(false);
@@ -31,4 +33,12 @@ it('keeps the native cursor: the scene has no pointer game', () => {
 it('stays still in reduced motion and animates otherwise', () => {
   expect(setup(true).frames()).toBe(0);
   expect(setup(false).frames()).toBeGreaterThan(0);
+});
+
+it('switches the selected signal and its story without starting animation in reduced motion', () => {
+  const s=setup(true);
+  s.controls[1].click();
+  expect(s.controls.map(b=>b.attrs['aria-pressed'])).toEqual(['false','true','false']);
+  expect(s.stories.map(p=>p.hidden)).toEqual([true,false,true]);
+  expect(s.frames()).toBe(0);
 });
