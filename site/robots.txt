@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://rommuser.com/sitemap.xml
+Disallow: /preview/

@@ -9,7 +9,8 @@
     "test": "vitest run",
     "typecheck": "tsc",
     "site:en": "node scripts/build-site-en.mjs",
-    "lanzamientos": "node scripts/publicar-lanzamientos.mjs"
+    "lanzamientos": "node scripts/publicar-lanzamientos.mjs",
+    "site:previews": "node scripts/build-site-previews.mjs"
   },
   "repository": {
     "type": "git",

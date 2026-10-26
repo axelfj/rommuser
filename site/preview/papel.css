@@ -1,0 +1,44 @@
+/* A · PAPEL — cream editorial: ink on paper, the portrait framed like a magazine plate. */
+.variant-switch{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:60;display:flex;gap:2px;padding:3px;background:#111;border:1px solid #ece6da55;font:10px/1 monospace;letter-spacing:.1em;max-width:calc(100vw - 20px);overflow-x:auto}.variant-switch a{color:#ece6da;padding:10px 12px;min-height:36px;display:flex;align-items:center;white-space:nowrap}.variant-switch a[aria-current]{background:#ece6da;color:#111}
+.v-papel{--paper:#ECE6DA;--ink:#141310;--bone:#ECE6DA;--line:#14131026;--muted:#5f594f;background:var(--paper);color:var(--ink);counter-reset:sec}
+.v-papel>header{background:#ECE6DAf0;border-bottom:1px solid var(--ink)}
+.v-papel>header .brand img{filter:invert(1)}
+.v-papel>header nav a,.v-papel>header .menu-toggle,.v-papel>header .language-toggle{color:var(--ink);border-color:var(--ink)}
+.v-papel .button{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.v-papel .text-link{color:var(--ink)}
+.v-papel .receiver-hero{background:var(--paper);color:var(--ink);border-bottom:3px double var(--ink)}
+.v-papel .receiver-hero>.hero-photo{left:auto;right:4.5%;top:72px;bottom:40px;height:auto;width:min(36%,520px);-webkit-mask-image:none;mask-image:none;filter:grayscale(1) contrast(1.15);border:1px solid var(--ink);box-shadow:14px 14px 0 var(--ink)}
+.v-papel .hero-top .eyebrow,.v-papel .hero-bottom{color:var(--ink)}
+.v-papel .receiver-heading{width:58%}
+.v-papel .receiver-hero h1{color:var(--ink);font-size:clamp(60px,10vw,165px)}
+.v-papel .receiver-invitation,.v-papel h2 em,.v-papel .booking-statement em,.v-papel .signal-stories p{font-family:'Instrument Serif',Georgia,serif}
+.v-papel .receiver-invitation{font-size:clamp(30px,4vw,62px);line-height:1.05}
+.v-papel .world-index{background:var(--ink);color:var(--paper);border:0}
+.v-papel .section{border-bottom:3px double var(--ink)}
+.v-papel .section-label{color:var(--ink)}
+.v-papel .section-label::before{counter-increment:sec;content:'0' counter(sec);width:auto;height:auto;background:none;font:italic 400 34px/1 'Instrument Serif',Georgia,serif;letter-spacing:0}
+.v-papel .section-label span{border-top:1px solid currentColor;padding-top:6px;flex:1}
+.v-papel .music{background:var(--paper)}
+.v-papel .fan-strip{background:var(--ink);color:var(--paper)}
+.v-papel .fan-strip h2,.v-papel .fan-strip-copy{color:var(--paper)}
+.v-papel .fan-strip input[type=email]{color:var(--paper);border-color:#ECE6DA88}
+.v-papel .fan-strip input::placeholder{color:#c9c2b5}
+.v-papel .fan-strip .button{background:var(--paper);color:var(--ink)}
+.v-papel .live{background:var(--ink);color:var(--paper);--line:#ECE6DA2a;--muted:#aaa397}
+.v-papel .live .text-link,.v-papel .live .show-video{color:var(--paper)}
+.v-papel .live .button.light{background:var(--paper);color:var(--ink)}
+.v-papel .secret-room{background:var(--paper)}
+.v-papel .room-door{box-shadow:14px 14px 0 #14131033}
+.v-papel .cosmic-artist{background:var(--ink);color:var(--paper);--line:#ECE6DA2a;--muted:#aaa397}
+.v-papel .cosmic-artist .text-link{color:var(--paper)}
+.v-papel .contact.contact-simple{background:var(--paper)}
+.v-papel .booking-statement{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-style:italic;letter-spacing:-.03em}
+.v-papel .universe-footer{background:var(--ink);color:var(--paper)}
+@media(max-width:900px){.v-papel>header nav{background:var(--paper);border-color:var(--ink)}}
+@media(max-width:620px){
+.v-papel .receiver-hero>.hero-photo{left:5%;right:auto;top:56px;bottom:auto;width:72%;height:48%;box-shadow:10px 10px 0 var(--ink)}
+.v-papel .receiver-heading{width:100%;padding-top:58vh}
+.v-papel .receiver-invitation{font-size:32px}
+.v-papel .section-label::before{font-size:28px}}
+.artist-home.v-papel{padding-top:76px}
+@media(max-width:620px){.artist-home.v-papel{padding-top:66px}}
