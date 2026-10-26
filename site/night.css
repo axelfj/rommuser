@@ -177,7 +177,7 @@
 .artist-home .fan-strip .button{background:var(--night);color:var(--bone)}
 .artist-home .live-sets{gap:20px;margin:38px 0 48px}
 .artist-home .live-sets .collection-card{min-height:260px;position:relative;overflow:hidden;justify-content:flex-end;border:1px solid var(--line);padding:30px;background:#171717}
-.artist-home .live-sets .collection-card::before{content:'↗';font:110px/.8 'League Spartan',Arial,sans-serif;position:absolute;right:24px;top:20px;color:#eeeae32a;transition:transform .3s}
+.artist-home .live-sets .collection-card::before{content:'';position:absolute;right:28px;top:28px;width:44px;height:44px;border-top:1px solid #eeeae35c;border-right:1px solid #eeeae35c;transition:transform .3s}
 .artist-home .live-sets .collection-card:hover::before{transform:translate(6px,-6px)}
 .artist-home .live-sets h3{font-size:clamp(22px,3vw,42px);max-width:85%;line-height:1.05;position:relative;margin-bottom:28px}
 .artist-home .next-show{box-shadow:none;border:1px solid var(--bone)}
@@ -220,3 +220,29 @@
 }
 @media(prefers-reduced-motion:reduce){.artist-home .live-sets .collection-card::before{transition:none}}
 @media(forced-colors:active){.outline-word{color:CanvasText;-webkit-text-stroke:0}.room-door{border:1px solid CanvasText}}
+
+/* Audit 2026-10-26: every device. */
+/* Live set cards: the title keeps clear of the corner mark. */
+.artist-home .live-sets h3{padding-right:64px}
+/* World index and newsletter controls reach a 44px touch target. */
+.world-index a{display:inline-flex;align-items:center;min-height:44px;padding:0}
+.artist-home .fan-strip .fan-form input[type=email],.artist-home .fan-strip .fan-form .button{min-height:44px}
+@media(max-width:620px){
+  /* Labels wrap inside two columns instead of pushing the page sideways on 320px phones. */
+  .artist-home .music-labels .label-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .artist-home .music-labels .label-list li{white-space:normal;min-width:0}
+  #vivo .section-heading>p{text-align:left;margin-left:0}
+  .artist-home .music-labels .label-list li.label-tier-1{grid-column:1/-1}
+}
+/* Wide screens: hero, index strip and newsletter line up with the 1400px column like every other section. */
+@media(min-width:1500px){
+  .artist-home .hero,.world-index,.artist-home .fan-strip{padding-left:calc((100vw - 1400px)/2);padding-right:calc((100vw - 1400px)/2)}
+  .artist-home .hero .portrait{left:calc((100vw - 1400px)/2 + 602px);right:calc((100vw - 1400px)/2)}
+  .artist-home .hero>.hero-signal{right:calc((100vw - 1400px)/2 - 120px);top:-40px;width:940px}
+}
+/* Live set cards share the full width so titles never break mid-word. */
+.artist-home .live-sets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;width:100%}
+.artist-home .live-sets h3{overflow-wrap:break-word}
+@media(max-width:620px){.artist-home .live-sets{grid-template-columns:1fr}.artist-home .live-sets .collection-card{min-height:200px;padding:24px}.artist-home .live-sets h3{padding-right:40px;overflow-wrap:normal}.artist-home .live-sets .collection-card::before{width:28px;height:28px;right:20px;top:20px}}
+/* Mobile menu: ESTUDIO lines up with the other items. */
+@media(max-width:900px){.artist-home>header nav a.nav-external{padding-left:8px}}
