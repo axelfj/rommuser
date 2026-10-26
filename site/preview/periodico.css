@@ -1,0 +1,55 @@
+/* B · EL PERIÓDICO — a broadsheet front page on cream newsprint: masthead, lead story, agenda, listings and classifieds. */
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}img{display:block;max-width:100%}a{color:inherit}a:focus-visible{outline:2px solid currentColor;outline-offset:4px}h1,h2,h3,h4,p,ol,ul,dl,dd,figure,blockquote{margin:0}ol,ul{padding:0;list-style:none}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+.variant-switch{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:90;display:flex;gap:2px;padding:3px;background:#0b0b0b;border:1px solid #ece5d655;font:10px/1 "Space Mono",monospace;letter-spacing:.08em;max-width:calc(100vw - 20px);overflow-x:auto}.variant-switch a{color:#ece5d6;padding:10px 11px;min-height:36px;display:flex;align-items:center;white-space:nowrap;text-decoration:none}.variant-switch a[aria-current]{background:#ece5d6;color:#0b0b0b}
+.pv-periodico{--paper:#EEE7D7;--ink:#121110;--rule:#12111055;background:var(--paper);color:var(--ink);font:400 16px/1.55 'Instrument Serif',Georgia,serif;padding:0 4% 90px}
+.pv-periodico a{text-decoration-thickness:1px;text-underline-offset:3px}
+.masthead{text-align:center;padding:20px 0 0;border-bottom:4px double var(--ink)}
+.mast-top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font:10px 'Space Mono',monospace;letter-spacing:.12em;border-bottom:1px solid var(--ink);padding-bottom:10px}
+.masthead h1{font:400 clamp(72px,17vw,300px)/.82 'Instrument Serif',Georgia,serif;letter-spacing:-.045em;padding:18px 0 8px}
+.mast-nav{display:flex;justify-content:center;gap:0;border-top:1px solid var(--ink);font:11px 'Space Mono',monospace;letter-spacing:.14em;text-transform:uppercase}
+.mast-nav a{padding:12px 22px;text-decoration:none;border-right:1px solid var(--rule)}.mast-nav a:last-child{border-right:0}
+.paper{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:0 32px;padding-top:28px}
+.paper>*{border-top:1px solid var(--ink);padding-top:16px;margin-bottom:40px}
+.kicker{font:10px 'Space Mono',monospace;letter-spacing:.16em;margin-bottom:12px}
+.lead{grid-column:1/9;grid-row:1}
+.lead h2{font:900 clamp(38px,4.6vw,76px)/.95 'League Spartan',Arial,sans-serif;letter-spacing:-.04em;margin-bottom:18px}
+.deck{font:italic 400 clamp(20px,1.9vw,28px)/1.3 'Instrument Serif',Georgia,serif;border-bottom:1px solid var(--rule);padding-bottom:20px;margin-bottom:20px}
+.cols{columns:2;column-gap:32px;column-rule:1px solid var(--rule);font-size:18px}
+.cols p{margin-bottom:14px}
+.dropcap::first-letter{float:left;font:900 74px/.8 'League Spartan',Arial,sans-serif;margin:6px 10px 0 0}
+.cta a{display:inline-block;font:11px 'Space Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:12px 14px;text-decoration:none;margin:0 8px 8px 0}
+.portrait{grid-column:9/13;grid-row:1}
+.portrait img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 22%;filter:grayscale(1) contrast(1.35) brightness(.95);mix-blend-mode:multiply}
+.portrait{position:relative}.portrait::after{content:'';position:absolute;left:0;right:0;top:16px;aspect-ratio:4/5;background:radial-gradient(circle,#0003 .8px,transparent 1.2px) 0 0/4px 4px;pointer-events:none}
+.portrait figcaption{font:italic 15px 'Instrument Serif',Georgia,serif;border-bottom:1px solid var(--rule);padding:8px 0}
+.agenda{grid-column:9/13;grid-row:2/4;border-left:0}
+.agenda h3,.listings h3,.classifieds h3{font:900 28px/1 'League Spartan',Arial,sans-serif;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:16px}
+.agenda .next{border:2px solid var(--ink);padding:16px;margin-bottom:22px}
+.agenda .next strong{display:block;font:900 44px/.9 'League Spartan',Arial,sans-serif;letter-spacing:-.03em}
+.agenda .next span{display:block;font:12px 'Space Mono',monospace;margin:8px 0}
+.agenda .next a{font:11px 'Space Mono',monospace}
+.agenda h4{font:10px 'Space Mono',monospace;letter-spacing:.16em;margin-bottom:6px}
+.agenda li{display:grid;grid-template-columns:86px 1fr;gap:0 10px;padding:9px 0;border-bottom:1px dotted var(--rule);font-size:15px;line-height:1.3}
+.agenda time{font:11px 'Space Mono',monospace;grid-row:1/3}.agenda b{font:700 14px 'League Spartan',Arial,sans-serif}
+.agenda li a{grid-column:2;font:11px 'Space Mono',monospace;margin-top:4px}
+.listings{grid-column:1/9;grid-row:2}
+.listings small{font:italic 400 16px 'Instrument Serif',Georgia,serif;text-transform:none;letter-spacing:0;margin-left:8px}
+.listings table{width:100%;border-collapse:collapse;font:12px 'Space Mono',monospace}
+.listings th{text-align:left;font-weight:400;font-size:10px;letter-spacing:.14em;border-bottom:2px solid var(--ink);padding:6px 8px 6px 0}
+.listings td{border-bottom:1px solid var(--rule);padding:11px 8px 11px 0;vertical-align:top}
+.listings td:first-child{font:700 15px 'League Spartan',Arial,sans-serif}
+.listings td:last-child{text-align:right;white-space:nowrap}
+.listings td a,.listings td .is-soon{font-size:11px;letter-spacing:.08em}
+.listings tr.is-presave td:first-child::after{content:' ★';font-size:11px}
+.more{margin-top:14px;font-style:italic}
+.rooms{grid-column:1/4;grid-row:3;align-self:start;background:var(--ink);color:var(--paper);padding:22px!important;border:0!important}
+.rooms h3{font:400 34px/1 'Instrument Serif',Georgia,serif;margin-bottom:14px}.rooms .years{font:11px 'Space Mono',monospace;margin:14px 0}.rooms a{font:11px 'Space Mono',monospace;letter-spacing:.1em}
+.classifieds{grid-column:4/9;grid-row:3;columns:2;column-gap:28px;column-rule:1px solid var(--rule)}
+.classifieds h3{column-span:all}
+.ad{break-inside:avoid;border:1px solid var(--ink);padding:14px;margin-bottom:16px;font-size:16px;line-height:1.35}
+.ad b{font:700 13px 'League Spartan',Arial,sans-serif;letter-spacing:.04em}
+.ad a{overflow-wrap:anywhere}
+.colophon{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:4px double var(--ink);padding:16px 0;font:11px 'Space Mono',monospace;letter-spacing:.1em}
+.colophon nav{display:flex;gap:6px 18px;flex-wrap:wrap}.colophon a{padding:6px 0}
+@media(max-width:900px){.paper{grid-template-columns:1fr}.paper>*{grid-column:1/-1!important;grid-row:auto!important}.portrait{max-width:480px}.classifieds{columns:1}.mast-top span:nth-child(3){display:none}}
+@media(max-width:620px){.pv-periodico{padding:0 5% 90px}.cols{columns:1}.mast-nav{flex-wrap:wrap}.mast-nav a{padding:12px 10px;font-size:10px;letter-spacing:.08em}.listings th:nth-child(2),.listings td:nth-child(2){display:none}.mast-top span:nth-child(4){display:none}}

@@ -1,0 +1,59 @@
+/* C · LA CAJA — a record crate flipped sideways: sleeves for releases, ticket stubs for shows, a door, then the back cover. */
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}img{display:block;max-width:100%}a{color:inherit}a:focus-visible{outline:2px solid currentColor;outline-offset:4px}h1,h2,h3,h4,p,ol,ul,dl,dd,figure,blockquote{margin:0}ol,ul{padding:0;list-style:none}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+.variant-switch{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:90;display:flex;gap:2px;padding:3px;background:#0b0b0b;border:1px solid #ece5d655;font:10px/1 "Space Mono",monospace;letter-spacing:.08em;max-width:calc(100vw - 20px);overflow-x:auto}.variant-switch a{color:#ece5d6;padding:10px 11px;min-height:36px;display:flex;align-items:center;white-space:nowrap;text-decoration:none}.variant-switch a[aria-current]{background:#ece5d6;color:#0b0b0b}
+.pv-caja{--ink:#0b0b0b;--cream:#ECE5D6;--dim:#8a8476;background:#151513;color:var(--cream);font:400 16px/1.5 'League Spartan',Arial,sans-serif;height:100svh;overflow:hidden;display:flex;flex-direction:column}
+.mono{font:11px/1.5 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase}
+.serif,.pv-caja em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
+.crate-head{display:flex;justify-content:space-between;align-items:center;padding:0 3%;height:62px;flex:none;border-bottom:1px solid #ece5d622}
+.crate-brand{font:900 22px 'League Spartan',Arial,sans-serif;letter-spacing:-.04em;text-decoration:none}
+.crate-head nav{display:flex;gap:4px 22px;font:11px 'Space Mono',monospace;letter-spacing:.12em}.crate-head nav a{text-decoration:none;padding:12px 0}
+.crate{flex:1;display:flex;gap:22px;align-items:stretch;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scroll-padding-inline:3vw;padding:26px 3vw 70px;scrollbar-width:none;outline:none}
+.crate::-webkit-scrollbar{display:none}
+.card{flex:none;height:100%;scroll-snap-align:start;position:relative;overflow:hidden;padding:30px;display:flex;flex-direction:column}
+.card h2{font:900 clamp(48px,5.6vw,96px)/.88 'League Spartan',Arial,sans-serif;letter-spacing:-.05em;margin:14px 0 18px}
+.pill{display:inline-flex;align-items:center;min-height:42px;padding:10px 16px;border:1px solid currentColor;border-radius:999px;font:11px 'Space Mono',monospace;letter-spacing:.1em;text-decoration:none;margin:8px 8px 0 0;align-self:flex-start;transition:background .2s,color .2s}
+.pill:hover{background:currentColor}.pill:hover{color:inherit;filter:invert(1)}
+.c-cover{width:min(1100px,88vw);flex-direction:row;padding:0;background:var(--ink)}
+.c-cover img{height:100%;width:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 22%;filter:grayscale(1) contrast(1.3)}
+.c-cover>div{padding:40px;display:flex;flex-direction:column;justify-content:flex-end;flex:1;min-width:0}
+.c-cover h1{font:900 clamp(44px,6.2vw,118px)/.82 'League Spartan',Arial,sans-serif;letter-spacing:-.065em;margin:12px 0 24px;white-space:nowrap}
+.c-cover .serif{font-size:clamp(22px,2.2vw,34px);line-height:1.15;max-width:18ch}
+.hint{margin-top:40px;color:var(--dim);animation:nudge 1.8s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(10px)}}
+.c-divider{width:min(420px,80vw);justify-content:flex-end;background:var(--cream);color:var(--ink)}
+.c-divider .serif{font-size:24px}.c-divider-dark{background:#232220;color:var(--cream);justify-content:flex-end}
+/* A sleeve: square, with the record sliding out on hover. */
+.sleeve{aspect-ratio:1;width:auto;background:var(--ink);border:1px solid #ece5d633;justify-content:flex-end}
+.sleeve-light{background:var(--cream);color:var(--ink)}
+.sleeve .cat{position:absolute;top:24px;left:30px}
+.sleeve .disc{position:absolute;top:50%;right:-46%;width:78%;aspect-ratio:1;border-radius:50%;transform:translateY(-62%);background:radial-gradient(circle,var(--cream) 0 6%,#111 6.5% 18%,transparent 18.5%),repeating-radial-gradient(circle,#161616 0 2px,#0b0b0b 2px 4px);box-shadow:0 0 0 1px #ece5d622;transition:right .5s cubic-bezier(.2,.8,.2,1)}
+.sleeve:hover .disc,.sleeve:focus-within .disc{right:-22%}
+.sleeve h3{font:900 clamp(30px,3.6vw,58px)/.9 'League Spartan',Arial,sans-serif;letter-spacing:-.04em;max-width:75%;position:relative}
+.sleeve p{position:relative;margin-top:8px}.sleeve .date{font-size:14px}
+.sleeve .is-soon{color:var(--dim);border-style:dashed}
+.sleeve.is-presave::after{content:'PRE-SAVE';position:absolute;top:22px;right:-38px;transform:rotate(45deg);background:var(--cream);color:var(--ink);font:10px 'Space Mono',monospace;letter-spacing:.14em;padding:6px 44px}
+.sleeve-light.is-presave::after{background:var(--ink);color:var(--cream)}
+/* A ticket stub: perforated edges, the date as the headline. */
+.stub{width:300px;background:var(--cream);color:var(--ink);justify-content:space-between;-webkit-mask:radial-gradient(circle 9px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 9px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat}
+.stub::before{content:'';position:absolute;left:18px;right:18px;top:50%;border-top:2px dashed #0b0b0b44}
+.stub h3{font:900 34px/.95 'League Spartan',Arial,sans-serif;letter-spacing:-.03em;margin-top:10px}
+.stub p{font-size:14px}
+.stub-date{font:700 34px/1 'Space Mono',monospace!important;letter-spacing:-.05em;margin-top:auto}
+.stub-next{background:var(--ink);color:var(--cream);border:1px solid var(--cream)}.stub-next::before{border-color:#ece5d655}
+.c-door{width:min(520px,86vw);background:#232220;justify-content:flex-end}
+.c-door .door{position:absolute;top:30px;right:30px;width:34%;aspect-ratio:9/16;background:var(--ink);border:1px solid #ece5d655;box-shadow:0 0 80px 4px #ece5d618}
+.c-door .door::after{content:'';position:absolute;top:0;bottom:0;right:24%;width:2px;background:var(--cream);box-shadow:0 0 18px 2px #ece5d699}
+.c-door .door img{position:absolute;left:14px;top:14px;width:32px}
+.c-door .mono{color:#cfc8b9}
+.c-liner{width:min(560px,86vw);background:var(--cream);color:var(--ink);justify-content:center;gap:24px}
+.c-liner .big{font-size:clamp(30px,3vw,46px);line-height:1.1}
+.c-back{width:min(640px,90vw);background:var(--ink);border:1px solid #ece5d633;gap:10px;justify-content:flex-end}
+.big-mail{font:900 clamp(26px,3vw,44px)/1 'League Spartan',Arial,sans-serif;letter-spacing:-.03em;overflow-wrap:anywhere;margin-bottom:6px}
+.c-back .socials{display:flex;flex-wrap:wrap;gap:4px 16px;font:11px 'Space Mono',monospace;letter-spacing:.08em;margin:10px 0}.c-back .socials a{padding:8px 0}
+.crate-progress{position:fixed;left:3vw;right:3vw;bottom:58px;height:2px;background:#ece5d622;pointer-events:none}.crate-progress i{display:block;height:100%;width:var(--p,0%);background:var(--cream)}
+@media(max-width:700px){
+.crate-head nav{display:none}.crate{gap:14px;padding:16px 5% 66px;scroll-snap-type:x mandatory}
+.card{padding:22px}.c-cover{flex-direction:column;width:86vw}.c-cover img{height:52%;width:100%;aspect-ratio:auto}.c-cover>div{padding:20px}
+.sleeve{width:86vw;height:auto;align-self:center}.stub{width:72vw}
+.c-door .door{width:30%}}
+.sleeve:not(.sleeve-light) .disc{background:radial-gradient(circle,var(--cream) 0 6%,#0b0b0b 6.5% 18%,transparent 18.5%),repeating-radial-gradient(circle,#262624 0 2px,#1a1a18 2px 4px);box-shadow:0 0 0 1px #ece5d64d}

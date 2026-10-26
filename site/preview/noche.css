@@ -1,0 +1,70 @@
+/* A · LA NOCHE — the page is one night: doors at 22:00, the tracklist at peak time, the after, then dawn turns the page cream. */
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}img{display:block;max-width:100%}a{color:inherit}a:focus-visible{outline:2px solid currentColor;outline-offset:4px}h1,h2,h3,h4,p,ol,ul,dl,dd,figure,blockquote{margin:0}ol,ul{padding:0;list-style:none}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+.variant-switch{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:90;display:flex;gap:2px;padding:3px;background:#0b0b0b;border:1px solid #ece5d655;font:10px/1 "Space Mono",monospace;letter-spacing:.08em;max-width:calc(100vw - 20px);overflow-x:auto}.variant-switch a{color:#ece5d6;padding:10px 11px;min-height:36px;display:flex;align-items:center;white-space:nowrap;text-decoration:none}.variant-switch a[aria-current]{background:#ece5d6;color:#0b0b0b}
+.pv-noche{--ink:#0b0b0b;--cream:#ECE5D6;--dim:#8f897d;background:var(--ink);color:var(--cream);font:400 16px/1.6 'League Spartan',Arial,sans-serif}
+.pv-noche em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-.01em}
+.clock{position:fixed;left:0;top:0;bottom:0;width:132px;z-index:40;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;border-right:1px solid #ece5d61f;color:var(--cream);mix-blend-mode:difference}
+.clock-time{font:700 34px/1 'Space Mono',monospace;letter-spacing:-.04em}
+.clock-label{font:10px/1.3 'Space Mono',monospace;letter-spacing:.14em;writing-mode:vertical-rl;transform:rotate(180deg)}
+.clock-bar{position:absolute;left:0;top:0;width:2px;height:100%;background:#ece5d61f}.clock-bar i{display:block;width:100%;height:var(--p,0%);background:var(--cream);transition:height .2s}
+.pv-noche main{margin-left:132px}
+.hour{min-height:100svh;padding:96px 7% 110px;position:relative}
+.stamp{font:11px 'Space Mono',monospace;letter-spacing:.16em;color:var(--dim);margin-bottom:48px}
+.hour h2{font:700 clamp(46px,7vw,112px)/.95 'League Spartan',Arial,sans-serif;letter-spacing:-.045em;max-width:14ch;margin-bottom:56px}
+.h-doors{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:60px}
+.h-doors .stamp{position:absolute;top:36px;left:7%}
+.doors-photo{width:min(330px,62vw);aspect-ratio:4/5;overflow:hidden}
+.doors-photo img{width:100%;height:100%;object-fit:cover;object-position:center 22%;filter:grayscale(1) contrast(1.3) brightness(.85)}
+.h-doors h1{font:900 clamp(64px,15vw,250px)/.8 'League Spartan',Arial,sans-serif;letter-spacing:-.07em;margin-top:-.42em;mix-blend-mode:difference;color:var(--cream);position:relative}
+.tag{font:12px 'Space Mono',monospace;letter-spacing:.14em;text-transform:uppercase;margin-top:28px}
+.whisper{font:italic 400 clamp(22px,2.4vw,34px)/1.2 'Instrument Serif',Georgia,serif;color:var(--dim);margin-top:14px}
+.h-warm{background:#131311;display:grid;align-content:center}
+.lede{font:400 clamp(24px,2.9vw,44px)/1.25 'Instrument Serif',Georgia,serif;max-width:30ch}
+.h-warm blockquote{margin-top:48px;font:12px/1.8 'Space Mono',monospace;letter-spacing:.1em;text-transform:uppercase;border-left:2px solid var(--cream);padding-left:20px;max-width:46ch}
+.tracklist{border-top:1px solid #ece5d633}
+.tracklist li{display:grid;grid-template-columns:52px minmax(0,1fr) 120px 128px;gap:18px;align-items:center;padding:20px 12px;border-bottom:1px solid #ece5d633;font-family:'Space Mono',monospace;transition:background .25s,color .25s}
+.tracklist li:hover{background:var(--cream);color:var(--ink)}
+.t-n{color:var(--dim)}
+.t-main strong{display:block;font:700 clamp(17px,1.7vw,24px)/1.2 'League Spartan',Arial,sans-serif;letter-spacing:-.01em}
+.t-main small{font-size:11px;color:var(--dim)}
+.tracklist time{font-size:12px}
+.t-act{justify-self:end;font-size:11px;letter-spacing:.1em;border:1px solid currentColor;padding:10px 12px;text-decoration:none;min-height:40px;display:inline-flex;align-items:center}
+.tracklist .is-soon{border-style:dashed;color:var(--dim)}
+.tracklist .is-presave .t-act{background:var(--cream);color:var(--ink)}
+.tracklist li:hover .t-act{border-color:var(--ink)}
+.more{display:flex;gap:28px;flex-wrap:wrap;margin-top:34px;font:11px 'Space Mono',monospace;letter-spacing:.12em}.more a{padding:10px 0;border-bottom:1px solid}
+.h-nights{background:#1a1916}
+.next{display:grid;grid-template-columns:auto 1fr auto auto;gap:6px 28px;align-items:center;background:var(--cream);color:var(--ink);padding:26px 30px;margin-bottom:84px}
+.next span{grid-column:1/-1;font:10px 'Space Mono',monospace;letter-spacing:.16em}
+.next strong{font:900 clamp(36px,5vw,72px)/.9 'League Spartan',Arial,sans-serif;letter-spacing:-.04em}
+.next em{font-size:24px}.next time{font:700 18px 'Space Mono',monospace}
+.next a{font:11px 'Space Mono',monospace;letter-spacing:.1em;border:1px solid;padding:12px 14px;text-decoration:none}
+.nights li{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,1.2fr) 90px 130px;gap:18px;align-items:baseline;padding:18px 0;border-bottom:1px solid #ece5d626}
+.nights time{font:12px 'Space Mono',monospace;color:var(--dim)}
+.nights strong{font:700 clamp(18px,2vw,28px)/1.1 'League Spartan',Arial,sans-serif;letter-spacing:-.02em}
+.nights span{font-size:13px;color:var(--dim)}.nights i{font:normal 10px 'Space Mono',monospace;letter-spacing:.12em}
+.nights a{font:11px 'Space Mono',monospace;letter-spacing:.08em;justify-self:end;padding:8px 0;border-bottom:1px solid}
+.h-after{background:#2a2824;display:grid;grid-template-columns:minmax(200px,.7fr) 1fr;gap:9%;align-items:center}
+.h-after .stamp{position:absolute;top:96px;left:7%}
+.door{height:min(520px,62vh);aspect-ratio:9/16;background:var(--ink);border:1px solid #ece5d655;position:relative;box-shadow:0 0 120px 10px #ece5d614;justify-self:center}
+.door::after{content:'';position:absolute;top:0;bottom:0;right:22%;width:2px;background:var(--cream);box-shadow:0 0 22px 3px #ece5d699}
+.door img{position:absolute;left:28px;top:28px;width:46px}
+.h-after p{font-size:17px;max-width:38ch;color:#cfc8b9}.h-after .years{font:11px 'Space Mono',monospace;letter-spacing:.06em;margin-top:22px;color:var(--dim)}
+.h-after h2{margin-bottom:28px}
+.line{display:inline-block;margin-top:30px;font:11px 'Space Mono',monospace;letter-spacing:.12em;padding:10px 0;border-bottom:1px solid}
+.h-dawn{background:linear-gradient(#2a2824 0,#857e70 22%,#d9d1c0 42%,var(--cream) 58%);color:var(--ink);padding-top:180px}
+.h-dawn .stamp{color:#3d3a34}
+.contact{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;border-top:2px solid var(--ink);padding-top:28px}
+.contact dt{font:10px 'Space Mono',monospace;letter-spacing:.16em;color:#5f594f;margin-bottom:10px}
+.contact dd{font:700 clamp(18px,1.8vw,26px)/1.3 'League Spartan',Arial,sans-serif;overflow-wrap:anywhere}
+.signed{margin-top:70px;font:12px/1.8 'Space Mono',monospace;letter-spacing:.06em}.signed span{display:block;font-size:10px;letter-spacing:.16em;color:#5f594f}
+.socials{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:40px;font:11px 'Space Mono',monospace;letter-spacing:.1em;text-transform:uppercase}.socials a{padding:10px 0}
+.foot{margin-top:50px;padding-bottom:40px;font:10px 'Space Mono',monospace;letter-spacing:.14em;color:#5f594f}
+@media(max-width:900px){.nights li{grid-template-columns:96px minmax(0,1fr) auto}.nights span{grid-column:2}.nights i{grid-column:3;grid-row:1}.nights a{grid-column:2/-1;justify-self:start}.h-after{grid-template-columns:1fr}.h-after .stamp{position:static}.contact{grid-template-columns:1fr}}
+@media(max-width:700px){
+.clock{top:0;bottom:auto;left:0;right:0;width:auto;height:46px;flex-direction:row;justify-content:space-between;padding:0 5%;border-right:0;border-bottom:1px solid #ece5d61f}
+.clock-time{font-size:18px}.clock-label{writing-mode:horizontal-tb;transform:none;font-size:9px}.clock-bar{top:auto;bottom:0;width:var(--p,0%);height:2px;background:var(--cream)}.clock-bar i{display:none}
+.pv-noche main{margin-left:0}.hour{padding:80px 5% 100px}.h-doors .stamp{top:66px;left:5%}
+.tracklist li{grid-template-columns:30px minmax(0,1fr);gap:4px 12px;padding:16px 4px}.tracklist time{grid-column:2;font-size:11px;color:var(--dim)}.t-act{grid-column:2;justify-self:start;margin-top:8px}
+.next{grid-template-columns:1fr;padding:22px}.nights li{grid-template-columns:84px minmax(0,1fr)}.nights i{grid-column:2;grid-row:auto}
+.door{height:340px}}
