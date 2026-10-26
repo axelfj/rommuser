@@ -110,3 +110,9 @@
   .artist-home::after,.artist-home .contact.contact-simple::before,.artist-home .hero .portrait::before,.hero-signal{display:none}
   .booking-statement span{color:var(--night);-webkit-text-stroke:0}
 }
+
+/* Readable artist bio and live set cards. */
+.artist-home .cosmic-after>p{font-size:clamp(16px,2vw,21px);line-height:1.7;text-transform:none;letter-spacing:0}
+.artist-home .cosmic-after .hero-bio{margin-top:24px;color:var(--muted);font-size:16px}
+.artist-home .live-sets{margin-bottom:32px}
+.artist-home .live-sets h3{font-size:clamp(20px,3vw,32px);overflow-wrap:anywhere}
