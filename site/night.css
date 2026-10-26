@@ -16,13 +16,13 @@
 .artist-home .hero-top{position:relative;z-index:2;color:var(--muted)}
 .artist-home .hero-top .eyebrow{font-size:11px;letter-spacing:.24em}
 .artist-home .hero h1{position:relative;z-index:2;letter-spacing:-.06em;line-height:.86;margin:30px 0 34px}
-.artist-home .hero-grid{position:relative}
+.artist-home .hero>.hero-grid{position:relative;z-index:auto}
 .artist-home .hero-copy{position:relative;z-index:2;padding-bottom:0}
 .artist-home .hero-copy>.eyebrow.red{font-size:12px;letter-spacing:.2em;border-left-width:3px}
 .artist-home .hero h2 span{border-bottom-width:6px}
 .artist-home .hero-copy>p:not(.eyebrow){color:#cfcbc4}
 .artist-home .hero-copy .hero-bio{color:var(--muted);font-style:italic;opacity:1}
-.artist-home .hero .portrait{position:relative;z-index:1;background:#000;isolation:isolate}
+.artist-home .hero .portrait{position:relative;z-index:0;background:#000;isolation:isolate}
 .artist-home .hero .portrait img{filter:grayscale(1) contrast(1.4) brightness(.68);object-position:center 30%}
 /* Long exposure: a blurred copy of the same frame drifts beside him. */
 .artist-home .hero .portrait::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:url('assets/portrait.webp') center 30%/cover;filter:grayscale(1) contrast(1.5) brightness(.9) blur(7px);mix-blend-mode:lighten;opacity:.3;transform:translateX(-7%);animation:exposure 9s ease-in-out infinite alternate}
@@ -31,15 +31,40 @@
 .artist-home .portrait figcaption{z-index:3;background:none;color:var(--muted);font-size:10px;letter-spacing:.28em;left:22px;bottom:20px}
 @keyframes exposure{from{transform:translateX(-8%)}to{transform:translateX(-3%)}}
 
-/* SEÑAL: phase spheres orbiting behind the name. */
-.artist-home .hero>.hero-signal{position:absolute;z-index:0;right:-6vw;top:-4vw;width:min(62vw,820px);aspect-ratio:1;pointer-events:none;opacity:.8}
-.artist-home .hero-signal i{position:absolute;inset:0;border:1px solid #ebe8e21c;border-radius:50%;animation:orbit 38s linear infinite}
-.hero-signal i:nth-child(2){inset:14%;animation-duration:26s;animation-direction:reverse}
-.hero-signal i:nth-child(3){inset:30%;border-style:dashed;border-color:#ebe8e214;animation-duration:17s}
-.hero-signal i::before{content:'';position:absolute;top:-7px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#ebe8e2 40%,#6f6c67 100%);box-shadow:0 0 22px #ebe8e266}
-.hero-signal i:nth-child(2)::before{top:auto;bottom:-5px;width:10px;height:10px;margin-left:-5px}
-.hero-signal i:nth-child(3)::before{width:6px;height:6px;top:-3px;margin-left:-3px;box-shadow:0 0 10px #ebe8e299}
+/* SEÑAL: a particle ring with phase spheres orbiting it, drawn by signal.js behind the name. */
+.artist-home .hero>.hero-signal{position:absolute;z-index:1;mix-blend-mode:screen;right:-8vw;top:-6vw;width:min(70vw,940px);aspect-ratio:1;pointer-events:none}
+.hero-signal canvas{display:block;width:100%;height:100%}
 @keyframes orbit{to{transform:rotate(360deg)}}
+
+/* Space objects from the moodboard, one per section, all decorative. */
+.astro{pointer-events:none;user-select:none}
+/* Sliced sphere beside the music heading: each slice drifts on its own. */
+.artist-home .music .section-heading{position:relative}
+.astro-slices{position:absolute;right:0;top:50%;width:clamp(120px,15vw,210px);transform:translateY(-55%)}
+.astro-slices svg{display:block;width:100%;height:auto;overflow:visible}
+.astro-slices ellipse{animation:slice 7s ease-in-out infinite alternate;animation-delay:calc(var(--i) * -.55s)}
+@keyframes slice{from{transform:translateX(-9px)}to{transform:translateX(9px)}}
+/* Stacked phase spheres, small, before the Golden Circle name. */
+.astro-stack{display:flex;flex-direction:column;align-items:center;gap:0;flex:none;width:34px}
+.astro-stack i{display:block;border-radius:50%;background:radial-gradient(circle at 38% 30%,#fff,#bdbab4 38%,#2a2a2a 78%,#141414);box-shadow:0 0 12px #ebe8e21f}
+.astro-stack i:nth-child(1){width:6px;height:6px;margin-bottom:3px}
+.astro-stack i:nth-child(2){width:22px;height:22px;margin-bottom:-6px}
+.astro-stack i:nth-child(3){width:30px;height:30px;margin-bottom:2px}
+.astro-stack i:nth-child(4){width:12px;height:12px}
+/* Eclipse with orbits and small planets behind the live heading. */
+.artist-home .live{position:relative;overflow:hidden}
+.artist-home .live .section-heading{position:relative}
+.astro-eclipse{position:absolute;z-index:0;right:-2%;top:0;width:clamp(220px,28vw,400px);aspect-ratio:1;transform:translateY(-38%)}
+.astro-eclipse::before{content:'';position:absolute;inset:30%;border-radius:50%;background:#0c0c0c;box-shadow:0 0 0 1px #ebe8e233,0 -6px 28px #ebe8e255,0 0 70px #ebe8e226,inset 0 8px 22px #ebe8e21a}
+.astro-eclipse i{position:absolute;inset:0;border:1px solid #ebe8e214;border-radius:50%;animation:orbit 46s linear infinite}
+.astro-eclipse i:nth-child(2){inset:12%;animation-duration:30s;animation-direction:reverse}
+.astro-eclipse i:nth-child(3){inset:22%;border-color:#ebe8e20d;animation-duration:19s}
+.astro-eclipse i::before{content:'';position:absolute;left:50%;top:-6px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#9d9a95 45%,#1d1d1d)}
+.astro-eclipse i:nth-child(2)::before{top:auto;bottom:-4px;width:8px;height:8px;margin-left:-4px}
+.astro-eclipse i:nth-child(3)::before{width:5px;height:5px;top:-2.5px;margin-left:-2.5px}
+.artist-home .live .section-heading h2,.artist-home .live .section-heading p{position:relative;z-index:1}
+/* A dark planet rises over the Hueso finale. */
+.astro-horizon{position:absolute;z-index:-1;left:50%;top:0;width:160vw;aspect-ratio:1;transform:translate(-50%,-96.5%);border-radius:50%;background:radial-gradient(circle at 50% 100%,#2a2a2a,#121212 30%);box-shadow:0 18px 60px #12121266,0 2px 0 #ebe8e2}
 
 .artist-home .actions{margin-top:30px}
 .artist-home .button{letter-spacing:.16em;font-size:12px}
@@ -58,7 +83,7 @@
 /* Music: the record block is a dark pressing, not a red glow. */
 .artist-home .music-layout .record-block{border-color:var(--line);background:radial-gradient(circle at 50% 34%,#262626,#121212 62%);overflow:hidden}
 .artist-home .record-block::before{background:repeating-radial-gradient(circle at 50% 34%,transparent 0 5px,#ffffff08 6px 7px);opacity:1}
-.artist-home .music-layout .record-block img{border-radius:50%;background:#0b0b0b;padding:22%;box-shadow:0 0 0 1px #ffffff1a,0 0 0 14px #121212,0 0 0 15px #ffffff10;width:220px;height:220px;max-width:70%;object-fit:contain;margin:18px 0 30px;animation:spin 14s linear infinite}
+.artist-home #originales .record-block img{border-radius:50%;background:#0b0b0b;padding:58px;box-shadow:0 0 0 1px #ffffff1a,0 0 0 14px #121212,0 0 0 15px #ffffff10;width:220px;height:220px;max-width:70%;object-fit:contain;margin:18px 0 30px;animation:spin 14s linear infinite}
 .artist-home .record-block .eyebrow{color:var(--muted);letter-spacing:.3em;font-size:11px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .artist-home .music-choice.track{transition:background-color .25s,padding-left .25s}
@@ -82,7 +107,8 @@
 .artist-home .cosmic-heading h2 span{color:var(--muted);border:0}
 
 /* Finale: the page turns to Hueso, like light at the end of the set. */
-.artist-home .contact.contact-simple{position:relative;background:var(--bone);color:var(--night);isolation:isolate}
+.artist-home .contact.contact-simple{position:relative;background:var(--bone);color:var(--night);isolation:isolate;overflow:hidden}
+.artist-home #contacto.contact-simple{padding-top:clamp(130px,15vw,210px)}
 .artist-home .contact.contact-simple::before{content:'';position:absolute;inset:0;z-index:-1;background:var(--grain) 0 0/170px 170px;opacity:.12;mix-blend-mode:multiply;pointer-events:none}
 .booking-statement{font-family:'League Spartan',Arial,sans-serif;font-weight:700;font-size:clamp(60px,12.5vw,190px);line-height:.84;letter-spacing:-.06em;margin-bottom:64px}
 .booking-statement span{color:transparent;-webkit-text-stroke:2px var(--night)}
@@ -93,20 +119,23 @@
 .artist-home dialog{background:#141414;border:1px solid #ffffff33;color:var(--bone)}
 
 @media(max-width:900px){
-  .artist-home .hero>.hero-signal{width:100vw;right:-32vw;top:2vw}
+  .artist-home .hero>.hero-signal{width:110vw;right:-38vw;top:0}
+  .astro-eclipse{opacity:.6}
   .artist-home .hero .portrait{margin-top:28px}
 }
 @media(max-width:620px){
   .artist-home::after{opacity:.05}
-  .artist-home .hero>.hero-signal{width:120vw;right:-50vw;top:10px;opacity:.45}
-  .artist-home .music-layout .record-block img{width:150px;height:150px}
+  .artist-home .hero>.hero-signal{width:140vw;right:-20vw;top:auto;bottom:-22vw;opacity:.85}
+  .astro-slices{width:72px;top:auto;bottom:calc(100% + 4px);transform:none}
+  .astro-eclipse{top:0;right:-30%;transform:none}
+  .artist-home #originales .record-block img{width:150px;height:150px;padding:40px}
   .booking-statement{font-size:15vw;margin-bottom:40px}
   .booking-statement span{-webkit-text-stroke-width:1.5px}
 }
 @media(prefers-reduced-motion:reduce){
-  .artist-home .hero-signal i,.artist-home .music-layout .record-block img,.artist-home .hero .portrait::before{animation:none}
+  .astro-slices ellipse,.astro-eclipse i,.artist-home .music-layout .record-block img,.artist-home .hero .portrait::before{animation:none}
 }
 @media(prefers-contrast:more),(forced-colors:active){
-  .artist-home::after,.artist-home .contact.contact-simple::before,.artist-home .hero .portrait::before,.hero-signal{display:none}
+  .artist-home::after,.artist-home .contact.contact-simple::before,.artist-home .hero .portrait::before,.hero-signal,.astro{display:none}
   .booking-statement span{color:var(--night);-webkit-text-stroke:0}
 }
