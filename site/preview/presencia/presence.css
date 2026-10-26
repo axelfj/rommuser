@@ -1,0 +1,12 @@
+/* Presencia: real portrait, clean architectural framing. */
+.artist-home .receiver-hero{min-height:720px;height:calc(100svh - 76px);max-height:1050px;padding-top:28px}
+.artist-home .receiver-hero>.hero-photo{inset:70px 0 0 auto;width:49%;height:calc(100% - 70px);object-fit:cover;object-position:center 20%;filter:grayscale(1);mask-image:none;-webkit-mask-image:none;z-index:-1}
+.artist-home .receiver-heading{width:53%;margin:70px 0 45px}
+.artist-home .receiver-hero h1{font-family:'League Spartan',Arial,sans-serif;font-size:clamp(60px,8.2vw,150px);letter-spacing:-.07em;line-height:1;margin:0 0 25px;white-space:nowrap}
+.artist-home .receiver-heading>.eyebrow{max-width:290px;line-height:1.8}
+.artist-home .receiver-invitation{font-size:clamp(30px,4.2vw,66px);max-width:520px;line-height:1.08}
+.artist-home .hero-top{width:100%}.artist-home .hero-bottom{width:43%;gap:25px}
+.proposal-bar{padding:16px 5%;background:#eeeae2;color:#111;display:flex;justify-content:space-between;gap:20px;font:11px monospace;border-bottom:1px solid #1114}.proposal-bar a{padding:10px 0;text-decoration:underline}
+.artist-home .music-layout{grid-template-columns:minmax(0,1fr)}.artist-home .music-layout .record-block{display:none}
+.artist-home .track-num{color:#555}.artist-home .section-heading h2{font-size:clamp(54px,7vw,110px)}
+@media(max-width:620px){.artist-home .receiver-hero{height:auto;min-height:0;max-height:none;padding:22px 5% 26px}.artist-home .receiver-hero>.hero-photo{position:relative;inset:auto;order:2;width:100%;height:auto;aspect-ratio:4/4.5;object-fit:cover;object-position:center 15%;margin-top:24px;z-index:0}.artist-home .hero-top{order:0}.artist-home .receiver-heading{order:1;width:100%;padding:0;margin:45px 0 0}.artist-home .receiver-hero h1{font-size:15.5vw}.artist-home .receiver-invitation{font-size:36px;max-width:300px}.artist-home .receiver-heading .actions{margin-top:25px}.artist-home .hero-bottom{order:3;width:100%;margin-top:20px}.proposal-bar{flex-wrap:wrap;font-size:10px}.artist-home .section-heading h2{font-size:16vw}}

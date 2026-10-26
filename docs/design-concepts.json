@@ -1,0 +1,52 @@
+[
+  {
+    "name": "01 Presencia",
+    "direction": "Black and bone editorial split hero: enormous condensed wordmark left, faithful three-quarter portrait right against architectural bone rectangle. Lower bone music rows. Strong human presence.",
+    "path": "site/preview/concepts/01.webp"
+  },
+  {
+    "name": "02 Contacto",
+    "direction": "Swiss contact sheet website. Bone background, black typographic grid, three differently cropped photographs from provided originals as a horizontal film contact sheet. Oversized sans wordmark spanning top. Minimal black lower music section.",
+    "path": "site/preview/concepts/02.webp"
+  },
+  {
+    "name": "03 Umbral",
+    "direction": "Architectural doorway website. Black hero, portrait framed inside tall narrow bone doorway at center, small elegant wordmark at left edge, spacious restrained typography. Lower asymmetric bone panels and Secret Rooms doorway.",
+    "path": "site/preview/concepts/03.webp"
+  },
+  {
+    "name": "04 Frecuencia",
+    "direction": "Avant-garde waveform website. Off-white hero with huge black ROMMUSER, portrait on right, delicate thin contour waveform lines passing behind portrait without obscuring face. Black horizontal music bar and generous white grid.",
+    "path": "site/preview/concepts/04.webp"
+  },
+  {
+    "name": "05 Medianoche",
+    "direction": "Cinematic full bleed monochrome portrait hero, almost entirely black, close crop of provided face and glasses at right, small left typography with huge bottom ROMMUSER wordmark. Below dark track list with silver hairline dividers. No white section until footer.",
+    "path": "site/preview/concepts/05.webp"
+  },
+  {
+    "name": "06 Archivo",
+    "direction": "Record-store editorial archive. Bone background with compact left vertical navigation rail, large portrait square and large typography in asymmetrical modular grid. Three album-less typographic track cards below. Looks like collectible independent music journal.",
+    "path": "site/preview/concepts/06.webp"
+  },
+  {
+    "name": "07 Cuerpo",
+    "direction": "Experimental brutalist music artist website. Huge black grotesk typography broken across bold grid BUT name ROMMUSER must remain intact. Bone canvas with dramatically oversized black coat body portrait crop, small face visible top. Narrow black horizontal bands and big LISTEN rectangular control.",
+    "path": "site/preview/concepts/07.webp"
+  },
+  {
+    "name": "08 Silencio",
+    "direction": "Ultra-minimal luxury artist website. Vast bone negative space, small centered ROMMUSER wordmark, portrait in medium vertical black-and-white frame right of center, discreet serif italic 'Music to close your eyes to.' left. Delicate music table beneath, very few elements, elegant art gallery.",
+    "path": "site/preview/concepts/08.webp"
+  },
+  {
+    "name": "09 Doble exposición",
+    "direction": "Diptych editorial website using two faithful original portraits facing across an empty black center. Large bone ROMMUSER typography across center lower portion. Clear small navigation. Bone music section with wide oversized track titles and elegant serif live section.",
+    "path": "site/preview/concepts/09.webp"
+  },
+  {
+    "name": "10 La señal",
+    "direction": "Art-book inspired asymmetrical black/bone website. Left third permanent black navigation with vertically arranged MUSIC LIVE ARTIST STUDIO and big ROMMUSER at top. Right two-thirds bone content with large portrait and expressive editorial serif headings, thin waveform below and track index. Bold spatial layout.",
+    "path": "site/preview/concepts/10.webp"
+  }
+]
