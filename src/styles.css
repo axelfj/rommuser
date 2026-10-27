@@ -171,7 +171,6 @@ h2 {
 }
 
 .btn:focus-visible,
-.service:focus-visible,
 .drop:focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 2px;
@@ -398,116 +397,15 @@ h2 {
   padding-top: 48px;
 }
 
-.services {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
-  margin-bottom: 24px;
+.soundbetter-cta {
+  max-width: 100%;
+  text-align: center;
 }
 
-.service {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-align: left;
-  padding: 20px;
-  background: transparent;
-  color: var(--fg);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  font: inherit;
-  cursor: pointer;
-}
-
-.service.selected,
-.service:hover {
-  border-color: var(--fg);
-}
-
-.service.selected {
-  background: var(--fg);
-  color: var(--bg);
-}
-
-.service.selected .fine {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.service-name {
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.service-price {
-  font-family: var(--display);
-  font-size: 36px;
-  font-weight: 700;
-}
-
-.order {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-width: 520px;
-}
-
-.order label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--dim);
-}
-
-.order input,
-.order textarea {
-  font: inherit;
-  font-size: 15px;
-  color: var(--fg);
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 10px 12px;
-}
-
-.order input:focus,
-.order textarea:focus {
-  outline: none;
-  border-color: var(--fg);
-}
-
-.order .btn {
-  align-self: flex-start;
-}
-
-/* Segunda vía para contratar: perfil en SoundBetter */
-.soundbetter {
-  margin-top: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 14px;
-  color: var(--dim);
-}
-
-.soundbetter img {
-  display: block;
-  width: 130px;
-  max-width: 130px;
-  height: auto;
-}
-
-.soundbetter a:hover {
-  opacity: 0.8;
-}
-
-/* Campo trampa para bots: nadie lo ve ni lo llena. */
-.order .trap {
-  position: absolute;
-  left: -9999px;
+.cta-note {
+  max-width: 560px;
+  margin-top: 12px;
+  line-height: 1.6;
 }
 
 /* Navegación hacia el sitio principal */
@@ -587,7 +485,7 @@ h2 {
   flex-wrap: wrap;
 }
 
-/* `hidden` tiene que ganarle a los display de arriba (p. ej. el formulario). */
+/* `hidden` conserva ocultos el progreso y el reporte hasta que corresponda. */
 [hidden] {
   display: none !important;
 }

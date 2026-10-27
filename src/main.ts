@@ -1,4 +1,4 @@
-import { CONTACT_EMAIL, FORM_ENDPOINT, PAYMENT_TERMS, PAYMENT_TERMS_EN, PLAUSIBLE_DOMAIN, SERVICES, TURNSTILE_SITEKEY, type ServiceKey } from './config';
+import { CONTACT_EMAIL, PLAUSIBLE_DOMAIN } from './config';
 import type { FileAnalysis } from './lib/analyze';
 import {
   buildReport,
@@ -14,7 +14,6 @@ import {
 } from './lib/checks';
 import { filesFromDrop, filesFromInput, type PickedFile } from './lib/files';
 import { lang, preferredLang, saveLang, setLang, tx, type Lang } from './lib/i18n';
-import { quoteBody } from './lib/quote';
 import type { WorkerRequest, WorkerResponse } from './worker';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -36,11 +35,6 @@ function el<K extends keyof HTMLElementTagNameMap>(
 declare global {
   interface Window {
     plausible?: (event: string, opts?: { props?: Record<string, string | number> }) => void;
-    turnstile?: {
-      render: (target: HTMLElement, opts: Record<string, unknown>) => string;
-      reset: (id: string) => void;
-    };
-    initQuoteChallenge?: () => void;
   }
 }
 
@@ -304,108 +298,10 @@ function metaLine(a: FileAnalysis) {
   return `${formatFormat(a)} · ${formatDuration(duration(a))} · ${tx('pico', 'peak')} ${formatPeak(a.stats.peak)}`;
 }
 
-// --- Pedido -------------------------------------------------------------------
+// --- Contratación -------------------------------------------------------------
 
-const form = $<HTMLFormElement>('order');
-
-// Cada envío al Apps Script necesita un token nuevo de Turnstile.
-let quoteWidget: string | undefined;
-let quoteToken = '';
-let sending = false;
-if (FORM_ENDPOINT && TURNSTILE_SITEKEY) {
-  window.initQuoteChallenge = () => {
-    quoteWidget = window.turnstile?.render($('quote-challenge'), {
-      sitekey: TURNSTILE_SITEKEY,
-      action: 'studio_quote',
-      appearance: 'interaction-only',
-      language: lang(),
-      callback: (t: string) => (quoteToken = t),
-      'expired-callback': () => (quoteToken = ''),
-      'error-callback': () => (quoteToken = ''),
-    });
-  };
-  document.head.append(
-    el('script', { src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=initQuoteChallenge&render=explicit', async: '', defer: '' }),
-  );
-}
-
-function renderServices() {
-  const wrap = $('services');
-  const selected = (form.elements.namedItem('servicio') as HTMLInputElement).value;
-  wrap.replaceChildren();
-  for (const key of Object.keys(SERVICES) as ServiceKey[]) {
-    const s = SERVICES[key];
-    const btn = el(
-      'button',
-      { class: key === selected ? 'service selected' : 'service', type: 'button', 'data-service': key },
-      el('span', { class: 'service-name' }, s.label),
-      el('span', { class: 'service-price' }, tx(s.price, s.priceEn)),
-      el('span', { class: 'fine' }, tx(s.detail, s.detailEn)),
-    );
-    btn.addEventListener('click', () => {
-      wrap.querySelectorAll('.service').forEach((b) => b.classList.toggle('selected', b === btn));
-      (form.elements.namedItem('servicio') as HTMLInputElement).value = key;
-      form.hidden = false;
-      track('cta', { servicio: key, resultado: lastReport?.verdict ?? 'sin_chequeo' });
-      (form.elements.namedItem('nombre') as HTMLInputElement).focus();
-    });
-    wrap.append(btn);
-  }
-  $('terms').textContent = tx(`${PAYMENT_TERMS} Te respondo desde ${CONTACT_EMAIL}.`, `${PAYMENT_TERMS_EN} I'll reply from ${CONTACT_EMAIL}.`);
-}
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
-  const service = SERVICES[data.servicio as ServiceKey];
-  const reporte = lastReport ? reportToText(lastReport) : '';
-  const status = $('order-status');
-  track('pedido', { servicio: data.servicio });
-
-  if (FORM_ENDPOINT) {
-    if (sending || data.website) return;
-    if (!quoteToken || quoteWidget === undefined) {
-      status.textContent = tx('Completa la verificación. Si no aparece, recarga la página.', "Complete the check. If it doesn't show, reload the page.");
-      return;
-    }
-    sending = true;
-    status.textContent = tx('Enviando…', 'Sending…');
-    try {
-      // La respuesta de Apps Script es opaca: si la red no falla, el pedido llegó.
-      await fetch(FORM_ENDPOINT, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: quoteBody({ ...data, servicio: service.label, nombre: data.nombre, correo: data.correo, reporte, lang: lang(), token: quoteToken }),
-        signal: AbortSignal.timeout(20000),
-      });
-      form.reset();
-      status.textContent = tx('Listo, te escribo pronto.', "Done, I'll write to you soon.");
-    } catch {
-      status.textContent = tx(`No se pudo enviar. Escribime a ${CONTACT_EMAIL}.`, `Couldn't send. Email me at ${CONTACT_EMAIL}.`);
-    } finally {
-      quoteToken = '';
-      if (quoteWidget !== undefined) window.turnstile?.reset(quoteWidget);
-      sending = false;
-    }
-    return;
-  }
-
-  const body = [
-    `${tx('Nombre', 'Name')}: ${data.nombre}`,
-    `${tx('Correo', 'Email')}: ${data.correo}`,
-    `${tx('Servicio', 'Service')}: ${service.label} (${tx(service.price, service.priceEn)})`,
-    data.link ? `Stems: ${data.link}` : '',
-    data.mensaje ? `\n${data.mensaje}` : '',
-    reporte ? `\n---\n${reporte}` : '',
-  ]
-    .filter(Boolean)
-    .join('\n');
-  const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`${service.label} · ${data.nombre}`)}&body=${encodeURIComponent(body)}`;
-  window.location.href = href;
-  status.textContent = tx(
-    `Te preparé el correo con el pedido: falta que lo envíes desde tu app de correo. Si no se abrió, escribime a ${CONTACT_EMAIL}.`,
-    `Your order email is ready: you still need to send it from your email app. If it didn't open, email me at ${CONTACT_EMAIL}.`,
-  );
+$('soundbetter-cta').addEventListener('click', () => {
+  track('soundbetter_click', { resultado: lastReport?.verdict ?? 'sin_chequeo' });
 });
 
 // --- Entrada de archivos --------------------------------------------------------
@@ -464,7 +360,6 @@ function applyLang(next: Lang) {
   const toggle = $('lang-toggle');
   toggle.textContent = next.toUpperCase();
   toggle.setAttribute('aria-label', tx('Switch to English', 'Cambiar a español'));
-  renderServices();
   if (lastEntries && !$('report').hidden) {
     lastReport = buildReport(lastEntries);
     renderReport(lastReport, false);
