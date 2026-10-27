@@ -5,7 +5,7 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 
 // Content mirrors site/index.html (ES). Dates as shown there; Pieces stays undated until DENAR confirms.
 const releases = [
-  { title: 'ID', label: 'ID', date: '11.12.2026', year: 2026, status: 'upcoming' },
+  { title: 'JUST GROOVE', label: 'Decypher', date: '11.12.2026', year: 2026, status: 'presave', href: 'https://create.ffm.to/rommuserjustgroo' },
   { title: 'PIECES', label: 'DENAR RCRDS · con GOSVE', date: '', year: 2026, status: 'presave', href: 'https://link.tracks.id/dItL' },
   { title: "DON'T WANNA", label: 'Jendex Records · GOSVE feat. ROMMUSER & Outlandar', date: '30.10.2026', year: 2026, status: 'presave', href: 'https://www.beatport.com/release/dont-wanna/7598860' },
   { title: 'HOLY', label: 'DENAR RCRDS', date: '22.08.2026', year: 2026, href: 'https://open.spotify.com/track/4EjfoMJQ5B11CHIWuMDgjS' },
