@@ -482,6 +482,12 @@ h2 {
   align-self: flex-start;
 }
 
+/* Campo trampa para bots: nadie lo ve ni lo llena. */
+.order .trap {
+  position: absolute;
+  left: -9999px;
+}
+
 /* Navegación hacia el sitio principal */
 .brand,
 .nav a,

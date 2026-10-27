@@ -24,8 +24,11 @@ export type ServiceKey = keyof typeof SERVICES;
 export const PAYMENT_TERMS = '50% para empezar, 50% al entregar.';
 export const PAYMENT_TERMS_EN = '50% to start, 50% on delivery.';
 
-/** Endpoint tipo Formspree. Sin él, el formulario abre un correo a contact@. */
+/** URL /exec del Apps Script de pedidos. Sin ella, el formulario abre un correo a contact@. */
 export const FORM_ENDPOINT: string = import.meta.env.VITE_FORM_ENDPOINT ?? '';
+
+/** Turnstile de Cloudflare: el mismo widget que rommuser.com (studio.rommuser.com tiene que estar en su lista de dominios). */
+export const TURNSTILE_SITEKEY: string = import.meta.env.VITE_TURNSTILE_SITEKEY ?? '0x4AAAAAAFR3wMqwdxNIoieU';
 
 /** Dominio en Plausible. Sin él no se carga ninguna analítica. */
 export const PLAUSIBLE_DOMAIN: string = import.meta.env.VITE_PLAUSIBLE_DOMAIN ?? '';

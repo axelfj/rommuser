@@ -1,4 +1,4 @@
-import { CONTACT_EMAIL, FORM_ENDPOINT, PAYMENT_TERMS, PAYMENT_TERMS_EN, PLAUSIBLE_DOMAIN, SERVICES, type ServiceKey } from './config';
+import { CONTACT_EMAIL, FORM_ENDPOINT, PAYMENT_TERMS, PAYMENT_TERMS_EN, PLAUSIBLE_DOMAIN, SERVICES, TURNSTILE_SITEKEY, type ServiceKey } from './config';
 import type { FileAnalysis } from './lib/analyze';
 import {
   buildReport,
@@ -14,6 +14,7 @@ import {
 } from './lib/checks';
 import { filesFromDrop, filesFromInput, type PickedFile } from './lib/files';
 import { lang, preferredLang, saveLang, setLang, tx, type Lang } from './lib/i18n';
+import { quoteBody } from './lib/quote';
 import type { WorkerRequest, WorkerResponse } from './worker';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -35,6 +36,11 @@ function el<K extends keyof HTMLElementTagNameMap>(
 declare global {
   interface Window {
     plausible?: (event: string, opts?: { props?: Record<string, string | number> }) => void;
+    turnstile?: {
+      render: (target: HTMLElement, opts: Record<string, unknown>) => string;
+      reset: (id: string) => void;
+    };
+    initQuoteChallenge?: () => void;
   }
 }
 
@@ -302,6 +308,27 @@ function metaLine(a: FileAnalysis) {
 
 const form = $<HTMLFormElement>('order');
 
+// Cada envío al Apps Script necesita un token nuevo de Turnstile.
+let quoteWidget: string | undefined;
+let quoteToken = '';
+let sending = false;
+if (FORM_ENDPOINT && TURNSTILE_SITEKEY) {
+  window.initQuoteChallenge = () => {
+    quoteWidget = window.turnstile?.render($('quote-challenge'), {
+      sitekey: TURNSTILE_SITEKEY,
+      action: 'studio_quote',
+      appearance: 'interaction-only',
+      language: lang(),
+      callback: (t: string) => (quoteToken = t),
+      'expired-callback': () => (quoteToken = ''),
+      'error-callback': () => (quoteToken = ''),
+    });
+  };
+  document.head.append(
+    el('script', { src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=initQuoteChallenge&render=explicit', async: '', defer: '' }),
+  );
+}
+
 function renderServices() {
   const wrap = $('services');
   const selected = (form.elements.namedItem('servicio') as HTMLInputElement).value;
@@ -336,21 +363,31 @@ form.addEventListener('submit', async (e) => {
   track('pedido', { servicio: data.servicio });
 
   if (FORM_ENDPOINT) {
-    status.textContent = tx('Enviando…', 'Sending…');
-    try {
-      const res = await fetch(FORM_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...data, servicio: service.label, reporte, _subject: `${service.label} · ${data.nombre}` }),
-      });
-      if (!res.ok) throw new Error(String(res.status));
-      form.reset();
-      status.textContent = tx('Listo, te escribo pronto.', "Done, I'll write to you soon.");
-      return;
-    } catch {
-      status.textContent = tx(`No se pudo enviar. Escribime a ${CONTACT_EMAIL}.`, `Couldn't send. Email me at ${CONTACT_EMAIL}.`);
+    if (sending || data.website) return;
+    if (!quoteToken || quoteWidget === undefined) {
+      status.textContent = tx('Completa la verificación. Si no aparece, recarga la página.', "Complete the check. If it doesn't show, reload the page.");
       return;
     }
+    sending = true;
+    status.textContent = tx('Enviando…', 'Sending…');
+    try {
+      // La respuesta de Apps Script es opaca: si la red no falla, el pedido llegó.
+      await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: quoteBody({ ...data, servicio: service.label, nombre: data.nombre, correo: data.correo, reporte, lang: lang(), token: quoteToken }),
+        signal: AbortSignal.timeout(20000),
+      });
+      form.reset();
+      status.textContent = tx('Listo, te escribo pronto.', "Done, I'll write to you soon.");
+    } catch {
+      status.textContent = tx(`No se pudo enviar. Escribime a ${CONTACT_EMAIL}.`, `Couldn't send. Email me at ${CONTACT_EMAIL}.`);
+    } finally {
+      quoteToken = '';
+      if (quoteWidget !== undefined) window.turnstile?.reset(quoteWidget);
+      sending = false;
+    }
+    return;
   }
 
   const body = [

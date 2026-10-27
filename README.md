@@ -17,7 +17,8 @@ npm run build      # typecheck + build estático en dist/
 
 | Variable | Para qué |
 |---|---|
-| `VITE_FORM_ENDPOINT` | Endpoint tipo Formspree para recibir pedidos. Sin él, el formulario abre un correo a contact@rommuser.com. |
+| `VITE_FORM_ENDPOINT` | URL `/exec` del Apps Script de pedidos (`integraciones/estudio-pedidos.gs`). El pedido llega por correo a contact@rommuser.com. Sin ella, el formulario abre un correo en la app del visitante. |
+| `VITE_TURNSTILE_SITEKEY` | Sitekey de Turnstile. Por defecto, el mismo widget de rommuser.com; `studio.rommuser.com` tiene que estar en su lista de dominios. |
 | `VITE_PLAUSIBLE_DOMAIN` | Dominio en Plausible para contar chequeos y clics (sin cookies). Sin él no se carga analítica. |
 
 Precios y textos del servicio: `src/config.ts`.
