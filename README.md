@@ -1,8 +1,8 @@
 # ROMMUSER Studio
 
-Chequeo de stems gratis y, más adelante, portal de mezcla de ROMMUSER.
+Chequeo de stems gratis y contratación de mezcla y mastering a través de SoundBetter.
 
-El productor suelta su carpeta de stems y la página le dice, en español, qué corregir antes de mandarla a mezclar: sample rates distintos, clipping, picos sin margen, largos distintos, pistas en silencio, mono guardado en estéreo, bit depth bajo y nombres genéricos. Todo se analiza en el navegador (un Web Worker lee el WAV/AIFF directo); los archivos no se suben a ningún lado. Desde el reporte puede pedir mixdown o mastering.
+El productor suelta su carpeta de stems y la página le dice, en español, qué corregir antes de mandarla a mezclar: sample rates distintos, clipping, picos sin margen, largos distintos, pistas en silencio, mono guardado en estéreo, bit depth bajo y nombres genéricos. Todo se analiza en el navegador (un Web Worker lee el WAV/AIFF directo); los archivos no se suben a ningún lado. La página ofrece un único botón principal al perfil de ROMMUSER en SoundBetter para consultar y contratar mezcla o mastering. El reporte puede copiarse y compartirse manualmente; no se envían archivos ni datos del chequeo a SoundBetter al hacer clic.
 
 ## Desarrollo
 
@@ -17,11 +17,9 @@ npm run build      # typecheck + build estático en dist/
 
 | Variable | Para qué |
 |---|---|
-| `VITE_FORM_ENDPOINT` | URL `/exec` del Apps Script de pedidos (`integraciones/estudio-pedidos.gs`). El pedido llega por correo a contact@rommuser.com. Sin ella, el formulario abre un correo en la app del visitante. |
-| `VITE_TURNSTILE_SITEKEY` | Sitekey de Turnstile. Por defecto, el mismo widget de rommuser.com; `studio.rommuser.com` tiene que estar en su lista de dominios. |
 | `VITE_PLAUSIBLE_DOMAIN` | Dominio en Plausible para contar chequeos y clics (sin cookies). Sin él no se carga analítica. |
 
-Precios y textos del servicio: `src/config.ts`.
+Texto y enlace de contratación: `index.html` (español/inglés). Contacto y analítica: `src/config.ts`. Studio ya no publica precios ni carga el formulario de pedidos o su desafío Turnstile. Las integraciones históricas permanecen en el repositorio; no se modifican servicios externos.
 
 ## Estructura
 
