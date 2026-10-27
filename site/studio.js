@@ -45,30 +45,75 @@ if(!calm&&'IntersectionObserver' in window){
   }
 }
 
-// Quote form: checks the two fields that can be wrong, then opens the visitor's email with the request filled in.
+// Quote form: checks the fields that can be wrong, then sends the request to contact@ through the Apps Script
+// endpoint (integraciones/estudio-pedidos.gs, Turnstile protected). Until data-endpoint is set, it opens the
+// visitor's email app with the request filled in instead.
 const form=document.querySelector('.studio-form');
 if(!form)return;
 const status=form.querySelector('.form-status');
+const button=form.querySelector('button[type="submit"]');
+const challenge=form.querySelector('#studio-challenge');
+const endpoint=form.dataset.endpoint;
+const EMAIL=/^[^\s@=+\-][^\s@]*@[^\s@]+\.[^\s@]{2,}$/;
+let widget,token='',sending=false;
+const renderChallenge=()=>{
+  if(!endpoint||!challenge?.dataset.sitekey||widget!==undefined||!window.turnstile)return;
+  widget=window.turnstile.render(challenge,{
+    sitekey:challenge.dataset.sitekey,
+    action:'studio_quote',
+    appearance:'interaction-only',
+    language:document.documentElement.lang==='en'?'en':'es',
+    callback:t=>{token=t},
+    'expired-callback':()=>{token=''},
+    'error-callback':()=>{token=''},
+  });
+};
+window.initStudioChallenge=renderChallenge;
+renderChallenge();
 const fail=(input,bad)=>{
   input.setAttribute('aria-invalid',String(bad));
   document.getElementById(input.getAttribute('aria-describedby')).hidden=!bad;
   return bad;
 };
-form.addEventListener('submit',event=>{
-  event.preventDefault();
-  const artist=form.elements.artista,link=form.elements.enlace;
-  const badArtist=fail(artist,!artist.value.trim());
-  const badLink=fail(link,!!link.value.trim()&&!/^https?:\/\/\S+$/i.test(link.value.trim()));
-  if(badArtist||badLink){(badArtist?artist:link).focus();status.textContent='';return}
+const openMail=()=>{
   const service=form.elements.servicio.selectedOptions[0].textContent;
   const lines=[...form.querySelectorAll('label')].map(label=>{
     const field=document.getElementById(label.htmlFor);
     const value=field.tagName==='SELECT'?field.selectedOptions[0].textContent:field.value.trim();
     return label.textContent+': '+value;
   });
-  const subject=tr('Cotización')+' · '+service+' · '+artist.value.trim();
+  const subject=tr('Cotización')+' · '+service+' · '+form.elements.artista.value.trim();
   location.href='mailto:'+form.dataset.to+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(lines.join('\n')+'\n\n');
   status.textContent=tr('Se abrió tu correo con el pedido listo. Si no se abrió, escribe a contact@rommuser.com.');
+};
+form.addEventListener('submit',async event=>{
+  event.preventDefault();
+  if(sending)return;
+  const artist=form.elements.artista,email=form.elements.correo,link=form.elements.enlace;
+  const badArtist=fail(artist,!artist.value.trim());
+  const badEmail=fail(email,email.value.trim().length>254||!EMAIL.test(email.value.trim()));
+  const badLink=fail(link,!!link.value.trim()&&!/^https?:\/\/\S+$/i.test(link.value.trim()));
+  if(badArtist||badEmail||badLink){(badArtist?artist:badEmail?email:link).focus();status.textContent='';return}
+  if(form.elements.website.value)return;
+  if(!endpoint){openMail();return}
+  if(!token||widget===undefined){status.textContent=tr('Completa la verificación. Si no aparece, recarga la página.');return}
+  sending=true;button.disabled=true;button.textContent=tr('ENVIANDO');
+  try{
+    const body=new URLSearchParams(new FormData(form));
+    body.set('servicio',form.elements.servicio.selectedOptions[0].textContent);
+    body.set('lang',document.documentElement.lang==='en'?'en':'es');
+    body.set('origen','rommuser.com'+location.pathname);
+    body.set('cf-turnstile-response',token);
+    await fetch(endpoint,{method:'POST',mode:'no-cors',body,signal:AbortSignal.timeout(20000)});
+    // Apps Script answers with an opaque response, so the page can only confirm the request left.
+    form.reset();
+    status.textContent=tr('Listo. Tu pedido me llegó y te respondo a tu correo.');
+  }catch{
+    status.textContent=tr('No se pudo enviar. Escríbeme a contact@rommuser.com.');
+  }finally{
+    token='';if(widget!==undefined)window.turnstile.reset(widget);
+    sending=false;button.disabled=false;button.textContent=tr('PEDIR COTIZACIÓN');
+  }
 });
 form.addEventListener('input',event=>{
   if(event.target.getAttribute('aria-invalid')==='true')fail(event.target,false);
