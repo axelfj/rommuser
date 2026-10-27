@@ -125,10 +125,16 @@ describe('rommuser.com', () => {
     expect(html).not.toContain('LFTD');
   });
 
-  it('incluye Decypher (Australia) al final de FIRMADO EN / SIGNED TO en español e inglés', () => {
+  it('ordena FIRMADO EN / SIGNED TO de mayor a menor renombre, igual en español, inglés y /estudio', () => {
+    const order = ['Decypher', 'DENAR RCRDS', 'Electric Eden', 'HouseYouNite', 'LVLD Music', 'Jendex Records', 'Late Hours'];
     for (const page of ['index.html', 'es/index.html', 'en/index.html']) {
       const labels = read(page).match(/<ul class="label-list">.*?<\/ul>/s)[0];
-      expect(labels).toMatch(/aria-label="Australia"[^]*?<\/svg> Decypher<\/li><\/ul>/);
+      const names = [...labels.matchAll(/<\/svg> ([^<]+)<\/li>/g)].map((m) => m[1]);
+      expect(names).toEqual(order);
+      expect(labels).toMatch(/aria-label="Australia"[^]*?<\/svg> Decypher<\/li>/);
+    }
+    for (const page of ['estudio/index.html', 'en/studio/index.html']) {
+      expect(read(page)).toContain('Decypher · DENAR RCRDS · Electric Eden · HouseYouNite · LVLD Music · House Of Boogie · Jendex Records · Late Hours');
     }
   });
 });
