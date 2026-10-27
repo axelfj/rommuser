@@ -482,6 +482,28 @@ h2 {
   align-self: flex-start;
 }
 
+/* Segunda vía para contratar: perfil en SoundBetter */
+.soundbetter {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--dim);
+}
+
+.soundbetter img {
+  display: block;
+  width: 130px;
+  max-width: 130px;
+  height: auto;
+}
+
+.soundbetter a:hover {
+  opacity: 0.8;
+}
+
 /* Campo trampa para bots: nadie lo ve ni lo llena. */
 .order .trap {
   position: absolute;

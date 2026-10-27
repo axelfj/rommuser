@@ -1,6 +1,6 @@
 # Headers de seguridad de studio.rommuser.com. Netlify y Cloudflare Pages leen este archivo.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://plausible.io https://challenges.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https:; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; form-action 'self' mailto:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://plausible.io https://challenges.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://d2p6ecj15pyavq.cloudfront.net; connect-src 'self' https:; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; form-action 'self' mailto:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
