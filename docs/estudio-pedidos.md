@@ -14,6 +14,8 @@ El formulario PEDIR COTIZACIÓN de rommuser.com/estudio manda el pedido directo 
 5. Pega la URL en `data-endpoint` de `.studio-form` en `site/estudio/index.html` y corre `npm run site:en`.
 6. En Cloudflare Turnstile, el widget ya cubre `rommuser.com` y `www.rommuser.com`. Si studio.rommuser.com va a
    usar el mismo endpoint, agrega ese dominio al widget.
+7. Para studio.rommuser.com: en Cloudflare Pages > rommuser-studio > Settings > Environment variables, pon
+   `VITE_FORM_ENDPOINT` = la misma URL `/exec` y vuelve a desplegar (el cliente está en el PR #50).
 
 Turnstile no funciona en los previews de pages.dev (no están en el widget), así que el envío real se prueba en rommuser.com.
 
