@@ -98,6 +98,20 @@ describe('rommuser.com', () => {
     for (const synonym of ['PREVENTA', 'PRE-ORDER', 'PREORDER', 'PRE-GUARDAR', 'VER LANZAMIENTO', 'VIEW RELEASE']) expect(html).not.toContain(synonym);
   });
 
+  it('/estudio: una sola acción (PEDIR COTIZACIÓN), sin credenciales escritas, sin repetir enlaces', () => {
+    for (const [path, cta] of [['estudio/index.html', 'PEDIR COTIZACIÓN'], ['en/studio/index.html', 'GET A QUOTE']]) {
+      const html = read(path);
+      const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
+      // The hero button and the form submit carry the same label; nothing else competes with it.
+      expect(main.match(new RegExp(`>${cta}</(a|button)>`, 'g'))).toHaveLength(2);
+      expect(main).toContain(`<a class="button" href="#pedir">${cta}</a>`);
+      expect(main).toContain('id="pedir"');
+      expect(html).not.toMatch(/10\+ (años|years)|originales y un remix|originals and one remix|graduado/);
+      const hrefs = [...main.matchAll(/<a [^>]*href="((?:https|mailto)[^"]+)"/g)].map((m) => m[1]);
+      expect(hrefs.filter((h, k) => hrefs.indexOf(h) !== k)).toEqual([]);
+    }
+  });
+
   it('acredita los sellos confirmados para Never Be y Echoes', () => {
     for (const path of ['index.html', 'en/index.html']) {
       expect(read(path)).toContain('<strong>NEVER BE</strong><small>HOUSE OF BOOGIE</small>');
@@ -107,7 +121,20 @@ describe('rommuser.com', () => {
 
   it('acredita los sellos de FIRMADO EN, con LVLD Music en lugar de LFTD Global', () => {
     const html = read('index.html');
-    for (const label of ['HouseYouNite', 'DENAR RCRDS', 'LVLD Music', 'Electric Eden', 'Late Hours']) expect(html).toContain(label);
+    for (const label of ['HouseYouNite', 'DENAR RCRDS', 'LVLD Music', 'Electric Eden', 'Late Hours', 'Jendex Records', 'Decypher']) expect(html).toContain(label);
     expect(html).not.toContain('LFTD');
+  });
+
+  it('ordena FIRMADO EN / SIGNED TO de mayor a menor renombre, igual en español, inglés y /estudio', () => {
+    const order = ['Decypher', 'DENAR RCRDS', 'Electric Eden', 'HouseYouNite', 'LVLD Music', 'Jendex Records', 'Late Hours'];
+    for (const page of ['index.html', 'es/index.html', 'en/index.html']) {
+      const labels = read(page).match(/<ul class="label-list">.*?<\/ul>/s)[0];
+      const names = [...labels.matchAll(/<\/svg> ([^<]+)<\/li>/g)].map((m) => m[1]);
+      expect(names).toEqual(order);
+      expect(labels).toMatch(/aria-label="Australia"[^]*?<\/svg> Decypher<\/li>/);
+    }
+    for (const page of ['estudio/index.html', 'en/studio/index.html']) {
+      expect(read(page)).toContain('Decypher · DENAR RCRDS · Electric Eden · HouseYouNite · LVLD Music · House Of Boogie · Jendex Records · Late Hours');
+    }
   });
 });
