@@ -107,7 +107,14 @@ describe('rommuser.com', () => {
 
   it('acredita los sellos de FIRMADO EN, con LVLD Music en lugar de LFTD Global', () => {
     const html = read('index.html');
-    for (const label of ['HouseYouNite', 'DENAR RCRDS', 'LVLD Music', 'Electric Eden', 'Late Hours']) expect(html).toContain(label);
+    for (const label of ['HouseYouNite', 'DENAR RCRDS', 'LVLD Music', 'Electric Eden', 'Late Hours', 'Jendex Records', 'Decypher']) expect(html).toContain(label);
     expect(html).not.toContain('LFTD');
+  });
+
+  it('incluye Decypher (Australia) al final de FIRMADO EN / SIGNED TO en español e inglés', () => {
+    for (const page of ['index.html', 'es/index.html', 'en/index.html']) {
+      const labels = read(page).match(/<ul class="label-list">.*?<\/ul>/s)[0];
+      expect(labels).toMatch(/aria-label="Australia"[^]*?<\/svg> Decypher<\/li><\/ul>/);
+    }
   });
 });
