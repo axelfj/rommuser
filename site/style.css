@@ -405,3 +405,6 @@ nav a.nav-external svg{flex:none}
 .artist-home .tracks .track.upcoming:not(.presave) .track-type::before{display:none}
 /* Nothing on the page reads smaller than 12px. */
 html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs button,.release-count,.show-count,.tracks .track-n,.tracks .track-info small,.tracks .release-date,.tracks .track .track-type,.music-labels .eyebrow,.fan-strip h2,.fan-strip .fan-form .button,.show-row time,.show-row p,.show-row>span,.show-video,.cosmic-heading .eyebrow,.motion-control,.cosmic-scene figcaption span,.contact-entry h3,.universe-footer>span){font-size:12px!important}
+/* Every row action is the same box: PRE-SAVE, ESCUCHAR and LISTEN share one width. */
+.artist-home .tracks .track:not(:disabled) .track-type{width:120px}
+@media(max-width:620px){.artist-home .tracks .track:not(:disabled) .track-type{width:112px}}
