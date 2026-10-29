@@ -1,4 +1,4 @@
-// One player for the whole page. The hero's ESCUCHAR, the MÚSICA rows and the planets in El artista all play
+// One player for the whole page. The hero's ESCUCHAR, the MÚSICA rows (originals and remixes) and the planets in El artista all play
 // through the same SoundCloud widget, loaded only on the first tap, and a thin bar at the bottom of the screen
 // says what is sounding. The platform list stays one tap away (PLATAFORMAS). If SoundCloud can't load,
 // tapping a row opens that platform list as before. The same happens when a browser won't let the hidden widget
@@ -6,11 +6,13 @@
 (()=>{
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Costa_Rica'}).format(new Date());
 const shortDate=iso=>iso.slice(8,10)+'.'+iso.slice(5,7)+'.'+iso.slice(0,4);
-const tracks=[...document.querySelectorAll('#originales .track[data-soundcloud]:not(.presave)')].map(row=>({
+const ROWS='#musica .tracks .track[data-soundcloud]:not(.presave)';
+// Released originals newest first, then the remixes, which carry no date.
+const tracks=[...document.querySelectorAll(ROWS)].map(row=>({
   row,name:row.dataset.track,label:row.querySelector('.track-info small')?.textContent||'',
   iso:row.querySelector('time')?.getAttribute('datetime')||'',url:row.dataset.soundcloud,
   type:row.querySelector('.track-type'),typeText:row.querySelector('.track-type')?.textContent||''
-})).filter(t=>t.iso&&t.iso<today).sort((a,b)=>b.iso.localeCompare(a.iso));
+})).filter(t=>!t.iso||t.iso<today).sort((a,b)=>b.iso.localeCompare(a.iso));
 if(!tracks.length)return;
 const listeners=new Set();
 let widget=null,current=null,playing=false,loading=false,failed=false,bypass=false,watchdog=0;
@@ -23,7 +25,7 @@ function emit(){
   for(const t of tracks){const on=t===current;t.row.classList.toggle('is-playing',on&&playing);t.row.classList.toggle('is-current',on);if(t.type)t.type.textContent=on?(loading?tr('CARGANDO'):playing?tr('SONANDO'):tr('EN PAUSA')):t.typeText}
   if(current){
     bar.hidden=false;document.body.classList.add('has-now-bar');
-    $('.now-text').textContent=(loading?tr('CARGANDO'):playing?tr('SONANDO'):tr('EN PAUSA'))+' · '+current.name+' · '+current.label+' · '+shortDate(current.iso)+' · '+tr('VÍA SOUNDCLOUD');
+    $('.now-text').textContent=[loading?tr('CARGANDO'):playing?tr('SONANDO'):tr('EN PAUSA'),current.name,current.label,current.iso&&shortDate(current.iso),tr('VÍA SOUNDCLOUD')].filter(Boolean).join(' · ');
     const action=playing?tr('PAUSA'):tr('SEGUIR');$('.now-toggle').textContent=action;$('.now-toggle').setAttribute('aria-label',action+': '+current.name);
     $('.now-next').hidden=tracks.length<2;
   }
@@ -61,7 +63,7 @@ $('.now-platforms').addEventListener('click',()=>current&&platforms(current));
 $('.now-close').addEventListener('click',close);
 // Rows play here; capture runs before the row's own platform-list handler in app.js.
 document.addEventListener('click',e=>{
-  if(bypass)return;const row=e.target.closest?.('#originales .track[data-soundcloud]:not(.presave)');const t=row&&tracks.find(t=>t.row===row);
+  if(bypass)return;const row=e.target.closest?.(ROWS);const t=row&&tracks.find(t=>t.row===row);
   if(!t||failed)return;e.preventDefault();e.stopPropagation();play(t);
 },true);
 // The hero's ESCUCHAR plays the newest release; without this script it still scrolls to MÚSICA.
