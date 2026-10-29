@@ -1,0 +1,43 @@
+/* Generado por scripts/build-tokens.mjs desde tokens/rommuser.tokens.json. No editar a mano: npm run tokens. */
+@layer tokens {
+  :root {
+    --night: #121212; /* Noche: el negro de la marca (preset NOCHE, ~7%) */
+    --bone: #ebe8e2; /* Hueso: el blanco de la marca (~92%) */
+    --red: #c81d25; /* El único acento: acción principal y lo que hay que corregir */
+    --muted: #a8a59f; /* Texto secundario sobre Noche */
+    --line: rgba(235,232,226,0.16); /* Divisores y bordes suaves */
+    --line-strong: rgba(235,232,226,0.32); /* Bordes que tienen que verse */
+    --wash: rgba(235,232,226,0.06); /* Fondo apenas levantado (zona activa, hover) */
+    --ink-muted: rgba(18,18,18,0.62); /* Texto secundario sobre Hueso */
+    --font-display: 'League Spartan',Arial,sans-serif; /* Titulares y la marca */
+    --font-body: Poppins,Arial,sans-serif; /* Todo lo demás */
+    --step--2: 12px; /* Notas, metadatos */
+    --step--1: 14px; /* Etiquetas, menú, botones */
+    --step-0: 16px; /* Texto corrido */
+    --step-1: clamp(17px,1.4vw,20px); /* Entradilla */
+    --step-2: clamp(20px,2.1vw,28px); /* Subtítulo */
+    --step-3: clamp(28px,4.5vw,40px); /* Titular de bloque */
+    --step-4: clamp(36px,6vw,56px); /* Titular de página en las apps */
+    --step-5: clamp(48px,6.4vw,94px); /* Titular de sección del sitio */
+    --tracking-label: 0.09em; /* Etiquetas en mayúscula */
+    --tracking-button: 0.05em; /* Texto de botones */
+    --tracking-display: -0.02em; /* Titulares */
+    --space-1: 8px;
+    --space-2: 12px;
+    --space-3: 16px;
+    --space-4: 24px;
+    --space-5: 32px;
+    --space-6: 48px;
+    --space-7: 64px;
+    --space-8: 80px;
+    --space-9: 96px;
+    --gutter: clamp(20px,4.5vw,64px); /* Margen lateral de página */
+    --control-height: 52px; /* Alto mínimo de botones */
+    --control-radius: 0px; /* Sin esquinas redondeadas */
+    --control-border: 1px;
+    --ease: cubic-bezier(0.22,1,0.36,1);
+    --duration: 300ms;
+    --grain-opacity: 0.05; /* Grano de página (Sombra y señal) */
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+}
