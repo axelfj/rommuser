@@ -216,7 +216,7 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
 .artist-home .tracks .track{transition:background-color .2s,border-color .2s}
 .artist-home .tracks .track-n,.artist-home .tracks .release-date{font-family:var(--font-body);font-weight:400;letter-spacing:.04em;color:var(--muted)}
 .artist-home .tracks .track:not(:disabled) .track-type{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;min-width:0;padding:0 12px;border:1px solid var(--line-strong);border-radius:2px;background:transparent;font-family:var(--font-body);font-size:11px!important;font-weight:500;line-height:1.4;letter-spacing:.08em;text-decoration:none;transition:border-color .2s,background-color .2s,box-shadow .2s}
-.artist-home .tracks .track:not(:disabled):not(.presave):not(.track-link):not(.track-all) .track-type::before{content:"";width:0;height:0;border-style:solid;border-width:4px 0 4px 6px;border-color:transparent transparent transparent currentColor}
+.artist-home .tracks .track:not(:disabled):not(.presave):not(.track-link) .track-type::before{content:"";width:0;height:0;border-style:solid;border-width:4px 0 4px 6px;border-color:transparent transparent transparent currentColor}
 
 .artist-home .tracks .track:focus-visible .track-type{border-color:var(--bone);background-color:rgba(235,232,226,.08);box-shadow:inset 2px 0 var(--red)}
 @media(hover:hover){
@@ -239,8 +239,13 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
  .artist-home .tracks .track-type{grid-area:action;align-self:center;justify-self:end}
  .artist-home .tracks .track-info strong{font-size:21px}
  .artist-home .tracks .track:disabled .track-type{font-size:10px!important;letter-spacing:0;white-space:normal;max-width:82px;min-width:0;text-align:right}
- .artist-home .listen-links a{flex-wrap:nowrap;gap:12px}
- .artist-home .listen-links a>span{text-align:right}}
+}
+/* Platforms are a grid of tiles, logo over name; the whole tile is the link. */
+.artist-home .listen-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;border:0}
+.artist-home .listen-links a{display:flex;flex-direction:column;justify-content:center;gap:10px;min-height:96px;padding:14px 6px;border:1px solid var(--line);border-radius:var(--control-radius);text-align:center;font:500 12px/1.2 var(--font-body);letter-spacing:.04em}
+.artist-home .listen-links a img{width:32px;height:32px;display:block}
+.artist-home .listen-links a>span{font:inherit;letter-spacing:inherit}
+@media(max-width:620px){.artist-home .listen-links{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.artist-home .listen-links a{transition:none}}/* One alignment contract for all row actions, regardless of title wrapping. */
 
 
@@ -448,6 +453,7 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 .artist-home button.system-body{cursor:pointer}
 .artist-home button.system-body:hover .system-name,.artist-home button.system-body:focus-visible .system-name,.artist-home .system-body[aria-pressed="true"] .system-name{color:var(--bone);opacity:1}
 .artist-home .system-body.is-next .system-date{color:var(--bone)}
+.artist-home .system-body.is-upcoming{transition:opacity .4s}.artist-home .system-body.is-upcoming .system-name{color:var(--bone)}.artist-home .system-body.is-gone{opacity:0;visibility:hidden}
 .artist-home .system-now{position:absolute;left:var(--gutter);right:var(--gutter);bottom:8px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;font:700 12px/1.5 var(--font-body);letter-spacing:.08em;color:var(--muted)}
 @media(max-width:900px){.artist-home .artist-system{height:clamp(380px,100vw,600px)}}
 @media(max-width:620px){.artist-home .artist-system{height:calc(clamp(380px,100vw,600px) + 64px)}.artist-home .artist-system canvas,.artist-home .system-bodies{bottom:64px;height:calc(100% - 64px)}.artist-home .system-now{bottom:0;gap:4px 18px}.artist-home .system-date{display:none}.artist-home .system-name{font-size:11px;letter-spacing:.05em}}
@@ -489,3 +495,4 @@ body.has-now-bar{padding-bottom:64px}
 .artist-home .tracks .track.is-playing:not(.presave) .track-type::before{width:6px;height:8px;border-width:0 2px;border-color:currentColor;border-style:solid}
 @media(max-width:620px){.now-bar{flex-wrap:wrap;gap:0 16px}.now-text{flex-basis:100%;order:-1;padding-top:6px}body.has-now-bar{padding-bottom:100px}}
 @media(prefers-reduced-motion:reduce){.now-progress span{transition:none}}
+@media(max-width:620px){.artist-home .system-body.is-upcoming .system-date{display:block}}

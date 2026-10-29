@@ -17,7 +17,7 @@ document.querySelectorAll('.track.upcoming[data-release]').forEach(track=>{
   }
 });
 
-const tabs=[...document.querySelectorAll('[role="tab"]')];function chooseTab(tab){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected})}tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>chooseTab(tab));tab.addEventListener('keydown',event=>{let n=i;if(event.key==='ArrowRight')n=(i+1)%tabs.length;else if(event.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.length-1;else return;event.preventDefault();chooseTab(tabs[n]);tabs[n].focus()})});const listenDialog=document.getElementById('listen-dialog');const listenPlatforms=['amazon','apple','bandcamp','beatport','deezer','soundcloud','spotify','youtube'].map(key=>({key,element:document.getElementById('listen-'+key)})).filter(p=>p.element).map(p=>({...p,defaultHref:p.element.href,defaultLabel:p.element.querySelector('span').textContent}));
+const tabs=[...document.querySelectorAll('[role="tab"]')];function chooseTab(tab){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected})}tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>chooseTab(tab));tab.addEventListener('keydown',event=>{let n=i;if(event.key==='ArrowRight')n=(i+1)%tabs.length;else if(event.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.length-1;else return;event.preventDefault();chooseTab(tabs[n]);tabs[n].focus()})});const listenDialog=document.getElementById('listen-dialog');const listenPlatforms=['amazon','apple','bandcamp','beatport','deezer','soundcloud','spotify','youtube'].map(key=>({key,element:document.getElementById('listen-'+key)})).filter(p=>p.element).map(p=>({...p,defaultHref:p.element.href}));
 // Pre-saves and collection rows (.track-link) are plain links; every other row opens the platform list.
 document.querySelectorAll('.music-choice:not(.presave):not(.track-link)').forEach(b=>b.addEventListener('click',e=>{
   e.preventDefault();
@@ -30,11 +30,11 @@ document.querySelectorAll('.music-choice:not(.presave):not(.track-link)').forEac
     return;
   }
   // Only platforms where the track really is are shown.
-  listenPlatforms.forEach(({key,element,defaultHref,defaultLabel})=>{
+  // Each platform is one tile, logo and name: the tile is the action, so no label per row.
+  listenPlatforms.forEach(({key,element,defaultHref})=>{
     const href=b.dataset[key];
     element.hidden=isTrack&&!href;
     element.href=href||defaultHref;
-    element.querySelector('span').textContent=href?tr(key==='beatport'||key==='bandcamp'?'COMPRAR':'ESCUCHAR'):defaultLabel;
   });
   document.getElementById('listen-title').dataset.original=b.dataset.track;
   document.getElementById('listen-title').textContent=tr(b.dataset.track);
