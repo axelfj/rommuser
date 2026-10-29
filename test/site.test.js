@@ -126,7 +126,7 @@ describe('rommuser.com', () => {
   });
 
   it('ordena FIRMADO EN / SIGNED TO de mayor a menor renombre, igual en español, inglés y /estudio', () => {
-    const order = ['Decypher', 'DENAR RCRDS', 'Electric Eden', 'HouseYouNite', 'LVLD Music', 'Jendex Records', 'Late Hours'];
+    const order = ['Decypher', 'DENAR RCRDS', 'Electric Eden', 'HouseYouNite', 'LVLD Music', 'House Of Boogie', 'Jendex Records', 'Late Hours'];
     for (const page of ['index.html', 'es/index.html', 'en/index.html']) {
       const labels = read(page).match(/<ul class="label-list">.*?<\/ul>/s)[0];
       const names = [...labels.matchAll(/<\/svg> ([^<]+)<\/li>/g)].map((m) => m[1]);
