@@ -393,3 +393,5 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 /* The portrait keeps its own 4:5 frame, never cropped by the height of the text beside it. */
 .artist-home .portrait{height:auto;min-height:0;aspect-ratio:4/5;align-self:start;justify-self:end;width:100%;max-width:480px}
 .artist-home .portrait img{position:static;height:100%;object-position:center top}
+/* Eight labels: two even rows of four on desktop instead of seven plus one orphan. */
+@media(min-width:901px){.artist-home .music-labels .label-list{display:grid;grid-template-columns:repeat(4,max-content);justify-content:space-between;gap:16px 24px}}
