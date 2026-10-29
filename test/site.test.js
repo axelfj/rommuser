@@ -36,6 +36,17 @@ describe('rommuser.com', () => {
     expect(read('i18n.js')).not.toContain('navigator.languages');
   });
 
+  it('el sistema de El artista lee los originales de MÚSICA y puede sonar con SoundCloud', () => {
+    const system = read('system.js');
+    expect(system).toContain("#originales .track[data-track]");
+    expect(system).toContain('row.dataset.soundcloud');
+    for (const name of ['HOLY', 'PIECES', 'JUST GROOVE', 'TIKIKAI']) expect(system).not.toContain(name);
+    expect(read('index.html')).toContain('<script src="system.js"></script>');
+    const headers = read('_headers');
+    expect(headers.match(/script-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
+    expect(headers.match(/frame-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
+  });
+
   it('la política de seguridad deja que el formulario del Golden Circle envíe', () => {
     const endpoint = read('index.html').match(/class="fan-form" data-endpoint="([^"]+)"/)[1];
     const connect = read('_headers').match(/connect-src ([^;]+);/)[1].split(' ');
