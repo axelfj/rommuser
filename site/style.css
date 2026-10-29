@@ -390,3 +390,6 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 .artist-home .hero::before{display:none}
 .artist-home::after{content:"";position:fixed;inset:0;z-index:100;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
 @media(prefers-contrast:more),(forced-colors:active){.artist-home::after{display:none}}
+/* The portrait keeps its own 4:5 frame, never cropped by the height of the text beside it. */
+.artist-home .portrait{height:auto;min-height:0;aspect-ratio:4/5;align-self:start;justify-self:end;width:100%;max-width:480px}
+.artist-home .portrait img{position:static;height:100%;object-position:center top}
