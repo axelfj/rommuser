@@ -23,8 +23,8 @@ describe('tokens de marca', () => {
     expect(css.replace(/\/\*[\s\S]*?\*\//g, '')).not.toMatch(LOOSE_COLOR);
   });
 
-  it('studio.rommuser.com muestra el mismo RR que rommuser.com y el mismo color de barra', () => {
-    const html = read('index.html');
+  it.each(['index.html', 'plugins/index.html'])('studio.rommuser.com/%s muestra el mismo RR que rommuser.com y el mismo color de barra', (path) => {
+    const html = read(path);
     expect(html).toContain('src="/site/assets/rr-light.svg"');
     expect(html).toContain('<meta name="theme-color" content="#121212" />');
   });

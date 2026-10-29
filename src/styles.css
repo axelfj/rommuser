@@ -462,6 +462,7 @@ button:focus-visible,
 }
 
 .nav a:not(.nav-cta):hover,
+.nav a[aria-current='page'],
 .foot a:hover {
   color: var(--bone);
   text-decoration: underline;
@@ -496,25 +497,42 @@ button:focus-visible,
   flex-wrap: wrap;
 }
 
+/* Enlaces de texto: el mismo subrayado de rommuser.com */
+.link {
+  color: var(--bone);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color var(--duration) var(--ease);
+}
+
+.link:hover {
+  text-decoration-color: var(--red);
+}
+
 /* Página de plugins */
 .beta-badge {
   display: inline-block;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-3);
   padding: 4px 10px;
-  border: 1px solid var(--red);
-  color: var(--fg);
-  font-size: 12px;
+  border: var(--control-border) solid var(--red);
+  color: var(--bone);
+  font-size: var(--step--2);
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
 .beta-note,
 .install,
 .donate {
-  border: 1px solid var(--line);
-  padding: 24px;
-  margin: 0 0 48px;
+  border: var(--control-border) solid var(--line);
+  padding: var(--space-4);
+  margin: 0 0 var(--space-6);
 }
 
 .beta-note {
@@ -535,7 +553,7 @@ button:focus-visible,
 .beta-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: var(--space-4);
   margin-bottom: 0;
 }
 
@@ -545,19 +563,19 @@ button:focus-visible,
 }
 
 .plugin-group {
-  margin: 0 0 48px;
+  margin: 0 0 var(--space-6);
 }
 
 .plugin-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
+  gap: var(--space-3);
 }
 
 .plugin {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--faint);
+  border: var(--control-border) solid var(--line);
 }
 
 .plugin img {
@@ -565,51 +583,47 @@ button:focus-visible,
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  background: #000;
-  border-bottom: 1px solid var(--faint);
+  background: var(--night);
+  border-bottom: var(--control-border) solid var(--line);
 }
 
 .plugin-body {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 16px;
+  padding: var(--space-3);
 }
 
 .plugin h3 {
-  font-family: var(--display);
-  font-size: 22px;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  letter-spacing: var(--tracking-display);
   margin: 0 0 6px;
 }
 
 .plugin p {
-  color: var(--dim);
-  font-size: 14px;
+  color: var(--muted);
+  font-size: var(--step--1);
   line-height: 1.5;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-3);
   flex: 1;
 }
 
 .plugin-download {
   align-self: flex-start;
-  padding: 12px 18px;
 }
 
 .install ol {
   padding-left: 20px;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-3);
 }
 
 .install li {
-  margin-bottom: 8px;
-}
-
-.donate {
-  border-color: var(--faint);
+  margin-bottom: var(--space-1);
 }
 
 .donate .lead {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-4);
 }
 
 /* `hidden` conserva ocultos el progreso y el reporte hasta que corresponda. */
