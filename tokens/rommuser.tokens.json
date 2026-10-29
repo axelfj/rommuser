@@ -1,0 +1,64 @@
+{
+  "$description": "ROMMUSER · Sombra y señal. Fuente única de color, letra, espacio y movimiento para rommuser.com, /estudio y studio.rommuser.com. Formato W3C Design Tokens 2025.10. Después de editar: npm run tokens.",
+  "color": {
+    "$type": "color",
+    "night": { "$description": "Noche: el negro de la marca (preset NOCHE, ~7%)", "$value": { "colorSpace": "srgb", "components": [0.0706, 0.0706, 0.0706], "hex": "#121212" } },
+    "bone": { "$description": "Hueso: el blanco de la marca (~92%)", "$value": { "colorSpace": "srgb", "components": [0.9216, 0.9098, 0.8863], "hex": "#ebe8e2" } },
+    "red": { "$description": "El único acento: acción principal y lo que hay que corregir", "$value": { "colorSpace": "srgb", "components": [0.7843, 0.1137, 0.1451], "hex": "#c81d25" } },
+    "muted": { "$description": "Texto secundario sobre Noche", "$value": { "colorSpace": "srgb", "components": [0.6588, 0.6471, 0.6235], "hex": "#a8a59f" } },
+    "line": { "$description": "Divisores y bordes suaves", "$value": { "colorSpace": "srgb", "components": [0.9216, 0.9098, 0.8863], "alpha": 0.16, "hex": "#ebe8e2" } },
+    "line-strong": { "$description": "Bordes que tienen que verse", "$value": { "colorSpace": "srgb", "components": [0.9216, 0.9098, 0.8863], "alpha": 0.32, "hex": "#ebe8e2" } },
+    "wash": { "$description": "Fondo apenas levantado (zona activa, hover)", "$value": { "colorSpace": "srgb", "components": [0.9216, 0.9098, 0.8863], "alpha": 0.06, "hex": "#ebe8e2" } },
+    "ink-muted": { "$description": "Texto secundario sobre Hueso", "$value": { "colorSpace": "srgb", "components": [0.0706, 0.0706, 0.0706], "alpha": 0.62, "hex": "#121212" } }
+  },
+  "font": {
+    "$type": "fontFamily",
+    "display": { "$description": "Titulares y la marca", "$value": ["League Spartan", "Arial", "sans-serif"] },
+    "body": { "$description": "Todo lo demás", "$value": ["Poppins", "Arial", "sans-serif"] }
+  },
+  "step": {
+    "$description": "Escala de letra. Los pasos fluidos crecen con el ancho entre min y max.",
+    "$type": "dimension",
+    "-2": { "$description": "Notas, metadatos", "$value": { "value": 12, "unit": "px" } },
+    "-1": { "$description": "Etiquetas, menú, botones", "$value": { "value": 14, "unit": "px" } },
+    "0": { "$description": "Texto corrido", "$value": { "value": 16, "unit": "px" } },
+    "1": { "$description": "Entradilla", "$value": { "value": 17, "unit": "px" }, "$extensions": { "com.rommuser.fluid": { "preferred": "1.4vw", "max": { "value": 20, "unit": "px" } } } },
+    "2": { "$description": "Subtítulo", "$value": { "value": 20, "unit": "px" }, "$extensions": { "com.rommuser.fluid": { "preferred": "2.1vw", "max": { "value": 28, "unit": "px" } } } },
+    "3": { "$description": "Titular de bloque", "$value": { "value": 28, "unit": "px" }, "$extensions": { "com.rommuser.fluid": { "preferred": "4.5vw", "max": { "value": 40, "unit": "px" } } } },
+    "4": { "$description": "Titular de página en las apps", "$value": { "value": 36, "unit": "px" }, "$extensions": { "com.rommuser.fluid": { "preferred": "6vw", "max": { "value": 56, "unit": "px" } } } },
+    "5": { "$description": "Titular de sección del sitio", "$value": { "value": 48, "unit": "px" }, "$extensions": { "com.rommuser.fluid": { "preferred": "6.4vw", "max": { "value": 94, "unit": "px" } } } }
+  },
+  "tracking": {
+    "$description": "Espaciado de letras",
+    "$type": "number",
+    "label": { "$description": "Etiquetas en mayúscula", "$value": 0.09, "$extensions": { "com.rommuser.unit": "em" } },
+    "button": { "$description": "Texto de botones", "$value": 0.05, "$extensions": { "com.rommuser.unit": "em" } },
+    "display": { "$description": "Titulares", "$value": -0.02, "$extensions": { "com.rommuser.unit": "em" } }
+  },
+  "space": {
+    "$type": "dimension",
+    "1": { "$value": { "value": 8, "unit": "px" } },
+    "2": { "$value": { "value": 12, "unit": "px" } },
+    "3": { "$value": { "value": 16, "unit": "px" } },
+    "4": { "$value": { "value": 24, "unit": "px" } },
+    "5": { "$value": { "value": 32, "unit": "px" } },
+    "6": { "$value": { "value": 48, "unit": "px" } },
+    "7": { "$value": { "value": 64, "unit": "px" } },
+    "8": { "$value": { "value": 80, "unit": "px" } },
+    "9": { "$value": { "value": 96, "unit": "px" } },
+    "gutter": { "$description": "Margen lateral de página", "$value": { "value": 20, "unit": "px" }, "$extensions": { "com.rommuser.fluid": { "preferred": "4.5vw", "max": { "value": 64, "unit": "px" } } } }
+  },
+  "control": {
+    "$type": "dimension",
+    "height": { "$description": "Alto mínimo de botones", "$value": { "value": 52, "unit": "px" } },
+    "radius": { "$description": "Sin esquinas redondeadas", "$value": { "value": 0, "unit": "px" } },
+    "border": { "$value": { "value": 1, "unit": "px" } }
+  },
+  "motion": {
+    "ease": { "$type": "cubicBezier", "$value": [0.22, 1, 0.36, 1] },
+    "duration": { "$type": "duration", "$value": { "value": 300, "unit": "ms" } }
+  },
+  "grain": {
+    "opacity": { "$description": "Grano de página (Sombra y señal)", "$type": "number", "$value": 0.05 }
+  }
+}
