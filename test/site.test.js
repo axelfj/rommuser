@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { PAGES, buildFromDisk } from '../scripts/build-site-en.mjs';
 
@@ -50,7 +50,7 @@ describe('rommuser.com', () => {
     expect(headers.match(/frame-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
   });
 
-  it('las tres pestañas de MÚSICA usan la misma fila: número, título, crédito, fecha o tipo, y la acción', () => {
+  it('las tres pestañas de MÚSICA usan la misma tarjeta: cover, título, crédito, fecha o tipo, y la acción', () => {
     for (const page of ['index.html', 'en/index.html']) {
       const html = read(page);
       for (const id of ['originales', 'remixes', 'mixtapes']) {
@@ -58,9 +58,12 @@ describe('rommuser.com', () => {
         expect(panel.startsWith('<div class="tracks">')).toBe(true);
         const rows = panel.match(/<(a|button) class="track music-choice[^"]*"[^>]*>.*?<\/\1>/gs);
         expect(rows.length).toBeGreaterThan(0);
+        for (const row of rows) expect(row).toMatch(/^<(a|button)[^>]*><span class="track-cover"/);
         for (const row of rows) expect(row).toMatch(/<span class="track-n">\d\d<\/span><span class="track-info"><strong>[^<]+<\/strong><small>[^<]+<\/small><\/span><(time|span) class="release-date[^"]*"[^>]*>[^<]+<\/\1><span class="track-type">[^<]+<\/span>/);
       }
       expect(html).not.toContain('collection-card');
+      // Every cover the page points at is in the repo.
+      for (const [, file] of html.matchAll(/src="\/?(assets\/covers\/[^"]+)"/g)) expect(existsSync(new URL(`../site/${file}`, import.meta.url))).toBe(true);
     }
     // A collection is a plain link out; it must not open the platform list meant for a single track.
     expect(read('app.js')).toContain(".music-choice:not(.presave):not(.track-link)");

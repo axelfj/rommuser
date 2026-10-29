@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 import { expect, it } from 'vitest';
 const app = readFileSync(new URL('../site/app.js', import.meta.url), 'utf8');
-const source = app.slice(app.indexOf('// Release-day'), app.indexOf('// Preserve the original'));
+const source = app.slice(app.indexOf('// Release-day'), app.indexOf('const tabs='));
 function release(day, href = 'https://link.tracks.id/dItL', soundcloud) {
   const classes = new Set(['upcoming', 'presave']);
   const label = { textContent: 'PRE-SAVE' };
