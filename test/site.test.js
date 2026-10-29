@@ -112,6 +112,17 @@ describe('rommuser.com', () => {
     }
   });
 
+  it('la banda roja no escribe fechas propias: las toma de los lanzamientos y la próxima fecha', () => {
+    for (const page of ['index.html', 'es/index.html', 'en/index.html']) {
+      const band = read(page).match(/<div class="dates-band"[^]*?<div class="dates-track"><\/div><\/div>/);
+      expect(band).not.toBeNull();
+      expect(band[0]).not.toMatch(/\d{2}\.\d{2}/);
+    }
+    const script = read('dates.js');
+    expect(script).toContain("'.tracks .track[data-release]'");
+    expect(script).toContain("'.next-show[data-show-date]'");
+  });
+
   it('acredita los sellos confirmados para Never Be y Echoes', () => {
     for (const path of ['index.html', 'en/index.html']) {
       expect(read(path)).toContain('<strong>NEVER BE</strong><small>HOUSE OF BOOGIE</small>');
