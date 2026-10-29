@@ -16,25 +16,6 @@ document.querySelectorAll('.track.upcoming[data-release]').forEach(track=>{
     track.dataset.track=track.querySelector('strong').textContent;
   }
 });
-// Preserve the original listening controls inside a chronological release archive.
-const releaseList=document.querySelector('#originales .tracks');
-if(releaseList){
-  const releaseYears=new Map();
-  [...releaseList.children].forEach(track=>{
-    // Announced tracks without a date (IDs) get their own group above the years.
-    const year=track.querySelector('time')?.dateTime.slice(0,4)||(track.classList.contains('track-id')?'ID':'');
-    if(!year)return;
-    if(!releaseYears.has(year))releaseYears.set(year,[]);
-    releaseYears.get(year).push(track);
-  });
-  [...releaseYears].sort(([a],[b])=>b.localeCompare(a)).forEach(([year,tracks],index)=>{
-    const group=document.createElement('details');group.className='release-year';group.open=index===0||(index===1&&releaseYears.has('ID'));
-    const summary=document.createElement('summary');
-    const label=document.createElement('span');label.textContent=year==='ID'?tr('PRÓXIMAMENTE'):year;
-    const count=document.createElement('span');count.className='release-count';count.textContent=tracks.length+' '+tr(tracks.length===1?'TRACK':'TRACKS');
-    summary.append(label,count);group.append(summary,...tracks);releaseList.append(group);
-  });
-}
 
 const tabs=[...document.querySelectorAll('[role="tab"]')];function chooseTab(tab){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected})}tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>chooseTab(tab));tab.addEventListener('keydown',event=>{let n=i;if(event.key==='ArrowRight')n=(i+1)%tabs.length;else if(event.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.length-1;else return;event.preventDefault();chooseTab(tabs[n]);tabs[n].focus()})});const listenDialog=document.getElementById('listen-dialog');const listenPlatforms=['amazon','apple','bandcamp','beatport','deezer','soundcloud','spotify','youtube'].map(key=>({key,element:document.getElementById('listen-'+key)})).filter(p=>p.element).map(p=>({...p,defaultHref:p.element.href,defaultLabel:p.element.querySelector('span').textContent}));
 // Pre-saves and collection rows (.track-link) are plain links; every other row opens the platform list.

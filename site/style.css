@@ -246,10 +246,33 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
 
 .artist-home .tracks .track-type,#vivo .show-video{align-self:center;margin-block:0;box-sizing:border-box}
 .artist-home .tracks .track:not(:disabled) .track-type,#vivo .show-video{height:var(--control-height);min-height:var(--control-height);line-height:1;font-family:var(--control-font);border-color:var(--control-border);border-radius:var(--control-radius)}
-/* The three MÚSICA tabs share one row. One width for every row action keeps the dates in line whatever the label, and rows listed
-   straight in a tab (Remixes / Edits, Mixtapes) share a single line between them, like the rows inside a year in Originales. */
-.artist-home .tracks .track:not(:disabled) .track-type{min-width:112px}
-.artist-home .tracks>.track{border-bottom:0}.artist-home .tracks>.track:last-child{border-bottom:1px solid var(--line)}
+/* MÚSICA is a wall of covers. All three tabs (Originales, Remixes / Edits, Mixtapes) use the same card, laid over the same row markup,
+   so player.js, system.js and the platform list read it as before. A release whose artwork isn't in yet shows the RR on Noche.
+   The id keeps these rules above the older row rules without !important. */
+.artist-home #musica .tracks{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:44px 24px}
+.artist-home #musica .tracks .music-choice.track{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:'cover cover' 'info info' 'date action';align-items:center;align-content:start;gap:0 10px;min-height:0;padding:0;border:0;background:none}
+.artist-home #musica .track-cover{grid-area:cover;position:relative;display:block;aspect-ratio:1;overflow:hidden;background:#0b0b0b;box-shadow:inset 0 0 0 1px var(--line)}
+.artist-home #musica .track-cover:empty::before{content:"";position:absolute;inset:0;background:url("assets/rr-light.svg") center/30% no-repeat;opacity:.2}
+.artist-home #musica .track-cover img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.artist-home #musica .tracks .track-n{display:none}
+.artist-home #musica .tracks .track-info{grid-area:info;gap:4px;margin-top:14px}
+.artist-home #musica .tracks .track-info strong{font-size:clamp(15px,1.35vw,19px);line-height:1.15}
+.artist-home #musica .tracks .track-info small{font-size:10px;line-height:1.4;letter-spacing:.08em;color:rgba(235,232,226,.72)}
+.artist-home #musica .tracks .release-date{grid-area:date;align-self:center;margin-top:10px;font-size:11px!important}
+.artist-home #musica .tracks .track .track-type{grid-area:action;justify-self:end;align-self:center;height:auto;min-height:0;min-width:0;margin-top:10px;padding:0;border:0;background:none;box-shadow:none;font-size:10px!important;letter-spacing:.1em;gap:6px}
+.artist-home #musica .tracks .track:focus-visible{outline:2px solid var(--bone);outline-offset:6px}
+.artist-home #musica .tracks .track:focus-visible .track-type{background:none;box-shadow:none}
+.artist-home #musica .tracks .track.is-current .track-cover{box-shadow:inset 0 0 0 2px var(--red)}
+.artist-home #musica .tracks .track.is-playing .track-cover::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--red)}
+@media(hover:hover){.artist-home #musica .tracks .track:not(:disabled):hover{background:none}
+  .artist-home #musica .tracks .track:not(:disabled):hover .track-cover img{transform:scale(1.04)}
+  .artist-home #musica .tracks .track:not(:disabled):hover .track-type{background:none;box-shadow:none;color:var(--bone);text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:5px}}
+@media(prefers-reduced-motion:reduce){.artist-home #musica .track-cover img{transition:none}}
+@media(max-width:1099px){.artist-home #musica .tracks{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:719px){.artist-home #musica .tracks{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 16px}
+  .artist-home #musica .tracks .music-choice.track{grid-template-areas:'cover cover' 'info info' 'date date' 'action action'}
+  .artist-home #musica .tracks .release-date{margin-top:8px}
+  .artist-home #musica .tracks .track .track-type{justify-self:start;margin-top:6px}}
 .artist-home :is(.button,.menu-toggle,.dialog-close){min-height:var(--control-height)}
 .artist-home :is(.menu-toggle,.dialog-close){border:1px solid var(--control-border);border-radius:var(--control-radius)}
 .artist-home .music-tabs button{font-family:var(--control-font);font-weight:500}
@@ -287,16 +310,6 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 17 17 7M7 7h10v10' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 17 17 7M7 7h10v10' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
 }/* Release archive follows the same year hierarchy as the show archive. */
-
-
-
-.artist-home .release-year{border-bottom:1px solid var(--line)}
-.artist-home .release-year summary{display:flex;align-items:center;gap:18px;min-height:46px;padding:0 4px;cursor:pointer;list-style:none;font:700 13px var(--font-body);letter-spacing:.2em}
-.artist-home .release-year summary::-webkit-details-marker{display:none}
-.artist-home .release-year summary::after{content:"";width:8px;height:8px;margin-left:auto;margin-right:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
-.artist-home .release-year[open] summary::after{transform:rotate(225deg)}
-.artist-home .release-count{font-size:11px;color:var(--muted);letter-spacing:.08em}
-.artist-home .release-year .track:last-of-type{border-bottom:0}
 .artist-home .artist-bio{flex:1 0 100%;max-width:680px;margin:auto;font-size:16px;line-height:1.8}/* Honor the operating-system preference across every decorative animation. */
 
 @media(prefers-reduced-motion:reduce){
@@ -355,7 +368,7 @@ nav a.nav-external svg{flex:none}
 
 .artist-home .tracks .track.upcoming:not(.presave) .track-type::before{display:none}/* Nothing on the page reads smaller than 12px. */
 
-html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs button,.release-count,.show-count,.tracks .track-n,.tracks .track-info small,.tracks .release-date,.tracks .track .track-type,.music-labels .eyebrow,.fan-strip h2,.fan-strip .fan-form .button,.show-row time,.show-row p,.show-row>span,.show-video,.contact-entry h3,.universe-footer>span){font-size:12px!important}
+html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs button,.show-count,.tracks .track-n,.tracks .track-info small,.tracks .release-date,.tracks .track .track-type,.music-labels .eyebrow,.fan-strip h2,.fan-strip .fan-form .button,.show-row time,.show-row p,.show-row>span,.show-video,.contact-entry h3,.universe-footer>span){font-size:12px!important}
 /* Home system (2026-10-29): one gutter, one section rhythm, one hairline, one label style, two typefaces.
    Spacing steps: 8 / 16 / 24 / 32 / 48 / 64 / 96. Everything above this block that disagrees loses here. */
 .artist-home{--section-space:96px;--heading-space:48px}
@@ -369,8 +382,8 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 .artist-home #contacto.contact{border-top:1px solid var(--line);padding-top:48px;padding-bottom:48px}
 .artist-home>footer{border-top:1px solid var(--line)}
 /* Labels: one size, one weight, one tracking. */
-.artist-home :is(.eyebrow,.show-history-label,.music-labels .eyebrow,.contact-entry h3,.fan-strip h2,.show-count,.release-count,.show-year summary span,.track-year summary span){font-family:var(--font-body);font-size:12px;font-weight:600;letter-spacing:.12em;line-height:1.4}
-.artist-home :is(.show-history-label,.music-labels .eyebrow,.contact-entry h3,.show-count,.release-count){color:var(--muted)}
+.artist-home :is(.eyebrow,.show-history-label,.music-labels .eyebrow,.contact-entry h3,.fan-strip h2,.show-count,.show-year summary span,.track-year summary span){font-family:var(--font-body);font-size:12px;font-weight:600;letter-spacing:.12em;line-height:1.4}
+.artist-home :is(.show-history-label,.music-labels .eyebrow,.contact-entry h3,.show-count){color:var(--muted)}
 /* Numbers line up without a monospace face. */
 .artist-home :is(time,.release-date,.track-n,.show-row time){font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .artist-home :is(.tracks .track-type,.show-video,.music-tabs button){font-family:var(--font-body);letter-spacing:.08em}
