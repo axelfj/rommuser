@@ -28,4 +28,25 @@ describe('tokens de marca', () => {
     expect(html).toContain('src="/site/assets/rr-light.svg"');
     expect(html).toContain('<meta name="theme-color" content="#121212" />');
   });
+
+  const SITE_PAGES = ['index.html', 'es/index.html', 'en/index.html', 'estudio/index.html', 'en/studio/index.html', 'tienda/index.html', 'en/store/index.html', '404.html'];
+
+  it.each(SITE_PAGES)('rommuser.com/%s carga tokens.css antes que style.css', (path) => {
+    const html = read('site/' + path);
+    const tokens = html.search(/<link rel="stylesheet" href="\/?tokens\.css">/);
+    const style = html.search(/<link rel="stylesheet" href="\/?style\.css">/);
+    expect(tokens).toBeGreaterThan(-1);
+    expect(tokens).toBeLessThan(style);
+  });
+
+  it('el CSS del sitio no vuelve a definir los colores ni las fuentes de la marca', () => {
+    for (const path of ['site/style.css', 'site/studio.css']) {
+      const css = read(path);
+      expect(css).not.toMatch(/--(night|bone|red|line|line-strong|gutter|ease):/);
+      expect(css).not.toContain("'League Spartan',Arial");
+      expect(css).not.toContain('Poppins,Arial');
+      expect(css).not.toMatch(/#12130f|#eae6e5|rgba\(18,19,15/i);
+    }
+  });
 });
+

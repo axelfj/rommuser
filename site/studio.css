@@ -1,6 +1,6 @@
 /* /estudio landing page: one offer, one action (PEDIR COTIZACIÓN). Loaded after style.css on the studio pages only.
    Spacing steps 8/12/16/24/32/48/64/80/96, one curve for every move, transform and opacity only. */
-.studio-page{--ease:cubic-bezier(.22,1,.36,1);--muted:rgba(234,230,229,.3)}
+.studio-page{--muted:rgba(234,230,229,.3)}
 .studio-page h1,.studio-page h2{text-wrap:balance}
 .studio-page p,.studio-page li{text-wrap:pretty}
 .studio-page .button{transition:background-color .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease),transform .3s var(--ease)}
@@ -20,7 +20,7 @@
 
 /* Tagline: words light up one by one as they cross the reading line (studio.js) */
 .studio-tagline{padding-top:96px;padding-bottom:96px}
-.tagline-reveal{max-width:880px;font:700 clamp(36px,5vw,60px)/1.05 'League Spartan',Arial,sans-serif;letter-spacing:-.03em;text-wrap:balance}
+.tagline-reveal{max-width:880px;font:700 clamp(36px,5vw,60px)/1.05 var(--font-display);letter-spacing:-.03em;text-wrap:balance}
 .tagline-reveal .word{transition:color .6s var(--ease)}
 .motion .tagline-reveal .word{color:var(--muted)}
 .motion .tagline-reveal .word.lit{color:var(--bone)}
@@ -28,7 +28,7 @@
 /* Benefits */
 .studio-benefits{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
 .studio-benefits li{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:32px;border:1px solid var(--line)}
-.studio-benefits strong{font:700 24px/32px 'League Spartan',Arial,sans-serif;letter-spacing:-.01em}
+.studio-benefits strong{font:700 24px/32px var(--font-display);letter-spacing:-.01em}
 .studio-benefits p{font-size:16px;line-height:24px;max-width:480px}
 .studio-benefits .text-link{margin-top:auto}
 
@@ -37,9 +37,9 @@
 /* FAQ */
 .studio-faq{max-width:880px;border-top:1px solid var(--line)}
 .studio-faq details{border-bottom:1px solid var(--line)}
-.studio-faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 0;font:700 20px/28px 'League Spartan',Arial,sans-serif}
+.studio-faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 0;font:700 20px/28px var(--font-display)}
 .studio-faq summary::-webkit-details-marker{display:none}
-.studio-faq summary::after{content:'+';flex-shrink:0;font:400 24px/1 Poppins,Arial,sans-serif;transition:transform .5s var(--ease)}
+.studio-faq summary::after{content:'+';flex-shrink:0;font:400 24px/1 var(--font-body);transition:transform .5s var(--ease)}
 .studio-faq details[open] summary::after{transform:rotate(45deg)}
 .studio-faq summary:focus-visible{outline:3px solid var(--bone);outline-offset:4px}
 .studio-faq details p{padding:0 0 24px;max-width:680px;font-size:16px;line-height:24px}
@@ -55,7 +55,7 @@
 .studio-form{display:flex;flex-direction:column;gap:8px}
 .studio-form label{margin-top:16px;font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
 .studio-form label:first-child{margin-top:0}
-.studio-form input,.studio-form select,.studio-form textarea{width:100%;min-height:48px;padding:12px 16px;background:#181818;color:var(--bone);border:1px solid var(--line);border-radius:0;font:400 16px/24px Poppins,Arial,sans-serif;transition:border-color .3s var(--ease)}
+.studio-form input,.studio-form select,.studio-form textarea{width:100%;min-height:48px;padding:12px 16px;background:#181818;color:var(--bone);border:1px solid var(--line);border-radius:0;font:400 16px/24px var(--font-body);transition:border-color .3s var(--ease)}
 .studio-form textarea{resize:vertical}
 .studio-form input:hover,.studio-form select:hover,.studio-form textarea:hover{border-color:#8a8a84}
 .studio-form input:focus-visible,.studio-form select:focus-visible,.studio-form textarea:focus-visible{outline:3px solid var(--bone);outline-offset:2px;border-color:var(--bone)}
