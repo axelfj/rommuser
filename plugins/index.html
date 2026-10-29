@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plugins gratis · ROMMUSER Studio</title>
+    <meta name="description" content="26 plugins de audio gratis y open source (VST3, AU, CLAP) para productores que están empezando. En beta, en español e inglés." />
+    <meta property="og:title" content="Plugins gratis · ROMMUSER Studio" />
+    <meta property="og:description" content="26 plugins de audio gratis y open source para productores que están empezando." />
+    <meta property="og:image" content="https://studio.rommuser.com/plugins/img/shape-eq.webp" />
+    <meta name="theme-color" content="#12130F" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href="https://rommuser.com">ROMMUSER <span class="dim">/ STUDIO</span></a>
+      <nav class="nav" aria-label="ROMMUSER">
+        <a href="/" data-en="Stem check">Chequeo</a>
+        <a href="/plugins/" aria-current="page" data-en="Free plugins">Plugins gratis</a>
+        <a href="https://rommuser.com" class="nav-cta">rommuser.com</a>
+        <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch to English">ES</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro">
+        <p class="beta-badge">Beta</p>
+        <h1 data-en="Free plugins">Plugins gratis</h1>
+        <p class="lead" data-en="26 audio plugins for producers who are just starting out and can't pay for expensive tools. Free and open source, in Spanish and English. VST3, AU and CLAP for Windows, macOS and Linux.">
+          26 plugins de audio para productores que están empezando y no pueden pagar los plugins caros.
+          Gratis y open source, en español e inglés. VST3, AU y CLAP para Windows, macOS y Linux.
+        </p>
+      </section>
+
+      <section class="beta-note" aria-labelledby="beta-title">
+        <h2 id="beta-title" data-en="They're in beta">Están en beta</h2>
+        <p data-en="They work and you can use them in your tracks, but we're still improving them. Something might fail or change between versions. Save your project often and, if you find a bug, tell us on GitHub or by email.">
+          Funcionan y podés usarlos en tus tracks, pero todavía los estamos mejorando. Algo puede fallar o cambiar entre versiones.
+          Guardá tu proyecto seguido y, si encontrás un error, contanos en GitHub o por correo.
+        </p>
+        <p class="beta-links">
+          <a class="link" href="https://github.com/axelfj/music-plugins/issues" target="_blank" rel="noopener noreferrer" data-en="Report a bug">Reportar un error</a>
+          <a class="link" id="bug-mail" href="#"></a>
+        </p>
+      </section>
+
+      <div id="plugin-groups"></div>
+
+      <section class="install" aria-labelledby="install-title">
+        <h2 id="install-title" data-en="How to install">Cómo instalarlos</h2>
+        <ol>
+          <li data-en="Click Download on the plugin and pick the file for your computer: .exe for Windows, .pkg for macOS or .tar.gz for Linux.">Hacé clic en Descargar en el plugin y elegí el archivo de tu compu: .exe para Windows, .pkg para macOS o .tar.gz para Linux.</li>
+          <li data-en="Windows may say it protected your PC: click More info and then Run anyway. On macOS, right-click the file and choose Open. The installers aren't signed yet, but all the code is public.">Windows puede decir que protegió tu PC: hacé clic en Más información y luego en Ejecutar de todas formas. En macOS, clic derecho en el archivo y Abrir. Los instaladores todavía no están firmados, pero todo el código es público.</li>
+          <li data-en="Open your DAW and rescan your plugins.">Abrí tu DAW y volvé a escanear los plugins.</li>
+        </ol>
+        <p class="fine">
+          <a class="link" href="https://github.com/axelfj/music-plugins#instalar" target="_blank" rel="noopener noreferrer" data-en="Full install guide">Guía completa de instalación</a>
+          ·
+          <a class="link" href="https://github.com/axelfj/music-plugins/releases" target="_blank" rel="noopener noreferrer" data-en="All downloads">Todas las descargas</a>
+        </p>
+      </section>
+
+      <section class="donate" aria-labelledby="donate-title">
+        <h2 id="donate-title" data-en="Support the plugins">Apoyá los plugins</h2>
+        <p class="lead" data-en="The plugins are and will stay free. If they help you and you can, a donation pays for the time to keep improving them and making new ones.">
+          Los plugins son y van a seguir siendo gratis. Si te sirven y podés, una donación paga el tiempo para seguir mejorándolos y hacer nuevos.
+        </p>
+        <a id="donate-cta" class="btn" href="#" target="_blank" rel="noopener noreferrer" data-en="Donate">Donar</a>
+        <p id="donate-soon" class="fine" hidden data-en="Donations open soon.">Las donaciones abren muy pronto.</p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>© 2026 ROMMUSER / STUDIO / COSTA RICA</span>
+      <span class="foot-links">
+        <a href="https://github.com/axelfj/music-plugins" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://rommuser.com">rommuser.com</a>
+      </span>
+    </footer>
+
+    <script type="module" src="/src/plugins.ts"></script>
+  </body>
+</html>
