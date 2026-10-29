@@ -65,7 +65,6 @@ function note(kind){
   if(kind===1){ctx.beginPath();ctx.ellipse(5,13,5,3.5,-.35,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(10,12);ctx.lineTo(10,-7);ctx.stroke()}
 }
 // Comets: each upcoming release takes its turn to cross the frame on a shallow arc above the record, then the next one follows.
-// With reduced motion they rest at fixed points along their paths instead.
 const COMET_GAP=11,COMET_CROSS=8;
 function cometPoint(g,i,p){
   const y0=h*(.1+.09*(i%3)),x=-.08*w+p*1.16*w;
@@ -73,8 +72,7 @@ function cometPoint(g,i,p){
 }
 function comet(g,b,i){
   const n=upcoming.length;let p;
-  if(reduce.matches)p=.3+.4*(n>1?i/(n-1):.5);
-  else{const cycle=Math.max(n,2)*COMET_GAP,local=((t-i*COMET_GAP)%cycle+cycle)%cycle;p=local/COMET_CROSS}
+  const cycle=Math.max(n,2)*COMET_GAP,local=((t-i*COMET_GAP)%cycle+cycle)%cycle;p=local/COMET_CROSS;
   b.on=p>=0&&p<=1;const q=Math.min(1,Math.max(0,p)),head=cometPoint(g,i,q),back=cometPoint(g,i,Math.max(0,q-.02));
   b.x=head.x;b.y=head.y;b.z=1;b.s=1;b.dx=head.x-back.x;b.dy=head.y-back.y;
 }
@@ -126,7 +124,8 @@ function paint(){
 function loop(stamp){
   frame=0;if(!visible||document.hidden)return;
   const dt=Math.min(.05,(stamp-(last||stamp))/1000);last=stamp;
-  if(!reduce.matches){t+=dt;
+  // The system always moves, like the red band (Axel's call): a device that asks for less motion gets it at half speed.
+  const pace=reduce.matches?.5:1;{t+=dt*pace;
     if(playing&&current){beatClock+=dt;if(beatClock>=BEAT){beatClock-=BEAT;pulse=1;
       const g=geometry(),dx=current.x-g.cx,dy=current.y-g.cy,d=Math.hypot(dx,dy)||1;
       sparks.push({x:current.x,y:current.y,vx:dx/d*28+(Math.random()-.5)*14,vy:dy/d*20-16,age:0,life:2.6,kind:sparks.length%3,spin:(Math.random()-.5)*.8,red:Math.random()<.25})}}
@@ -136,7 +135,7 @@ function loop(stamp){
     disc=(disc+spin*dt)%(Math.PI*2);
     for(const s of sparks)s.age+=dt;while(sparks.length&&sparks[0].age>sparks[0].life)sparks.shift();
   }
-  paint();if(!reduce.matches||sparks.length)frame=requestAnimationFrame(loop);
+  paint();frame=requestAnimationFrame(loop);
 }
 function start(){if(!frame&&visible&&!document.hidden){last=0;frame=requestAnimationFrame(loop)}}
 function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);w=r.width;h=r.height;canvas.width=w*d;canvas.height=h*d;ctx.setTransform(d,0,0,d,0,0);paint()}
