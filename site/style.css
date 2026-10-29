@@ -453,6 +453,7 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 .artist-home button.system-body{cursor:pointer}
 .artist-home button.system-body:hover .system-name,.artist-home button.system-body:focus-visible .system-name,.artist-home .system-body[aria-pressed="true"] .system-name{color:var(--bone);opacity:1}
 .artist-home .system-body.is-next .system-date{color:var(--bone)}
+.artist-home .system-body.is-upcoming{transition:opacity .4s}.artist-home .system-body.is-upcoming .system-name{color:var(--bone)}.artist-home .system-body.is-gone{opacity:0;visibility:hidden}
 .artist-home .system-now{position:absolute;left:var(--gutter);right:var(--gutter);bottom:8px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;font:700 12px/1.5 var(--font-body);letter-spacing:.08em;color:var(--muted)}
 @media(max-width:900px){.artist-home .artist-system{height:clamp(380px,100vw,600px)}}
 @media(max-width:620px){.artist-home .artist-system{height:calc(clamp(380px,100vw,600px) + 64px)}.artist-home .artist-system canvas,.artist-home .system-bodies{bottom:64px;height:calc(100% - 64px)}.artist-home .system-now{bottom:0;gap:4px 18px}.artist-home .system-date{display:none}.artist-home .system-name{font-size:11px;letter-spacing:.05em}}
@@ -494,3 +495,4 @@ body.has-now-bar{padding-bottom:64px}
 .artist-home .tracks .track.is-playing:not(.presave) .track-type::before{width:6px;height:8px;border-width:0 2px;border-color:currentColor;border-style:solid}
 @media(max-width:620px){.now-bar{flex-wrap:wrap;gap:0 16px}.now-text{flex-basis:100%;order:-1;padding-top:6px}body.has-now-bar{padding-bottom:100px}}
 @media(prefers-reduced-motion:reduce){.now-progress span{transition:none}}
+@media(max-width:620px){.artist-home .system-body.is-upcoming .system-date{display:block}}

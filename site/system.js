@@ -1,7 +1,7 @@
 // "El sistema" in the artist section: the RR sits at the centre and every released original orbits it,
 // newest closest to the core. Tapping a planet plays that track through the page's one player (player.js),
-// and while it plays the RR turns like a record label at 33⅓, the core breathes and notes leave the planet. Releases still to come wait on the outer
-// dashed ring with their date. Everything is read from the MÚSICA rows, so nothing here is typed twice.
+// and while it plays the RR turns like a record label at 33⅓, the core breathes and notes leave the planet. Releases still to come cross
+// the frame as comets, one at a time and soonest first, carrying their name and date like an announcement. Everything is read from the MÚSICA rows, so nothing here is typed twice.
 (()=>{
 const figure=document.querySelector('.artist-system'),canvas=figure?.querySelector('canvas'),ctx=canvas?.getContext('2d');
 if(!ctx)return;
@@ -32,7 +32,6 @@ released.forEach((b,i)=>{
   button.addEventListener('focus',()=>{hover=b;paint()});button.addEventListener('blur',()=>{if(hover===b)hover=null;paint()});
 });
 upcoming.forEach((b,i)=>{
-  b.phase=Math.PI*.15+i*Math.PI*2/Math.max(3,upcoming.length);
   const tag=document.createElement('span');tag.className='system-body is-upcoming'+(i===0?' is-next':'');
   tag.innerHTML='<span class="system-name"></span><span class="system-date"></span>';
   tag.firstChild.textContent=b.short;tag.lastChild.textContent=tr('EN CAMINO')+' · '+b.iso.slice(8,10)+'.'+b.iso.slice(5,7);
@@ -65,10 +64,33 @@ function note(kind){
   if(kind===0)ctx.quadraticCurveTo(9,-6,8,2);if(kind===1)ctx.lineTo(10,-7);ctx.stroke();
   if(kind===1){ctx.beginPath();ctx.ellipse(5,13,5,3.5,-.35,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(10,12);ctx.lineTo(10,-7);ctx.stroke()}
 }
+// Comets: each upcoming release takes its turn to cross the frame on a shallow arc above the record, then the next one follows.
+// With reduced motion they rest at fixed points along their paths instead.
+const COMET_GAP=11,COMET_CROSS=8;
+function cometPoint(g,i,p){
+  const y0=h*(.1+.09*(i%3)),x=-.08*w+p*1.16*w;
+  return {x,y:y0+p*h*.2-Math.sin(p*Math.PI)*h*(g.mobile?.04:.07)};
+}
+function comet(g,b,i){
+  const n=upcoming.length;let p;
+  if(reduce.matches)p=.3+.4*(n>1?i/(n-1):.5);
+  else{const cycle=Math.max(n,2)*COMET_GAP,local=((t-i*COMET_GAP)%cycle+cycle)%cycle;p=local/COMET_CROSS}
+  b.on=p>=0&&p<=1;const q=Math.min(1,Math.max(0,p)),head=cometPoint(g,i,q),back=cometPoint(g,i,Math.max(0,q-.02));
+  b.x=head.x;b.y=head.y;b.z=1;b.s=1;b.dx=head.x-back.x;b.dy=head.y-back.y;
+}
+function drawComet(g,b){
+  const d=Math.hypot(b.dx,b.dy)||1,ux=b.dx/d,uy=b.dy/d,len=(g.mobile?.32:.2)*w,tx=b.x-ux*len,ty=b.y-uy*len,next=b.el.classList.contains('is-next');
+  const tail=ctx.createLinearGradient(b.x,b.y,tx,ty);tail.addColorStop(0,next?'rgba(200,29,37,.7)':'rgba(235,232,226,.55)');tail.addColorStop(1,'rgba(235,232,226,0)');
+  ctx.globalAlpha=1;ctx.fillStyle=tail;ctx.beginPath();ctx.moveTo(b.x-uy*3,b.y+ux*3);ctx.lineTo(tx,ty);ctx.lineTo(b.x+uy*3,b.y-ux*3);ctx.closePath();ctx.fill();
+  // Dust shed along the tail.
+  ctx.fillStyle=BONE;for(let k=1;k<6;k++){const f=k/6,wob=Math.sin(t*3+k*1.9)*4;ctx.globalAlpha=.35*(1-f);ctx.beginPath();ctx.arc(b.x-ux*len*f*.8-uy*wob,b.y-uy*len*f*.8+ux*wob,1.2,0,Math.PI*2);ctx.fill()}
+  sphere(b.x,b.y,g.mobile?4:5,1,false);
+  if(next){ctx.globalAlpha=.9;ctx.strokeStyle=RED;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(b.x,b.y,(g.mobile?4:5)+4,0,Math.PI*2);ctx.stroke();ctx.lineWidth=1}
+}
 function paint(){
   if(!w)return;const g=geometry();ctx.clearRect(0,0,w,h);ctx.lineWidth=1;
   released.forEach((b,i)=>place(g,b,orbitRadius(g,i),.2*Math.pow(g.inner/orbitRadius(g,i),1.5)));
-  upcoming.forEach(b=>place(g,b,g.rx,.035));
+  upcoming.forEach((b,i)=>comet(g,b,i));
   // Grooves and the fixed light across them, so the system reads as a record seen at an angle.
   ctx.save();ctx.translate(g.cx,g.cy);ctx.scale(1,g.ry/g.rx);ctx.strokeStyle=BONE;ctx.globalAlpha=.035;
   for(let r=g.inner*.7;r<g.outer*1.06;r+=g.mobile?4:5){ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.stroke()}
@@ -78,16 +100,15 @@ function paint(){
   // Orbits: thin bone lines, the hovered or playing one brighter.
   released.forEach((b,i)=>{const r=orbitRadius(g,i),lit=b===hover||b===current;ctx.globalAlpha=lit?.6:.16;ctx.strokeStyle=lit&&b===current?RED:BONE;
     ctx.beginPath();ctx.ellipse(g.cx,g.cy,r,r*g.ry/g.rx,0,0,Math.PI*2);ctx.stroke()});
-  ctx.setLineDash([2,7]);ctx.globalAlpha=.28;ctx.strokeStyle=BONE;ctx.beginPath();ctx.ellipse(g.cx,g.cy,g.rx,g.ry,0,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
-  const drawBody=b=>{if(b.upcoming){ctx.globalAlpha=.85;ctx.strokeStyle=b.el.classList.contains('is-next')?RED:BONE;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(b.x,b.y,6*b.s,0,Math.PI*2);ctx.stroke();ctx.lineWidth=1;return}
-    sphere(b.x,b.y,(g.mobile?7:9)*b.s*(b===current?1+pulse*.18:1),.55+.45*(b.z+1)/2,b===current)};
+  const drawBody=b=>sphere(b.x,b.y,(g.mobile?7:9)*b.s*(b===current?1+pulse*.18:1),.55+.45*(b.z+1)/2,b===current);
   const all=[...released,...upcoming];
-  all.filter(b=>b.z<0).sort((a,b)=>a.z-b.z).forEach(drawBody);
+  released.filter(b=>b.z<0).sort((a,b)=>a.z-b.z).forEach(drawBody);
   // Core: the RR with two halos; it breathes on the beat while a track plays.
   const core=(g.mobile?40:56)*(1+pulse*.07);
   [1.55,2.2].forEach((m,i)=>{ctx.globalAlpha=(playing?.34:.16)*(1-i*.4)+pulse*.25;ctx.strokeStyle=playing?RED:BONE;ctx.beginPath();ctx.ellipse(g.cx,g.cy,core*m*.5,core*m*.5*(g.ry/g.rx)*1.6,0,0,Math.PI*2);ctx.stroke()});
   ctx.globalAlpha=1;if(logo.complete&&logo.naturalWidth){ctx.save();ctx.translate(g.cx,g.cy);ctx.rotate(disc);ctx.drawImage(logo,-core/2,-core/2,core,core);ctx.restore()}
-  all.filter(b=>b.z>=0).sort((a,b)=>a.z-b.z).forEach(drawBody);
+  released.filter(b=>b.z>=0).sort((a,b)=>a.z-b.z).forEach(drawBody);
+  upcoming.forEach(b=>{if(b.on)drawComet(g,b)});
   // Notes drift on a loose halo around the system.
   ctx.fillStyle=BONE;ctx.strokeStyle=BONE;ctx.lineWidth=1.6;
   for(const n of notes){const a=n.a+t*n.speed,x=g.cx+Math.cos(a)*g.rx*n.r,y=g.cy+Math.sin(a)*g.ry*n.r*1.5+Math.sin(t*.6+n.bob)*10;
@@ -97,8 +118,10 @@ function paint(){
   ctx.globalAlpha=1;
   // Names sit on the outer side of each body and flip inward when they would leave the frame.
   for(const b of all){b.el.style.transform=`translate(${b.x.toFixed(1)}px,${b.y.toFixed(1)}px)`;
-    const lw=(b.lw??=Math.max(...[...b.el.children].map(c=>c.offsetWidth)))+22,left=b.x<g.cx?b.x-lw>0:b.x+lw>w;
-    b.el.classList.toggle('is-left',left);b.el.classList.toggle('is-back',b.z<-.2)}
+    const lw=(b.lw??=Math.max(...[...b.el.children].map(c=>c.offsetWidth)))+22;
+    // A comet's name trails behind its head (to the left, since it flies left to right) until that would leave the frame.
+    const left=b.upcoming?b.x-lw>0:b.x<g.cx?b.x-lw>0:b.x+lw>w;
+    b.el.classList.toggle('is-left',left);b.el.classList.toggle('is-back',b.z<-.2);if(b.upcoming)b.el.classList.toggle('is-gone',!b.on)}
 }
 function loop(stamp){
   frame=0;if(!visible||document.hidden)return;
