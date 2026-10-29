@@ -37,7 +37,8 @@ if(releaseList){
 }
 
 const tabs=[...document.querySelectorAll('[role="tab"]')];function chooseTab(tab){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected})}tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>chooseTab(tab));tab.addEventListener('keydown',event=>{let n=i;if(event.key==='ArrowRight')n=(i+1)%tabs.length;else if(event.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.length-1;else return;event.preventDefault();chooseTab(tabs[n]);tabs[n].focus()})});const listenDialog=document.getElementById('listen-dialog');const listenPlatforms=['amazon','apple','bandcamp','beatport','deezer','soundcloud','spotify','youtube'].map(key=>({key,element:document.getElementById('listen-'+key)})).filter(p=>p.element).map(p=>({...p,defaultHref:p.element.href,defaultLabel:p.element.querySelector('span').textContent}));
-document.querySelectorAll('.music-choice:not(.presave)').forEach(b=>b.addEventListener('click',e=>{
+// Pre-saves and collection rows (.track-link) are plain links; every other row opens the platform list.
+document.querySelectorAll('.music-choice:not(.presave):not(.track-link)').forEach(b=>b.addEventListener('click',e=>{
   e.preventDefault();
   const isTrack=b.dataset.track!=='MÚSICA DE ROMMUSER';
   // A track with no links yet (an ID) has nothing to play: send the fan to the Golden Circle instead of an empty list.

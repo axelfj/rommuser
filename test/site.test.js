@@ -36,11 +36,11 @@ describe('rommuser.com', () => {
     expect(read('i18n.js')).not.toContain('navigator.languages');
   });
 
-  it('un solo reproductor: el hero, las filas de MÚSICA y el sistema suenan con SoundCloud, leyendo los originales de la lista', () => {
+  it('un solo reproductor: el hero, las filas de MÚSICA y el sistema suenan con SoundCloud, leyendo las filas de la lista', () => {
     const system = read('system.js');
     const player = read('player.js');
     expect(system).toContain("#originales .track[data-track]");
-    expect(player).toContain("#originales .track[data-soundcloud]:not(.presave)");
+    expect(player).toContain("#musica .tracks .track[data-soundcloud]:not(.presave)");
     expect(system).toContain('window.rommuserPlayer');
     for (const file of [system, player]) for (const name of ['HOLY', 'PIECES', 'JUST GROOVE', 'TIKIKAI']) expect(file).not.toContain(name);
     // player.js has to load before system.js, which reads it.
@@ -48,6 +48,22 @@ describe('rommuser.com', () => {
     const headers = read('_headers');
     expect(headers.match(/script-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
     expect(headers.match(/frame-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
+  });
+
+  it('las tres pestañas de MÚSICA usan la misma fila: número, título, crédito, fecha o tipo, y la acción', () => {
+    for (const page of ['index.html', 'en/index.html']) {
+      const html = read(page);
+      for (const id of ['originales', 'remixes', 'mixtapes']) {
+        const panel = html.match(new RegExp(`<div id="${id}" role="tabpanel"[^>]*>(.*?)</div></div>`, 's'))[1];
+        expect(panel.startsWith('<div class="tracks">')).toBe(true);
+        const rows = panel.match(/<(a|button) class="track music-choice[^"]*"[^>]*>.*?<\/\1>/gs);
+        expect(rows.length).toBeGreaterThan(0);
+        for (const row of rows) expect(row).toMatch(/<span class="track-n">\d\d<\/span><span class="track-info"><strong>[^<]+<\/strong><small>[^<]+<\/small><\/span><(time|span) class="release-date[^"]*"[^>]*>[^<]+<\/\1><span class="track-type">[^<]+<\/span>/);
+      }
+      expect(html).not.toContain('collection-card');
+    }
+    // A collection is a plain link out; it must not open the platform list meant for a single track.
+    expect(read('app.js')).toContain(".music-choice:not(.presave):not(.track-link)");
   });
 
   it('FIRMADO EN está en la primera pantalla y solo una vez', () => {
