@@ -1,6 +1,6 @@
 // "El sistema" in the artist section: the RR sits at the centre and every released original orbits it,
 // newest closest to the core. Tapping a planet plays that track through the page's one player (player.js),
-// and while it plays the core breathes and notes leave the planet. Releases still to come wait on the outer
+// and while it plays the RR turns like a record label at 33⅓, the core breathes and notes leave the planet. Releases still to come wait on the outer
 // dashed ring with their date. Everything is read from the MÚSICA rows, so nothing here is typed twice.
 (()=>{
 const figure=document.querySelector('.artist-system'),canvas=figure?.querySelector('canvas'),ctx=canvas?.getContext('2d');
@@ -39,7 +39,8 @@ upcoming.forEach((b,i)=>{
   layer.append(tag);b.el=tag;
 });
 const logo=new Image();logo.src='/assets/rr-light.svg';logo.addEventListener('load',paint);
-let w=0,h=0,t=0,last=0,frame=0,visible=false,hover=null,current=null,playing=false,beatClock=0,pulse=0;
+let w=0,h=0,t=0,last=0,frame=0,visible=false,hover=null,current=null,playing=false,beatClock=0,pulse=0,spin=0,disc=0;
+const RPM33=Math.PI*2*(100/3)/60;
 const notes=Array.from({length:10},(_,i)=>({kind:i%3,a:i/10*Math.PI*2,r:1.02+(i%4)*.04,speed:.025+(i%3)*.01,bob:i*1.7,size:.8+(i%2)*.25}));
 const sparks=[];
 figure.hidden=false;
@@ -68,6 +69,12 @@ function paint(){
   if(!w)return;const g=geometry();ctx.clearRect(0,0,w,h);ctx.lineWidth=1;
   released.forEach((b,i)=>place(g,b,orbitRadius(g,i),.2*Math.pow(g.inner/orbitRadius(g,i),1.5)));
   upcoming.forEach(b=>place(g,b,g.rx,.035));
+  // Grooves and the fixed light across them, so the system reads as a record seen at an angle.
+  ctx.save();ctx.translate(g.cx,g.cy);ctx.scale(1,g.ry/g.rx);ctx.strokeStyle=BONE;ctx.globalAlpha=.035;
+  for(let r=g.inner*.7;r<g.outer*1.06;r+=g.mobile?4:5){ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.stroke()}
+  ctx.fillStyle=BONE;ctx.globalAlpha=.014;
+  for(const a of [-.8,Math.PI-.8])for(const spread of [.36,.24,.12]){ctx.beginPath();ctx.arc(0,0,g.outer*1.06,a-spread/2,a+spread/2);ctx.arc(0,0,g.inner*.7,a+spread/2,a-spread/2,true);ctx.closePath();ctx.fill()}
+  ctx.restore();
   // Orbits: thin bone lines, the hovered or playing one brighter.
   released.forEach((b,i)=>{const r=orbitRadius(g,i),lit=b===hover||b===current;ctx.globalAlpha=lit?.6:.16;ctx.strokeStyle=lit&&b===current?RED:BONE;
     ctx.beginPath();ctx.ellipse(g.cx,g.cy,r,r*g.ry/g.rx,0,0,Math.PI*2);ctx.stroke()});
@@ -79,7 +86,7 @@ function paint(){
   // Core: the RR with two halos; it breathes on the beat while a track plays.
   const core=(g.mobile?40:56)*(1+pulse*.07);
   [1.55,2.2].forEach((m,i)=>{ctx.globalAlpha=(playing?.34:.16)*(1-i*.4)+pulse*.25;ctx.strokeStyle=playing?RED:BONE;ctx.beginPath();ctx.ellipse(g.cx,g.cy,core*m*.5,core*m*.5*(g.ry/g.rx)*1.6,0,0,Math.PI*2);ctx.stroke()});
-  ctx.globalAlpha=1;if(logo.complete&&logo.naturalWidth)ctx.drawImage(logo,g.cx-core/2,g.cy-core/2,core,core);
+  ctx.globalAlpha=1;if(logo.complete&&logo.naturalWidth){ctx.save();ctx.translate(g.cx,g.cy);ctx.rotate(disc);ctx.drawImage(logo,-core/2,-core/2,core,core);ctx.restore()}
   all.filter(b=>b.z>=0).sort((a,b)=>a.z-b.z).forEach(drawBody);
   // Notes drift on a loose halo around the system.
   ctx.fillStyle=BONE;ctx.strokeStyle=BONE;ctx.lineWidth=1.6;
@@ -101,6 +108,9 @@ function loop(stamp){
       const g=geometry(),dx=current.x-g.cx,dy=current.y-g.cy,d=Math.hypot(dx,dy)||1;
       sparks.push({x:current.x,y:current.y,vx:dx/d*28+(Math.random()-.5)*14,vy:dy/d*20-16,age:0,life:2.6,kind:sparks.length%3,spin:(Math.random()-.5)*.8,red:Math.random()<.25})}}
     pulse=Math.max(0,pulse-dt*3.2);
+    // Like a turntable: it spins up when a track plays and runs down on pause, then rests where it stopped.
+    spin+=((playing?RPM33:0)-spin)*Math.min(1,dt*(playing?2.4:1.4));if(!playing&&spin<.01)spin=0;
+    disc=(disc+spin*dt)%(Math.PI*2);
     for(const s of sparks)s.age+=dt;while(sparks.length&&sparks[0].age>sparks[0].life)sparks.shift();
   }
   paint();if(!reduce.matches||sparks.length)frame=requestAnimationFrame(loop);
