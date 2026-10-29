@@ -36,15 +36,25 @@ describe('rommuser.com', () => {
     expect(read('i18n.js')).not.toContain('navigator.languages');
   });
 
-  it('el sistema de El artista lee los originales de MÚSICA y puede sonar con SoundCloud', () => {
+  it('un solo reproductor: el hero, las filas de MÚSICA y el sistema suenan con SoundCloud, leyendo los originales de la lista', () => {
     const system = read('system.js');
+    const player = read('player.js');
     expect(system).toContain("#originales .track[data-track]");
-    expect(system).toContain('row.dataset.soundcloud');
-    for (const name of ['HOLY', 'PIECES', 'JUST GROOVE', 'TIKIKAI']) expect(system).not.toContain(name);
-    expect(read('index.html')).toContain('<script src="system.js"></script>');
+    expect(player).toContain("#originales .track[data-soundcloud]:not(.presave)");
+    expect(system).toContain('window.rommuserPlayer');
+    for (const file of [system, player]) for (const name of ['HOLY', 'PIECES', 'JUST GROOVE', 'TIKIKAI']) expect(file).not.toContain(name);
+    // player.js has to load before system.js, which reads it.
+    expect(read('index.html')).toContain('<script src="player.js"></script><script src="system.js"></script>');
     const headers = read('_headers');
     expect(headers.match(/script-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
     expect(headers.match(/frame-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
+  });
+
+  it('FIRMADO EN está en la primera pantalla y solo una vez', () => {
+    const page = read('index.html');
+    const hero = page.match(/<section class="hero"[^>]*>.*?<\/section>/s)[0];
+    expect(hero).toContain('<div class="music-labels"><p class="eyebrow">FIRMADO EN</p>');
+    expect(page.match(/class="music-labels"/g)).toHaveLength(1);
   });
 
   it('la política de seguridad deja que el formulario del Golden Circle envíe', () => {

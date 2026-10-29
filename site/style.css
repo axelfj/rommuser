@@ -404,7 +404,8 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 .artist-home .dates-band:hover .dates-track,.artist-home .dates-band:focus-within .dates-track{animation-play-state:paused}
 .artist-home .dates-group{display:flex;flex:none}
 .artist-home .dates-item{display:inline-flex;align-items:baseline;gap:12px;padding-right:56px;font:700 clamp(15px,1.6vw,20px)/1.2 'League Spartan',Arial,sans-serif;letter-spacing:.04em;white-space:nowrap;text-transform:uppercase}
-.artist-home .dates-item time{font:600 12px/1 Poppins,Arial,sans-serif;letter-spacing:.12em;font-variant-numeric:tabular-nums;opacity:.85}
+.artist-home .dates-item time{font:600 12px/1 Poppins,Arial,sans-serif;letter-spacing:.12em;font-variant-numeric:tabular-nums}
+.artist-home .dates-item{color:var(--bone)}.artist-home .dates-item small{font:600 11px/1 Poppins,Arial,sans-serif;letter-spacing:.12em}.artist-home .dates-item:focus-visible{outline:2px solid var(--bone);outline-offset:4px}
 @keyframes dates-scroll{to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.artist-home .dates-track{animation:none;width:auto;flex-wrap:wrap;padding-inline:var(--gutter)}.artist-home .dates-group[aria-hidden]{display:none}.artist-home .dates-group{flex-wrap:wrap;row-gap:8px}}
 /* Artist: the bio beside "el sistema", the originals orbiting the RR (system.js). */
@@ -424,16 +425,13 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 .artist-home button.system-body:hover .system-name,.artist-home button.system-body:focus-visible .system-name,.artist-home .system-body[aria-pressed="true"] .system-name{color:var(--bone);opacity:1}
 .artist-home .system-body.is-next .system-date{color:var(--bone)}
 .artist-home .system-now{position:absolute;left:var(--gutter);right:var(--gutter);bottom:8px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;font:700 12px/1.5 Poppins,Arial,sans-serif;letter-spacing:.08em;color:var(--muted)}
-.artist-home .artist-system.is-playing .system-now-text{color:var(--bone)}
-.artist-home .system-toggle{background:transparent;border:0;border-bottom:1px solid var(--red);padding:6px 0;min-height:44px;font:700 12px Poppins,Arial,sans-serif;letter-spacing:.08em;color:var(--bone)}
-.artist-home .system-player{position:absolute;width:1px;height:1px;left:0;bottom:0;border:0;opacity:0;pointer-events:none}
 @media(max-width:900px){.artist-home .artist-system{height:clamp(380px,100vw,600px)}}
 @media(max-width:620px){.artist-home .artist-system{height:calc(clamp(380px,100vw,600px) + 64px)}.artist-home .artist-system canvas,.artist-home .system-bodies{bottom:64px;height:calc(100% - 64px)}.artist-home .system-now{bottom:0;gap:4px 18px}.artist-home .system-date{display:none}.artist-home .system-name{font-size:11px;letter-spacing:.05em}}
 /* Hero as one poster on desktop: the portrait bleeds off the right edge at full hero height, fades into Noche
    under the text and carries the same grain as the photos, so wide screens get the photo instead of an empty gap.
    Real photo only, toned down so the grey backdrop sits in the dark; nothing generated. */
 @media(min-width:901px){
-  .artist-home .hero{display:grid;grid-template-columns:minmax(0,1fr) 40%;grid-template-areas:"top top" "name ." "copy .";align-items:start;position:relative;overflow:hidden;isolation:isolate;min-height:min(860px,calc(100vh - 94px))}
+  .artist-home .hero{display:grid;grid-template-columns:minmax(0,1fr) 40%;grid-template-areas:"top top" "name ." "copy .";align-items:start;position:relative;overflow:hidden;isolation:isolate;min-height:min(860px,calc(100vh - 94px - 52px))}
   .artist-home .hero-top{grid-area:top;position:relative;z-index:2}
   .artist-home .hero-grid{display:contents}
   .artist-home .hero h1{grid-area:name;font-size:clamp(80px,10.5vw,270px);line-height:.9;margin:0;position:relative;z-index:2}
@@ -443,3 +441,25 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
   .artist-home .hero .portrait{-webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 22%,#000 55%),linear-gradient(0deg,transparent 0,#000 42%),linear-gradient(180deg,rgba(0,0,0,.3) 0,#000 24%);-webkit-mask-composite:source-in,source-in;mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 22%,#000 55%),linear-gradient(0deg,transparent 0,#000 42%),linear-gradient(180deg,rgba(0,0,0,.3) 0,#000 24%);mask-composite:intersect}
   .artist-home .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.16;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
 }
+/* FIRMADO EN moved into the hero: one quiet line of labels under the actions, so a promoter sees them first. */
+.artist-home .hero .music-labels{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);max-width:720px}
+.artist-home .hero .music-labels>.eyebrow{opacity:1}
+.artist-home .hero .music-labels .label-list{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:10px 22px;margin-top:12px}
+.artist-home .hero .music-labels .label-list li{font:700 13px/1.2 Poppins,Arial,sans-serif;letter-spacing:.06em;opacity:1}
+.artist-home .hero .music-labels .label-list .label-flag{width:18px;height:12px}
+@media(min-width:901px){.artist-home .hero{padding-bottom:40px}.artist-home .hero h2{font-size:clamp(52px,5.6vw,96px);margin:18px 0 16px}.artist-home .hero .hero-copy{padding-top:24px}.artist-home .hero .actions{margin-top:24px}.artist-home .hero .music-labels{margin-top:28px;padding-top:16px;max-width:800px}}
+/* The one player: a thin bar fixed to the bottom while a track plays, red progress line on its top edge. */
+.now-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;gap:8px 18px;background:var(--night);border-top:1px solid var(--line-strong);padding:6px max(var(--gutter),env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(var(--gutter),env(safe-area-inset-left,0px))}
+.now-progress{position:absolute;left:0;right:0;top:-1px;height:2px}
+.now-progress span{display:block;height:100%;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .3s linear}
+.now-text{flex:1;min-width:0;margin:0;font:700 12px/1.4 Poppins,Arial,sans-serif;letter-spacing:.08em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.now-bar button{background:transparent;border:0;color:var(--bone);min-height:44px;padding:0 2px;font:700 12px Poppins,Arial,sans-serif;letter-spacing:.08em;flex:none}
+.now-bar .now-toggle{min-width:64px;text-align:left;box-shadow:inset 0 -2px var(--red)}
+.now-bar .now-close{width:44px;font-size:22px;font-weight:400}
+.now-bar button:hover{color:var(--muted)}
+.now-player{position:fixed;width:1px;height:1px;left:0;bottom:0;border:0;opacity:0;pointer-events:none}
+body.has-now-bar{padding-bottom:64px}
+.artist-home .tracks .track.is-current .track-type{color:var(--red)}
+.artist-home .tracks .track.is-playing:not(.presave) .track-type::before{width:6px;height:8px;border-width:0 2px;border-color:currentColor;border-style:solid}
+@media(max-width:620px){.now-bar{flex-wrap:wrap;gap:0 16px}.now-text{flex-basis:100%;order:-1;padding-top:6px}body.has-now-bar{padding-bottom:100px}}
+@media(prefers-reduced-motion:reduce){.now-progress span{transition:none}}

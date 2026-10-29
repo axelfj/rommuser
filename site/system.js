@@ -1,33 +1,33 @@
 // "El sistema" in the artist section: the RR sits at the centre and every released original orbits it,
-// newest closest to the core. Tapping a planet plays that track right here through the SoundCloud widget,
+// newest closest to the core. Tapping a planet plays that track through the page's one player (player.js),
 // and while it plays the core breathes and notes leave the planet. Releases still to come wait on the outer
 // dashed ring with their date. Everything is read from the MÚSICA rows, so nothing here is typed twice.
 (()=>{
 const figure=document.querySelector('.artist-system'),canvas=figure?.querySelector('canvas'),ctx=canvas?.getContext('2d');
 if(!ctx)return;
-const rows=[...document.querySelectorAll('#originales .track[data-track]')];
+const player=window.rommuserPlayer,rows=[...document.querySelectorAll('#originales .track[data-track]')];
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Costa_Rica'}).format(new Date());
 const reduce=matchMedia('(prefers-reduced-motion: reduce)');
 const BONE='#EBE8E2',RED='#C81D25',BEAT=60/124,golden=Math.PI*(3-Math.sqrt(5));
 const shortDate=iso=>iso.slice(8,10)+'.'+iso.slice(5,7)+'.'+iso.slice(0,4);
 const bodies=rows.map(row=>{
   const iso=row.querySelector('time')?.getAttribute('datetime')||'';
-  return {name:row.dataset.track,short:row.dataset.track.replace(/\s*\(.*\)$/,''),label:row.querySelector('.track-info small')?.textContent||'',
-    iso,url:row.dataset.soundcloud||'',upcoming:!iso||iso>=today};
+  return {row,name:row.dataset.track,short:row.dataset.track.replace(/\s*\(.*\)$/,''),label:row.querySelector('.track-info small')?.textContent||'',
+    iso,track:player?.tracks.find(t=>t.row===row),upcoming:!iso||iso>=today};
 }).filter(b=>b.iso);
 const released=bodies.filter(b=>!b.upcoming).sort((a,b)=>b.iso.localeCompare(a.iso));
 const upcoming=bodies.filter(b=>b.upcoming).sort((a,b)=>a.iso.localeCompare(b.iso));
-if(!released.some(b=>b.url))return;
-const layer=figure.querySelector('.system-bodies'),now=figure.querySelector('.system-now-text'),toggle=figure.querySelector('.system-toggle');
+if(!released.some(b=>b.track))return;
+const layer=figure.querySelector('.system-bodies');figure.querySelector('.system-now').textContent=tr('TOCA UN PLANETA PARA ESCUCHARLO AQUÍ');
 layer.setAttribute('aria-label',tr('Originales de ROMMUSER'));
 released.forEach((b,i)=>{
   b.phase=i*golden*2.3;b.orbit=i;
   // A release without a SoundCloud link still orbits; it just can't be played here.
-  const button=document.createElement(b.url?'button':'span');button.className='system-body';
+  const button=document.createElement(b.track?'button':'span');button.className='system-body';
   button.innerHTML='<span class="system-name"></span>';button.firstChild.textContent=b.short;layer.append(button);b.el=button;
-  if(!b.url)return;
+  if(!b.track)return;
   button.type='button';button.setAttribute('aria-label',tr('Escuchar aquí')+': '+b.name+', '+b.label+', '+shortDate(b.iso));button.setAttribute('aria-pressed','false');
-  button.addEventListener('click',()=>play(b));
+  button.addEventListener('click',()=>player.play(b.track));
   button.addEventListener('pointerenter',()=>{hover=b;paint()});button.addEventListener('pointerleave',()=>{if(hover===b)hover=null;paint()});
   button.addEventListener('focus',()=>{hover=b;paint()});button.addEventListener('blur',()=>{if(hover===b)hover=null;paint()});
 });
@@ -39,7 +39,7 @@ upcoming.forEach((b,i)=>{
   layer.append(tag);b.el=tag;
 });
 const logo=new Image();logo.src='/assets/rr-light.svg';logo.addEventListener('load',paint);
-let w=0,h=0,t=0,last=0,frame=0,visible=false,hover=null,current=null,playing=false,widget=null,beatClock=0,pulse=0;
+let w=0,h=0,t=0,last=0,frame=0,visible=false,hover=null,current=null,playing=false,beatClock=0,pulse=0;
 const notes=Array.from({length:10},(_,i)=>({kind:i%3,a:i/10*Math.PI*2,r:1.02+(i%4)*.04,speed:.025+(i%3)*.01,bob:i*1.7,size:.8+(i%2)*.25}));
 const sparks=[];
 figure.hidden=false;
@@ -107,32 +107,14 @@ function loop(stamp){
 }
 function start(){if(!frame&&visible&&!document.hidden){last=0;frame=requestAnimationFrame(loop)}}
 function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);w=r.width;h=r.height;canvas.width=w*d;canvas.height=h*d;ctx.setTransform(d,0,0,d,0,0);paint()}
-function status(){
-  for(const b of released)if(b.url)b.el.setAttribute('aria-pressed',String(b===current&&playing));
-  if(!current){now.textContent=tr('TOCA UN PLANETA PARA ESCUCHARLO AQUÍ');toggle.hidden=true;return}
-  now.textContent=(playing?tr('SONANDO'):tr('EN PAUSA'))+' · '+current.name+' · '+current.label+' · '+shortDate(current.iso)+' · '+tr('VÍA SOUNDCLOUD');
-  toggle.hidden=false;toggle.textContent=playing?tr('PAUSA'):tr('SEGUIR');toggle.setAttribute('aria-label',(playing?tr('PAUSA'):tr('SEGUIR'))+': '+current.name);
-  figure.classList.toggle('is-playing',playing);
-}
-function widgetSrc(url){return 'https://w.soundcloud.com/player/?url='+encodeURIComponent(url)+'&auto_play=true&visual=false&show_artwork=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&hide_related=true&buying=false&sharing=false&download=false'}
-function connect(frameEl){
-  widget=SC.Widget(frameEl);
-  widget.bind(SC.Widget.Events.PLAY,()=>{playing=true;status();start()});
-  widget.bind(SC.Widget.Events.PAUSE,()=>{playing=false;status()});
-  widget.bind(SC.Widget.Events.FINISH,()=>{playing=false;status()});
-}
-function play(b){
-  if(b===current&&widget){widget.toggle();return}
-  current=b;playing=false;beatClock=BEAT;now.textContent=tr('CARGANDO')+' · '+b.name;toggle.hidden=true;paint();
-  if(widget){widget.load(b.url,{auto_play:true,visual:false,show_artwork:false,show_comments:false,show_user:false,show_teaser:false,hide_related:true});return}
-  const frameEl=document.createElement('iframe');frameEl.className='system-player';frameEl.title='SoundCloud';frameEl.allow='autoplay';frameEl.tabIndex=-1;frameEl.setAttribute('aria-hidden','true');frameEl.src=widgetSrc(b.url);
-  figure.append(frameEl);
-  const ready=()=>connect(frameEl);
-  if(window.SC?.Widget)ready();else{const script=document.createElement('script');script.src='https://w.soundcloud.com/player/api.js';script.onload=ready;document.head.append(script)}
-}
-toggle.addEventListener('click',()=>widget?.toggle());
 new ResizeObserver(resize).observe(canvas);
 new IntersectionObserver(([e])=>{visible=e.isIntersecting;visible?start():(cancelAnimationFrame(frame),frame=0)}).observe(figure);
 document.addEventListener('visibilitychange',start);reduce.addEventListener?.('change',()=>{paint();start()});
-status();
+// Follow the shared player: the playing track's planet turns red and the system starts to breathe.
+player.on(p=>{
+  current=released.find(b=>b.track&&b.track===p.current)||null;playing=Boolean(current&&p.playing);
+  if(playing&&beatClock===0)beatClock=BEAT;
+  for(const b of released)if(b.track)b.el.setAttribute('aria-pressed',String(b===current&&playing));
+  figure.classList.toggle('is-playing',playing);paint();start();
+});
 })();
