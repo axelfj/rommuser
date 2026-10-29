@@ -69,6 +69,15 @@ describe('rommuser.com', () => {
     expect(read('app.js')).toContain(".music-choice:not(.presave):not(.track-link)");
   });
 
+  it('cada sesión de Mixtapes tiene su tarjeta y suena en el reproductor; el catálogo completo no es un planeta', () => {
+    for (const page of ['index.html', 'en/index.html']) {
+      const panel = read(page).match(/<div id="mixtapes" role="tabpanel"[^>]*>(.*?)<\/div><\/div>/s)[1];
+      const sessions = panel.match(/<button class="track music-choice" type="button" data-track="[^"]+" data-soundcloud="https:\/\/soundcloud\.com\/rommuser\/[a-z0-9-]+">/g);
+      expect(sessions.length).toBeGreaterThanOrEqual(10);
+    }
+    expect(read('system.js')).toContain("#originales .track[data-track]:not(.track-all)");
+  });
+
   it('FIRMADO EN está en la primera pantalla y solo una vez', () => {
     const page = read('index.html');
     const hero = page.match(/<section class="hero"[^>]*>.*?<\/section>/s)[0];

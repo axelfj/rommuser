@@ -5,7 +5,7 @@
 (()=>{
 const figure=document.querySelector('.artist-system'),canvas=figure?.querySelector('canvas'),ctx=canvas?.getContext('2d');
 if(!ctx)return;
-const player=window.rommuserPlayer,rows=[...document.querySelectorAll('#originales .track[data-track]')];
+const player=window.rommuserPlayer,rows=[...document.querySelectorAll('#originales .track[data-track]:not(.track-all)')];
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Costa_Rica'}).format(new Date());
 const reduce=matchMedia('(prefers-reduced-motion: reduce)');
 const BONE='#EBE8E2',RED='#C81D25',BEAT=60/124,golden=Math.PI*(3-Math.sqrt(5));

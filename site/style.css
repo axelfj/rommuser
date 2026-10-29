@@ -216,7 +216,7 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
 .artist-home .tracks .track{transition:background-color .2s,border-color .2s}
 .artist-home .tracks .track-n,.artist-home .tracks .release-date{font-family:var(--font-body);font-weight:400;letter-spacing:.04em;color:var(--muted)}
 .artist-home .tracks .track:not(:disabled) .track-type{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;min-width:0;padding:0 12px;border:1px solid var(--line-strong);border-radius:2px;background:transparent;font-family:var(--font-body);font-size:11px!important;font-weight:500;line-height:1.4;letter-spacing:.08em;text-decoration:none;transition:border-color .2s,background-color .2s,box-shadow .2s}
-.artist-home .tracks .track:not(:disabled):not(.presave):not(.track-link) .track-type::before{content:"";width:0;height:0;border-style:solid;border-width:4px 0 4px 6px;border-color:transparent transparent transparent currentColor}
+.artist-home .tracks .track:not(:disabled):not(.presave):not(.track-link):not(.track-all) .track-type::before{content:"";width:0;height:0;border-style:solid;border-width:4px 0 4px 6px;border-color:transparent transparent transparent currentColor}
 
 .artist-home .tracks .track:focus-visible .track-type{border-color:var(--bone);background-color:rgba(235,232,226,.08);box-shadow:inset 2px 0 var(--red)}
 @media(hover:hover){
@@ -254,6 +254,10 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
 .artist-home #musica .track-cover{grid-area:cover;position:relative;display:block;aspect-ratio:1;overflow:hidden;background:#0b0b0b;box-shadow:inset 0 0 0 1px var(--line)}
 .artist-home #musica .track-cover:empty::before{content:"";position:absolute;inset:0;background:url("assets/rr-light.svg") center/30% no-repeat;opacity:.2}
 .artist-home #musica .track-cover img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+/* A mixtape without its own artwork gets a cover in the style of the catalog covers: its name and ROMMUSER over the Mixtapes ink. */
+.artist-home #musica .track-cover[data-cover]{container-type:inline-size;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12%;text-align:center;color:#fff;background:#000 url("assets/covers/mixtapes.webp") 0 100%/250% no-repeat}
+.artist-home #musica .track-cover[data-cover] b{font:700 18px/1 var(--font-display);font-size:clamp(14px,10cqi,30px);letter-spacing:-.01em}
+.artist-home #musica .track-cover[data-cover] i{font:600 8px/1 var(--font-body);font-size:max(8px,3.6cqi);font-style:normal;letter-spacing:.12em}
 .artist-home #musica .tracks .track-n{display:none}
 .artist-home #musica .tracks .track-info{grid-area:info;gap:4px;margin-top:14px}
 .artist-home #musica .tracks .track-info strong{font-size:clamp(15px,1.35vw,19px);line-height:1.15}
@@ -423,8 +427,8 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 .artist-home .dates-item time{font:600 12px/1 var(--font-body);letter-spacing:.12em;font-variant-numeric:tabular-nums}
 .artist-home .dates-item{color:var(--bone)}.artist-home .dates-item small{font:600 11px/1 var(--font-body);letter-spacing:.12em}.artist-home .dates-item:focus-visible{outline:2px solid var(--bone);outline-offset:4px}
 @keyframes dates-scroll{to{transform:translateX(-50%)}}
-/* Reduced motion: the band stands still but slides under a finger, with a fade at the edge so nothing reads as cut off. When everything fits it spreads across the width. */
-@media(prefers-reduced-motion:reduce){.artist-home .dates-track{animation:none;width:auto;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding-inline:var(--gutter);-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - max(var(--gutter),40px)),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - max(var(--gutter),40px)),transparent)}.artist-home .dates-track::-webkit-scrollbar{display:none}.artist-home .dates-group[aria-hidden]{display:none}.artist-home .dates-group{flex:1 0 auto;justify-content:space-between;gap:40px}.artist-home .dates-item{padding-right:0;scroll-snap-align:start;scroll-margin-left:var(--gutter)}}
+/* The band always moves, on every device (Axel's call). When the device asks for less motion it runs at half speed instead of standing still. */
+@media(prefers-reduced-motion:reduce){.artist-home .dates-track{animation-duration:96s}}
 /* Artist: the bio beside "el sistema", the originals orbiting the RR (system.js). */
 .artist-home #artista{position:relative;overflow:hidden}
 .artist-home .artist-layout{display:grid;gap:clamp(8px,2vw,24px)}
@@ -464,6 +468,8 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 .artist-home .hero .music-labels .label-list{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:10px 22px;margin-top:12px}
 .artist-home .hero .music-labels .label-list li{font:700 13px/1.2 var(--font-body);letter-spacing:.06em;opacity:1}
 .artist-home .hero .music-labels .label-list .label-flag{width:18px;height:12px}
+/* On a phone the labels sit in two aligned columns, the second flush to the right edge, instead of wrapping ragged. */
+@media(max-width:620px){.artist-home .hero .music-labels .label-list{display:grid;grid-template-columns:repeat(2,max-content);justify-content:space-between;gap:12px 16px}}
 @media(min-width:901px){.artist-home .hero{padding-bottom:40px}.artist-home .hero h2{font-size:clamp(52px,5.6vw,96px);margin:18px 0 16px}.artist-home .hero .hero-copy{padding-top:24px}.artist-home .hero .actions{margin-top:24px}.artist-home .hero .music-labels{margin-top:28px;padding-top:16px;max-width:800px}}
 /* The one player: a thin bar fixed to the bottom while a track plays, red progress line on its top edge. */
 .now-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;gap:8px 18px;background:var(--night);border-top:1px solid var(--line-strong);padding:6px max(var(--gutter),env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(var(--gutter),env(safe-area-inset-left,0px))}
