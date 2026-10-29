@@ -36,6 +36,27 @@ describe('rommuser.com', () => {
     expect(read('i18n.js')).not.toContain('navigator.languages');
   });
 
+  it('un solo reproductor: el hero, las filas de MÚSICA y el sistema suenan con SoundCloud, leyendo los originales de la lista', () => {
+    const system = read('system.js');
+    const player = read('player.js');
+    expect(system).toContain("#originales .track[data-track]");
+    expect(player).toContain("#originales .track[data-soundcloud]:not(.presave)");
+    expect(system).toContain('window.rommuserPlayer');
+    for (const file of [system, player]) for (const name of ['HOLY', 'PIECES', 'JUST GROOVE', 'TIKIKAI']) expect(file).not.toContain(name);
+    // player.js has to load before system.js, which reads it.
+    expect(read('index.html')).toContain('<script src="player.js"></script><script src="system.js"></script>');
+    const headers = read('_headers');
+    expect(headers.match(/script-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
+    expect(headers.match(/frame-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
+  });
+
+  it('FIRMADO EN está en la primera pantalla y solo una vez', () => {
+    const page = read('index.html');
+    const hero = page.match(/<section class="hero"[^>]*>.*?<\/section>/s)[0];
+    expect(hero).toContain('<div class="music-labels"><p class="eyebrow">FIRMADO EN</p>');
+    expect(page.match(/class="music-labels"/g)).toHaveLength(1);
+  });
+
   it('la política de seguridad deja que el formulario del Golden Circle envíe', () => {
     const endpoint = read('index.html').match(/class="fan-form" data-endpoint="([^"]+)"/)[1];
     const connect = read('_headers').match(/connect-src ([^;]+);/)[1].split(' ');
@@ -112,6 +133,17 @@ describe('rommuser.com', () => {
     }
   });
 
+  it('la banda roja no escribe fechas propias: las toma de los lanzamientos y la próxima fecha', () => {
+    for (const page of ['index.html', 'es/index.html', 'en/index.html']) {
+      const band = read(page).match(/<div class="dates-band"[^]*?<div class="dates-track"><\/div><\/div>/);
+      expect(band).not.toBeNull();
+      expect(band[0]).not.toMatch(/\d{2}\.\d{2}/);
+    }
+    const script = read('dates.js');
+    expect(script).toContain("'.tracks .track[data-release]'");
+    expect(script).toContain("'.next-show[data-show-date]'");
+  });
+
   it('acredita los sellos confirmados para Never Be y Echoes', () => {
     for (const path of ['index.html', 'en/index.html']) {
       expect(read(path)).toContain('<strong>NEVER BE</strong><small>HOUSE OF BOOGIE</small>');
@@ -126,7 +158,7 @@ describe('rommuser.com', () => {
   });
 
   it('ordena FIRMADO EN / SIGNED TO de mayor a menor renombre, igual en español, inglés y /estudio', () => {
-    const order = ['Decypher', 'DENAR RCRDS', 'Electric Eden', 'HouseYouNite', 'LVLD Music', 'Jendex Records', 'Late Hours'];
+    const order = ['Decypher', 'DENAR RCRDS', 'Electric Eden', 'HouseYouNite', 'LVLD Music', 'House Of Boogie', 'Jendex Records', 'Late Hours'];
     for (const page of ['index.html', 'es/index.html', 'en/index.html']) {
       const labels = read(page).match(/<ul class="label-list">.*?<\/ul>/s)[0];
       const names = [...labels.matchAll(/<\/svg> ([^<]+)<\/li>/g)].map((m) => m[1]);
