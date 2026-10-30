@@ -161,7 +161,7 @@ if (fanForm) {
       fanForm.reset();
       syncFanLanguage();
       syncFanRef();
-      fanStatus.textContent = tr('Listo. Te escribimos con lo próximo.');
+      fanStatus.textContent = tr('Estás dentro. La próxima señal llega a tu correo.');
     } catch {
       fanStatus.textContent = tr('No pudimos confirmar el envío. Inténtalo otra vez.');
     } finally {
