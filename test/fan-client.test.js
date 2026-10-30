@@ -33,7 +33,7 @@ it('submits one token, confirms calmly, and resets before retry', async () => {
   const c = client(); c.callbacks.callback('single-use-token');
   await c.submit();
   expect(c.fetch.mock.calls[0][1].body.get('cf-turnstile-response')).toBe('single-use-token');
-  expect(c.status.textContent).toContain('Listo');
+  expect(c.status.textContent).toContain('Estás dentro');
   expect(c.turnstile.reset).toHaveBeenCalledWith('widget-1');
   await c.submit();
   expect(c.fetch).toHaveBeenCalledTimes(1);
