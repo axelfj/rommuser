@@ -38,6 +38,7 @@ agregar un archivo nuevo, lo creas y agregas su `@import` en el lugar que le toc
 
 | Archivo | Qué estiliza |
 |---|---|
+| `base/fonts.css` | League Spartan y Poppins, servidas desde `site/assets/fonts` (nunca desde Google) |
 | `base/elements.css` | Etiquetas sueltas (cuerpo, enlaces, botones, títulos, foco) |
 | `base/shared.css` | Lo que comparten varias secciones: letra de etiquetas, subrayados, tamaño de controles |
 | `base/utilities.css` | `.sr-only` (texto solo para lectores de pantalla) y `.red` |

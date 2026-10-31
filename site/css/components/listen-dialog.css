@@ -61,18 +61,11 @@ dialog h2 {
   isolation: isolate;
 }
 
-/* The cover is planted in the dialog: it fills the whole top edge to edge, fades into Noche, and its own colours
-   tint the panel below it, so the page seems to open inside itself. No title or credit: the cover already carries
-   them. */
-.artist-home #listen-dialog::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--listen-art,none) center/cover no-repeat;
-  filter: blur(48px) saturate(1.2) brightness(.32);
-  opacity: .9;
-  pointer-events: none;
+/* The cover is planted in the dialog: it fills the whole top edge to edge and runs into the band of logos, painted
+   with the colour of the cover's own bottom edge (--listen-tone, from js/lib/cover-tone.js; Noche without a cover).
+   No title or credit: the cover already carries them. */
+.artist-home #listen-dialog {
+  background: var(--listen-tone,var(--night));
 }
 
 .artist-home #listen-dialog .dialog-close {
@@ -105,7 +98,7 @@ dialog h2 {
   position: absolute;
   inset: auto 0 0;
   height: 38%;
-  background: linear-gradient(to bottom,transparent,var(--night));
+  background: linear-gradient(to bottom,transparent,var(--listen-tone,var(--night)));
   pointer-events: none;
 }
 
@@ -129,17 +122,13 @@ dialog h2 {
   opacity: .8;
 }
 
-.artist-home .listen-art[hidden]~.listen-hint {
-  margin-top: 72px;
-}
-
-.artist-home .listen-hint {
-  position: relative;
-  margin: -14px 24px 12px;
-}
-
 .artist-home #listen-dialog .listen-links {
   margin: 0 16px 28px;
+}
+
+/* Without a cover (the hero's ESCUCHAR), the logos clear the close button. */
+.artist-home #listen-dialog .listen-art[hidden]~.listen-links {
+  margin-top: 72px;
 }
 
 .artist-home .listen-links {

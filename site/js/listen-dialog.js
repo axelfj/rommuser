@@ -4,6 +4,7 @@
 // covers already carry the name and the label, and the card the fan tapped shows them too.
 // Pre-saves are plain links and never open it. A card with no links at all (an "ID") sends the fan to the Golden
 // Circle sign-up instead of an empty list. The generic "MÚSICA DE ROMMUSER" button shows every platform's artist page.
+import { coverTone } from './lib/cover-tone.js';
 import { tr } from './lib/i18n.js';
 import { PLATFORMS } from './lib/platforms.js';
 
@@ -24,6 +25,7 @@ export function initListenDialog() {
     document.getElementById('fan-email')?.focus({ preventScroll: true });
   };
 
+  let coverRequest = 0;
   const showCover = (card) => {
     // A mixtape without artwork gets a plain black band with the RR mark (data-cover).
     const cover = card.querySelector('.track-cover');
@@ -31,9 +33,14 @@ export function initListenDialog() {
     art.hidden = !cover;
     art.toggleAttribute('data-cover', typeset);
     art.replaceChildren(...(cover && !typeset ? cover.cloneNode(true).childNodes : []));
-    // The cover's own colours, blurred, tint the panel behind the logos (--listen-art in listen-dialog.css).
+    // The band under the cover takes the colour of the cover's bottom edge (--listen-tone in listen-dialog.css).
+    dialog.style.removeProperty('--listen-tone');
+    const request = ++coverRequest;
     const image = cover?.querySelector('img');
-    dialog.style.setProperty('--listen-art', image ? `url("${image.currentSrc || image.src}")` : 'none');
+    if (!image) return;
+    coverTone(image).then((tone) => {
+      if (tone && request === coverRequest) dialog.style.setProperty('--listen-tone', tone);
+    });
   };
 
   const open = (card) => {

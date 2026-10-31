@@ -1,7 +1,8 @@
 // "El sistema" in El artista: the RR sits at the centre and every released original orbits it, newest closest to
 // the core. Tapping a planet plays that track through the page's one player (player.js), and while it plays the RR
 // turns like a record at 33⅓, the core breathes on the beat and notes leave the planet. Releases still to come cross
-// the frame as comets, one at a time and soonest first, carrying their name and date like an announcement.
+// the frame as comets, one at a time and soonest first, carrying their name and date like an announcement; each
+// pass comes in from a random side and the core's gravity bends it.
 // Everything is read from the MÚSICA cards, so nothing here is typed twice. It always moves (Axel's call, like the red
 // band); a device that asks for less motion gets it at half speed. Colours come from the brand tokens (--bone, --red).
 import { shortDate, todayInCostaRica } from './lib/dates.js';
@@ -169,24 +170,79 @@ export function initArtistSystem(player) {
       ctx.stroke();
     }
   }
-  // Comets: each upcoming release takes its turn to cross the frame on a shallow arc above the record, then the next one follows.
+  // Comets: each upcoming release takes its turn to cross the frame, then the next one follows. Every pass enters from
+  // a random point outside the frame, aimed past the core at a random distance, and the core's gravity bends it: it
+  // speeds up as it swings close, its tail traces the curve, and it leaves on a new heading. Each pass's path is worked
+  // out once (in units of the record's radius), so a repaint after a resize or a hover draws the same one.
   const COMET_GAP = 11,
-    COMET_CROSS = 8;
-  function cometPoint(g, i, p) {
-    const y0 = h * (0.1 + 0.09 * (i % 3)),
-      x = -0.08 * w + p * 1.16 * w;
-    return { x, y: y0 + p * h * 0.2 - Math.sin(p * Math.PI) * h * (g.mobile ? 0.04 : 0.07) };
+    COMET_CROSS = 8,
+    GRAVITY = 0.35,
+    seed = (Math.random() * 2 ** 32) >>> 0,
+    paths = new Map();
+  // The same comet, pass and key always give the same number in [0, 1) during one visit; a new visit, new paths.
+  function random(...keys) {
+    let x = seed;
+    for (const k of keys) x = Math.imul(x ^ (k + 0x9e3779b9), 0x85ebca6b) ^ (x >>> 13);
+    x = Math.imul(x ^ (x >>> 16), 0x45d9f3b);
+    return ((x ^ (x >>> 16)) >>> 0) / 2 ** 32;
+  }
+  // Comets fly in the plane of the record, among the planets.
+  const project = (g, p) => ({ x: g.cx + p.x * g.rx, y: g.cy + p.y * g.ry });
+  const outside = (g, p, margin) => {
+    const { x, y } = project(g, p);
+    return x < -margin || x > w + margin || y < -margin || y > h + margin;
+  };
+  function cometPath(g, i, pass) {
+    const key = `${i}:${pass}:${w}x${h}`;
+    if (paths.has(key)) return paths.get(key);
+    // Start just outside the frame on a random side, heading past the core by 0.4 to 0.75 of the record's radius.
+    const angle = random(i, pass, 1) * Math.PI * 2,
+      ux = -Math.cos(angle),
+      uy = -Math.sin(angle),
+      miss = (0.4 + random(i, pass, 2) * 0.35) * (random(i, pass, 3) < 0.5 ? -1 : 1),
+      speed = 0.85 + random(i, pass, 4) * 0.15;
+    let edge = 0.5;
+    while (!outside(g, { x: -ux * edge - uy * miss, y: -uy * edge + ux * miss }, 24)) edge += 0.05;
+    let x = -ux * edge - uy * miss,
+      y = -uy * edge + ux * miss,
+      vx = ux * speed,
+      vy = uy * speed,
+      closest = Infinity;
+    const points = [{ x, y }];
+    for (let step = 0; step < 4000; step++) {
+      const r2 = x * x + y * y + 0.0025,
+        pull = GRAVITY / (r2 * Math.sqrt(r2));
+      vx -= x * pull * 0.01;
+      vy -= y * pull * 0.01;
+      x += vx * 0.01;
+      y += vy * 0.01;
+      points.push({ x, y });
+      const r = Math.sqrt(x * x + y * y);
+      closest = Math.min(closest, r);
+      if (r > closest + 0.3 && outside(g, { x, y }, 24)) break;
+    }
+    if (paths.size > 8) paths.clear();
+    paths.set(key, points);
+    return points;
+  }
+  // A point between two samples of a path.
+  function at(path, k) {
+    const a = path[Math.floor(k)],
+      b = path[Math.min(path.length - 1, Math.floor(k) + 1)],
+      f = k - Math.floor(k);
+    return { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f };
   }
   function comet(g, b, i) {
-    const n = upcoming.length;
-    let p;
-    const cycle = Math.max(n, 2) * COMET_GAP,
-      local = (((t - i * COMET_GAP) % cycle) + cycle) % cycle;
-    p = local / COMET_CROSS;
-    b.on = p >= 0 && p <= 1;
-    const q = Math.min(1, Math.max(0, p)),
-      head = cometPoint(g, i, q),
-      back = cometPoint(g, i, Math.max(0, q - 0.02));
+    const cycle = Math.max(upcoming.length, 2) * COMET_GAP,
+      since = t - i * COMET_GAP,
+      pass = Math.floor(since / cycle),
+      p = (since - pass * cycle) / COMET_CROSS;
+    b.on = p <= 1;
+    if (!b.on) return void (b.x ??= -100, b.y ??= -100);
+    b.path = cometPath(g, i, pass);
+    b.head = p * (b.path.length - 1);
+    const head = project(g, at(b.path, b.head)),
+      back = project(g, at(b.path, Math.max(0, b.head - 2)));
     b.x = head.x;
     b.y = head.y;
     b.z = 1;
@@ -195,32 +251,45 @@ export function initArtistSystem(player) {
     b.dy = head.y - back.y;
   }
   function drawComet(g, b) {
-    const d = Math.hypot(b.dx, b.dy) || 1,
-      ux = b.dx / d,
-      uy = b.dy / d,
-      len = (g.mobile ? 0.32 : 0.2) * w,
-      tx = b.x - ux * len,
-      ty = b.y - uy * len,
-      next = b.el.classList.contains('is-next');
-    const tail = ctx.createLinearGradient(b.x, b.y, tx, ty);
-    tail.addColorStop(0, next ? 'rgba(200,29,37,.7)' : 'rgba(235,232,226,.55)');
-    tail.addColorStop(1, 'rgba(235,232,226,0)');
+    const next = b.el.classList.contains('is-next'),
+      tail = Math.max(2, Math.round((b.path.length - 1) * 0.16)),
+      end = Math.max(0, b.head - tail),
+      spine = [];
+    for (let k = b.head; k > end; k -= 3) spine.push(project(g, at(b.path, k)));
+    spine.push(project(g, at(b.path, end)));
+    // The tail is a ribbon along the path behind the head, 3px each side at the head and nothing at the end.
+    const left = [],
+      right = [];
+    spine.forEach((pt, k) => {
+      const o = spine[Math.min(spine.length - 1, k + 1)],
+        q = spine[Math.max(0, k - 1)],
+        dx = q.x - o.x,
+        dy = q.y - o.y,
+        d = Math.hypot(dx, dy) || 1,
+        half = 3 * (1 - k / (spine.length - 1 || 1));
+      left.push([pt.x - (dy / d) * half, pt.y + (dx / d) * half]);
+      right.push([pt.x + (dy / d) * half, pt.y - (dx / d) * half]);
+    });
+    const last = spine[spine.length - 1],
+      fade = ctx.createLinearGradient(b.x, b.y, last.x, last.y);
+    fade.addColorStop(0, next ? 'rgba(200,29,37,.7)' : 'rgba(235,232,226,.55)');
+    fade.addColorStop(1, 'rgba(235,232,226,0)');
     ctx.globalAlpha = 1;
-    ctx.fillStyle = tail;
+    ctx.fillStyle = fade;
     ctx.beginPath();
-    ctx.moveTo(b.x - uy * 3, b.y + ux * 3);
-    ctx.lineTo(tx, ty);
-    ctx.lineTo(b.x + uy * 3, b.y - ux * 3);
+    left.forEach(([x, y], k) => (k ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+    right.reverse().forEach(([x, y]) => ctx.lineTo(x, y));
     ctx.closePath();
     ctx.fill();
     // Dust shed along the tail.
     ctx.fillStyle = BONE;
     for (let k = 1; k < 6; k++) {
       const f = k / 6,
+        pt = spine[Math.min(spine.length - 1, Math.round(f * 0.8 * (spine.length - 1)))],
         wob = Math.sin(t * 3 + k * 1.9) * 4;
       ctx.globalAlpha = 0.35 * (1 - f);
       ctx.beginPath();
-      ctx.arc(b.x - ux * len * f * 0.8 - uy * wob, b.y - uy * len * f * 0.8 + ux * wob, 1.2, 0, Math.PI * 2);
+      ctx.arc(pt.x + wob, pt.y - wob, 1.2, 0, Math.PI * 2);
       ctx.fill();
     }
     sphere(b.x, b.y, g.mobile ? 4 : 5, 1, false);
@@ -343,8 +412,8 @@ export function initArtistSystem(player) {
     for (const b of all) {
       b.el.style.transform = `translate(${b.x.toFixed(1)}px,${b.y.toFixed(1)}px)`;
       const lw = (b.lw ??= Math.max(...[...b.el.children].map((c) => c.offsetWidth))) + 22;
-      // A comet's name trails behind its head (to the left, since it flies left to right) until that would leave the frame.
-      const left = b.upcoming ? b.x - lw > 0 : b.x < g.cx ? b.x - lw > 0 : b.x + lw > w;
+      // A comet's name trails behind its head (on the side it comes from) until that would leave the frame.
+      const left = b.upcoming ? (b.dx >= 0 ? b.x - lw > 0 : b.x + lw > w) : b.x < g.cx ? b.x - lw > 0 : b.x + lw > w;
       b.el.classList.toggle('is-left', left);
       b.el.classList.toggle('is-back', b.z < -0.2);
       if (b.upcoming) b.el.classList.toggle('is-gone', !b.on);

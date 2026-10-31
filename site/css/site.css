@@ -3,6 +3,7 @@
    later file wins. Colours, type and spacing come from ../tokens.css (generated from tokens/rommuser.tokens.json). */
 
 @import "../tokens.css";
+@import "base/fonts.css";
 @import "base/elements.css";
 @import "base/utilities.css";
 @import "base/shared.css";
