@@ -86,7 +86,8 @@ export function buildEnglishPage(html, dictionary, page = PAGES[0]) {
   out = out.replace(/<meta property="og:description" content="[^"]*">/, `<meta property="og:description" content="${encodeAttr(page.ogDescription)}">`);
   out = replaceOnce(out, `<meta property="og:url" content="${ORIGIN}${page.esPath}">`, `<meta property="og:url" content="${ORIGIN}${page.enPath}">`);
   out = out.replace(/<meta property="og:image:alt" content="[^"]*">/, `<meta property="og:image:alt" content="${encodeAttr(page.ogImageAlt)}">`);
-  out = replaceOnce(out, '<meta property="og:locale" content="es_CR"><meta property="og:locale:alternate" content="en_US">', '<meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="es_CR">');
+  out = replaceOnce(out, '<meta property="og:locale" content="es_CR">', '<meta property="og:locale" content="en_US">');
+  out = replaceOnce(out, '<meta property="og:locale:alternate" content="en_US">', '<meta property="og:locale:alternate" content="es_CR">');
   for (const [from, to] of page.ld) out = replaceOnce(out, from, to);
 
   // The page lives one folder down: local files load from the site root.
@@ -99,12 +100,12 @@ export function buildEnglishPage(html, dictionary, page = PAGES[0]) {
   });
 
   // Language link points back to the Spanish page.
-  const toggle = /<a class="language-toggle" id="site-language" href="[^"]*" hreflang="en"([^>]*)>ES<\/a>/;
+  const toggle = /<a\s+class="language-toggle"\s+id="site-language"\s+href="[^"]*"\s+hreflang="en"([^>]*)>ES<\/a>/;
   if (!toggle.test(out)) throw new Error('No se encontró el enlace de idioma');
   out = out.replace(toggle, `<a class="language-toggle" id="site-language" href="${page.esPath}" hreflang="es"$1>EN</a>`);
 
   // Press documents in English.
-  out = out.replace(/<a [^>]*data-en="[^"]+"[^>]*>/g, (tag) => {
+  out = out.replace(/<a\s[^>]*data-en="[^"]+"[^>]*>/g, (tag) => {
     const en = tag.match(/data-en="([^"]+)"/);
     return en ? tag.replace(/ href="[^"]*"/, ` href="${en[1]}"`) : tag;
   });

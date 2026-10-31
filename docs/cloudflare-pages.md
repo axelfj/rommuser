@@ -18,6 +18,6 @@ Netlify sigue funcionando con `netlify.toml` y `site/netlify.toml` mientras dure
 
 ## Public language
 
-The default homepage redirects to `/en/`. Spanish is explicitly available at `/es/`. `site/index.html` remains the Spanish source; run `npm run site:en` after copy changes to regenerate English pages and the Spanish secondary homepage. Browser language does not override this policy.
+The default homepage redirects to `/en/`. Spanish is explicitly available at `/es/`. `site/index.html` remains the Spanish source; run `npm run site` after any change to regenerate the bundled CSS and JS in `site/build/`, the English pages and the Spanish secondary homepage ([editar-el-sitio.md](editar-el-sitio.md)). Browser language does not override this policy.
 
 Editorial rules and completion evidence: [brand-policy.md](brand-policy.md).

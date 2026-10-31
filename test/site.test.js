@@ -3,7 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { PAGES, buildFromDisk, spanishHome } from '../scripts/build-site-en.mjs';
 import { buildBundles } from '../scripts/build-site.mjs';
 
-const read = (path) => readFileSync(new URL('../site/' + path, import.meta.url), 'utf8');
+const raw = (path) => readFileSync(new URL('../site/' + path, import.meta.url), 'utf8');
+// The pages are written one element per line; the checks below read them with the whitespace between tags removed.
+const flat = (html) => html.replace(/<[^>]+>/g, (tag) => tag.replace(/\s+/g, ' ').replace(/ (\/?>)$/, '$1')).replace(/>\s+</g, '><');
+const read = (path) => (path.endsWith('.html') ? flat(raw(path)) : raw(path));
 const scripts = () => readdirSync(new URL('../site/js', import.meta.url), { recursive: true }).filter((f) => f.endsWith('.js')).map((f) => read('js/' + f)).join('\n');
 const SPANISH = /\b(el|la|los|las|de|del|y|tu|tus|para|con|que|una?|más|sin|por)\b|[ñ¿¡]/i;
 const PLACES = new Set(['EL BOILER', 'Amón Solar, El Sótano · San José', 'Ivo Villalobos · San José', 'EL BOTECITO DELUXE,', 'San José, Costa Rica']);
@@ -12,15 +15,15 @@ describe('rommuser.com', () => {
   const built = buildFromDisk();
 
   it.each(built.map((b) => [b.page.en, b]))('%s está al día con su página en español e i18n/en.json (npm run site)', (path, { html }) => {
-    expect(read(path)).toBe(html);
+    expect(raw(path)).toBe(html);
   });
 
   it('es/index.html está al día con index.html (npm run site)', () => {
-    expect(read('es/index.html')).toBe(spanishHome());
+    expect(raw('es/index.html')).toBe(spanishHome());
   });
 
   it('build/ está al día con site/css y site/js (npm run site)', async () => {
-    for (const { to, text } of await buildBundles()) expect(read(to), to).toBe(text);
+    for (const { to, text } of await buildBundles()) expect(raw(to), to).toBe(text);
   });
 
   it.each(built.map((b) => [b.page.es, b]))('todo texto en español visible de %s tiene traducción', (_, { missing }) => {
