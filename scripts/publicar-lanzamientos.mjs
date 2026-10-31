@@ -4,17 +4,16 @@
 // Runs every day from .github/workflows/lanzamientos.yml; by hand: npm run lanzamientos
 // (FECHA=2026-10-30 npm run lanzamientos simulates a day).
 import { readFileSync, writeFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PLATFORMS } from '../site/js/lib/platforms.js';
+import { writePages } from './build-site-en.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const page = join(root, 'site', 'index.html');
 const releases = JSON.parse(readFileSync(join(root, 'scripts', 'lanzamientos.json'), 'utf8'));
 const today = process.env.FECHA || new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Costa_Rica' }).format(new Date());
 
-// Same platforms as the listening dialog in site/app.js.
-const PLATFORMS = ['amazon', 'apple', 'bandcamp', 'beatport', 'deezer', 'soundcloud', 'spotify', 'youtube'];
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
 let html = readFileSync(page, 'utf8');
@@ -48,6 +47,6 @@ for (const release of releases.filter((r) => r.fecha <= today).sort((a, b) => a.
 
 if (revealed.length) {
   writeFileSync(page, html);
-  execFileSync('node', [join(root, 'scripts', 'build-site-en.mjs')], { stdio: 'inherit' });
+  writePages();
 }
 console.log(revealed.length ? `Publicados: ${revealed.join(', ')}` : `Nada que publicar hoy (${today}).`);

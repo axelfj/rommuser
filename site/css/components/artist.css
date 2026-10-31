@@ -1,0 +1,114 @@
+/* El artista: bio and the labels list with flags (also used by FIRMADO EN in the hero). */
+
+/* Artist section: poem, then credentials and labels as their own quiet band */
+.label-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.label-list li {
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.artist-home .label-list {
+  margin-bottom: 0;
+}
+
+.label-flag {
+  display: block;
+  flex: none;
+  border-radius: 1px;
+}
+
+.label-list small {
+  font-size: 10px;
+  letter-spacing: .06em;
+}
+
+/* Release archive follows the same year hierarchy as the show archive. */
+.artist-home .artist-bio {
+  flex: 1 0 100%;
+  font-size: 16px;
+  line-height: 1.8;
+  margin: 0;
+  display: grid;
+  gap: 16px;
+  max-width: 640px;
+}
+
+/* Labels ordered by weight in three tiers, spread across the full row. */
+.artist-home .music-labels .label-list {
+  align-items: center;
+}
+
+.artist-home .music-labels .label-list li {
+  white-space: nowrap;
+}
+
+/* Artist: the bio, at reading width. */
+.artist-home .artist {
+  padding-bottom: var(--section-space);
+}
+
+.artist-home .artist-bio p {
+  font-size: clamp(17px,1.4vw,20px);
+  line-height: 1.6;
+}
+
+/* Artist: the bio beside "el sistema", the originals orbiting the RR (system.js). */
+.artist-home #artista {
+  position: relative;
+  overflow: hidden;
+}
+
+.artist-home .artist-layout {
+  display: grid;
+  gap: clamp(8px,2vw,24px);
+}
+
+.artist-home .hero .music-labels .label-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px 22px;
+  margin-top: 12px;
+}
+
+.artist-home .hero .music-labels .label-list li {
+  font: 700 13px/1.2 var(--font-body);
+  letter-spacing: .06em;
+  opacity: 1;
+}
+
+.artist-home .hero .music-labels .label-list .label-flag {
+  width: 18px;
+  height: 12px;
+}
+
+@media (max-width: 1100px) {
+  .artist-home .music-labels .label-list {
+    grid-template-columns: repeat(3,auto);
+  }
+}
+
+@media (max-width: 620px) {
+  /* On a phone the labels sit in two aligned columns, the second flush to the right edge, instead of wrapping
+     ragged. */
+  .artist-home .hero .music-labels .label-list {
+    display: grid;
+    grid-template-columns: repeat(2,max-content);
+    justify-content: space-between;
+    gap: 12px 16px;
+  }
+}
+
+@media (min-width: 901px) {
+  /* Eight labels: two even rows of four on desktop instead of seven plus one orphan. */
+  .artist-home .music-labels .label-list {
+    grid-template-columns: repeat(4,max-content);
+  }
+}

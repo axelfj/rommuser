@@ -1,0 +1,67 @@
+/* The red band under the hero with the next releases and shows. js/dates-band.js fills it from the MÚSICA rows and
+   the next-show card. */
+
+/* Date band: real dates in the one red block of the page, like a flyer strip. */
+.artist-home .dates-band {
+  background: var(--red);
+  color: var(--bone);
+  overflow: hidden;
+  padding-block: 14px;
+}
+
+.artist-home .dates-track {
+  display: flex;
+  width: max-content;
+  animation: dates-scroll 48s linear infinite;
+}
+
+.artist-home .dates-band:has(.dates-item:focus-visible) .dates-track {
+  animation-play-state: paused;
+}
+
+.artist-home .dates-group {
+  display: flex;
+  flex: none;
+}
+
+.artist-home .dates-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-right: 56px;
+  font: 700 clamp(15px,1.6vw,20px)/1.2 var(--font-display);
+  letter-spacing: .04em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+.artist-home .dates-item time {
+  font: 600 12px/1 var(--font-body);
+  letter-spacing: .12em;
+  font-variant-numeric: tabular-nums;
+}
+
+.artist-home .dates-item small {
+  font: 600 11px/1 var(--font-body);
+  letter-spacing: .12em;
+}
+
+.artist-home .dates-item:focus-visible {
+  outline: 2px solid var(--bone);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The band always moves, on every device (Axel's call). When the device asks for less motion it runs at half speed
+     instead of standing still. */
+  .artist-home .dates-track {
+    animation-duration: 96s;
+  }
+}
+
+@keyframes dates-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}

@@ -1,8 +1,11 @@
-import { readFileSync } from 'node:fs';
-import { runInNewContext } from 'node:vm';
-import { expect, it } from 'vitest';
-const app = readFileSync(new URL('../site/app.js', import.meta.url), 'utf8');
-const source = app.slice(app.indexOf('// Release-day'), app.indexOf('const tabs='));
+import { beforeAll, expect, it, vi } from 'vitest';
+
+let revealReleasedTracks;
+beforeAll(async () => {
+  vi.stubGlobal('document', { documentElement: { lang: 'es' } });
+  ({ revealReleasedTracks } = await import('../site/js/release-day.js'));
+});
+
 function release(day, href = 'https://link.tracks.id/dItL', soundcloud) {
   const classes = new Set(['upcoming', 'presave']);
   const label = { textContent: 'PRE-SAVE' };
@@ -10,8 +13,7 @@ function release(day, href = 'https://link.tracks.id/dItL', soundcloud) {
     classList: { remove: value => classes.delete(value), contains: value => classes.has(value) },
     hasAttribute: name => name === 'href' && !!href,
     querySelector: selector => selector === '.track-type' ? label : { textContent: 'PIECES' } };
-  runInNewContext(source, { document: { querySelectorAll: () => [track] },
-    Intl: { DateTimeFormat: class { format() { return day; } } }, Date, tr: s => s });
+  revealReleasedTracks([track], day);
   return { track, classes, label };
 }
 it('keeps a future pre-save label and verified destination before release', () => {

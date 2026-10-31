@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { buildTokensCss } from '../scripts/build-tokens.mjs';
 
@@ -31,21 +31,25 @@ describe('tokens de marca', () => {
 
   const SITE_PAGES = ['index.html', 'es/index.html', 'en/index.html', 'estudio/index.html', 'en/studio/index.html', 'tienda/index.html', 'en/store/index.html', '404.html'];
 
-  it.each(SITE_PAGES)('rommuser.com/%s carga tokens.css antes que style.css', (path) => {
+  it.each(SITE_PAGES)('rommuser.com/%s carga una sola hoja con los tokens primero (build/site.css)', (path) => {
     const html = read('site/' + path);
-    const tokens = html.search(/<link rel="stylesheet" href="\/?tokens\.css">/);
-    const style = html.search(/<link rel="stylesheet" href="\/?style\.css">/);
-    expect(tokens).toBeGreaterThan(-1);
-    expect(tokens).toBeLessThan(style);
+    expect(html).toMatch(/<link rel="stylesheet" href="\/?build\/site\.css">/);
+    expect(html).not.toMatch(/href="\/?(tokens|style)\.css"/);
+  });
+
+  it('site/css/site.css importa tokens.css antes que cualquier otro archivo', () => {
+    const imports = [...read('site/css/site.css').matchAll(/@import "([^"]+)";/g)].map((m) => m[1]);
+    expect(imports[0]).toBe('../tokens.css');
   });
 
   it('el CSS del sitio no vuelve a definir los colores ni las fuentes de la marca', () => {
-    for (const path of ['site/style.css', 'site/studio.css']) {
-      const css = read(path);
-      expect(css).not.toMatch(/--(night|bone|red|line|line-strong|gutter|ease):/);
-      expect(css).not.toContain("'League Spartan',Arial");
-      expect(css).not.toContain('Poppins,Arial');
-      expect(css).not.toMatch(/#12130f|#eae6e5|rgba\(18,19,15/i);
+    const dir = new URL('../site/css/', import.meta.url);
+    for (const file of readdirSync(dir, { recursive: true }).filter((f) => f.endsWith('.css'))) {
+      const css = read('site/css/' + file);
+      expect(css, file).not.toMatch(/--(night|bone|red|line|line-strong|gutter|ease):/);
+      expect(css, file).not.toContain("'League Spartan',Arial");
+      expect(css, file).not.toContain('Poppins,Arial');
+      expect(css, file).not.toMatch(/#12130f|#eae6e5|rgba\(18,19,15/i);
     }
   });
 });

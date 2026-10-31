@@ -1,7 +1,7 @@
-// Builds site/en/index.html from site/index.html (the Spanish source) and the dictionary in site/i18n.js,
-// so English visitors and search engines get a real English page at /en/.
-// Run after changing the site's copy: npm run site:en
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+// English pages: builds site/en/... from each Spanish page (the source) and the dictionary in site/i18n/en.json,
+// so English visitors and search engines get a real English page at /en/. Also writes site/es/index.html, the
+// Spanish home served at /es/. scripts/build-site.mjs runs it: npm run site
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -36,11 +36,7 @@ export const PAGES = [
   },
 ];
 
-export function readDictionary(i18nSource) {
-  const match = i18nSource.match(/const english=(\{.*?\});\n/s);
-  if (!match) throw new Error('No se encontró el diccionario english en i18n.js');
-  return JSON.parse(match[1]);
-}
+export const readDictionary = () => JSON.parse(readFileSync(join(siteDir, 'i18n', 'en.json'), 'utf8'));
 
 const decode = (s) => s.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 const encodeText = (s) => s.replace(/&/g, '&amp;').replace(/ /g, '&nbsp;').replace(/</g, '&lt;');
@@ -113,27 +109,30 @@ export function buildEnglishPage(html, dictionary, page = PAGES[0]) {
     return en ? tag.replace(/ href="[^"]*"/, ` href="${en[1]}"`) : tag;
   });
 
-  out = out.replace('<!DOCTYPE html>', `<!DOCTYPE html>\n<!-- Generado desde site/${page.es} por scripts/build-site-en.mjs. No editar a mano: npm run site:en -->`);
+  out = out.replace('<!DOCTYPE html>', `<!DOCTYPE html>\n<!-- Generado desde site/${page.es} por scripts/build-site-en.mjs. No editar a mano: npm run site -->`);
   return [out, [...missing]];
 }
 
 // Returns [{ page, html, missing }] for every page.
 export function buildFromDisk() {
-  const dictionary = readDictionary(readFileSync(join(siteDir, 'i18n.js'), 'utf8'));
+  const dictionary = readDictionary();
   return PAGES.map((page) => {
     const [html, missing] = buildEnglishPage(readFileSync(join(siteDir, page.es), 'utf8'), dictionary, page);
     return { page, html, missing };
   });
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const spanishHome = readFileSync(join(siteDir, 'index.html'), 'utf8').replace(/ (src|href)="(?![a-z]+:|#|\/)([^"]+)"/g, ' $1="/$2"');
-  mkdirSync(join(siteDir, 'es'), { recursive: true });
-  writeFileSync(join(siteDir, 'es/index.html'), spanishHome);
+// /es/ serves the Spanish home from one folder down, so its local files load from the site root.
+export const spanishHome = () => readFileSync(join(siteDir, 'index.html'), 'utf8').replace(/ (src|href)="(?![a-z]+:|#|\/)([^"]+)"/g, ' $1="/$2"');
+
+// Writes site/es/index.html and every English page; returns what it wrote, with the text left untranslated.
+export function writePages() {
+  const written = [{ path: 'es/index.html', missing: [] }];
+  writeFileSync(join(siteDir, 'es/index.html'), spanishHome());
   for (const { page, html, missing } of buildFromDisk()) {
     mkdirSync(dirname(join(siteDir, page.en)), { recursive: true });
     writeFileSync(join(siteDir, page.en), html);
-    console.log(`site/${page.en} listo.`);
-    if (missing.length) console.log('Sin traducción (se quedan igual):\n- ' + missing.join('\n- '));
+    written.push({ path: page.en, missing });
   }
+  return written;
 }

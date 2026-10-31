@@ -1,0 +1,177 @@
+/* Footer: RR, socials and platform icons, and the year (js/footer-year.js). */
+
+footer {
+  padding: 35px 4.5%;
+  font-size: 12px;
+}
+
+@media (min-width: 1500px) {
+  header,
+  .hero,
+  .section,
+  footer {
+    padding-left: max(4.5%,calc((100vw - 1400px)/2));
+    padding-right: max(4.5%,calc((100vw - 1400px)/2));
+  }
+}
+
+.all-links {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.all-links img {
+  display: block;
+}
+
+/* Narrow orbital window and compact footer */
+footer.universe-footer.compact-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.compact-footer>.brand {
+  font-size: 25px;
+  line-height: 1;
+}
+
+.compact-footer #footer-year {
+  width: auto;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.compact-footer .footer-icons {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.compact-footer .footer-icon-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.compact-footer .footer-icon-group+.footer-icon-group {
+  padding-left: 10px;
+  border-left: 1px solid var(--line);
+}
+
+.compact-footer .platform-logo,
+.compact-footer .all-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.compact-footer .platform-logo img {
+  width: 21px;
+  height: 21px;
+}
+
+.compact-footer .all-links {
+  border-left: 1px solid var(--line);
+  padding-left: 10px;
+  width: 54px;
+}
+
+.compact-footer .all-links img {
+  width: 21px;
+  height: 21px;
+}
+
+.compact-footer a:hover {
+  opacity: .7;
+  text-decoration: none;
+}
+
+@media (max-width: 1100px) {
+  .compact-footer .footer-icons {
+    flex-wrap: wrap;
+  }
+
+  .compact-footer #footer-year {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 1000px) {
+  .compact-footer .footer-icons {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  footer div {
+    font-size: 11px;
+  }
+
+  .compact-footer>.brand {
+    font-size: 22px;
+    margin: auto;
+  }
+
+  .compact-footer .footer-icons {
+    width: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 4px;
+  }
+
+  .compact-footer .footer-icon-group {
+    gap: 0;
+  }
+
+  .compact-footer .all-links {
+    width: 44px;
+    border: 0;
+    padding: 0;
+  }
+
+  .compact-footer #footer-year {
+    font-size: 10px;
+    white-space: normal;
+  }
+
+  footer.universe-footer.compact-footer {
+    gap: 12px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .compact-footer .footer-icon-group+.footer-icon-group {
+    border: 0;
+    padding-left: 0;
+  }
+
+  .compact-footer .platform-logo {
+    flex-shrink: 0;
+  }
+
+  .artist-home .compact-footer {
+    text-align: center;
+  }
+}

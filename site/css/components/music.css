@@ -1,0 +1,465 @@
+/* MÚSICA: the three tabs and the wall of covers. Every card (original, remix or mixtape) is the same markup:
+   cover, title, label, date and action (PRE-SAVE / ESCUCHAR). */
+
+.music-layout {
+  grid-template-columns: .85fr 1.15fr;
+}
+
+.track-n {
+  min-width: 22px;
+}
+
+.track h3 {
+  font-size: 34px;
+  line-height: 1.1;
+  margin-bottom: 7px;
+}
+
+.track div>span {
+  font-size: 12px;
+}
+
+.music-tabs {
+  margin: 0 0 30px;
+  align-items: stretch;
+}
+
+.music-choice.track {
+  width: 100%;
+  text-align: left;
+  color: inherit;
+}
+
+.track-info {
+  flex-direction: column;
+  min-width: 0;
+}
+
+.track-info strong {
+  font: 700 34px/1.1 var(--font-display);
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.release-date {
+  font: 700 12px Poppins;
+  white-space: nowrap;
+  display: block;
+  margin: 0;
+}
+
+.track-type {
+  margin-left: 0;
+  white-space: nowrap;
+}
+
+.platform-logo img {
+  display: block;
+  object-fit: contain;
+}
+
+.track.upcoming:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.artist-home .music-layout {
+  gap: 5%;
+}
+
+/* Matched-height artwork and releases, followed by labels and artist profiles. */
+/* Releases run full width now that the side panel is gone. */
+.artist-home #originales.music-layout {
+  align-items: stretch;
+  display: block;
+}
+
+.artist-home .tracks .track {
+  transition: background-color .2s,border-color .2s;
+}
+
+.artist-home .tracks .track-n,
+.artist-home .tracks .release-date {
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+
+.artist-home .tracks .track:not(:disabled) .track-type {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color .2s,background-color .2s,box-shadow .2s;
+}
+
+.artist-home .tracks .track:not(:disabled):not(.presave):not(.track-link) .track-type::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4px 0 4px 6px;
+  border-color: transparent transparent transparent currentColor;
+}
+
+/* MÚSICA is a wall of covers. All three tabs (Originales, Remixes / Edits, Mixtapes) use the same card, laid over
+   the same row markup, so player.js, system.js and the platform list read it as before. A release whose artwork
+   isn't in yet shows the RR on Noche. The id keeps these rules above the older row rules without !important. */
+.artist-home #musica .tracks {
+  display: grid;
+  grid-template-columns: repeat(5,minmax(0,1fr));
+  gap: 44px 24px;
+}
+
+.artist-home #musica .tracks .music-choice.track {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  align-items: center;
+  gap: 0 10px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.artist-home #musica .track-cover {
+  grid-area: cover;
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #0b0b0b;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.artist-home #musica .track-cover:empty::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/assets/rr-light.svg") center/30% no-repeat;
+  opacity: .2;
+}
+
+.artist-home #musica .track-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+  transition: transform .5s ease,filter .4s ease;
+}
+
+/* The wall rests in black and white, like the rest of the page; a cover takes its colour back under the pointer
+   and while it plays. */
+.artist-home #musica .tracks .track.is-current .track-cover img {
+  filter: none;
+}
+
+/* A mixtape without its own artwork gets a cover in the style of the catalog covers: its name and ROMMUSER over
+   the Mixtapes ink. */
+.artist-home #musica .track-cover[data-cover] {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 12%;
+  text-align: center;
+  color: #fff;
+  background: #000;
+}
+
+.artist-home #musica .track-cover[data-cover] b {
+  font: 700 18px/1 var(--font-display);
+  font-size: clamp(14px,10cqi,30px);
+  letter-spacing: -.01em;
+}
+
+.artist-home #musica .track-cover[data-cover] i {
+  font: 600 8px/1 var(--font-body);
+  font-size: max(8px,3.6cqi);
+  font-style: normal;
+  letter-spacing: .12em;
+}
+
+.artist-home #musica .tracks .track-n {
+  display: none;
+}
+
+.artist-home #musica .tracks .track-info {
+  grid-area: info;
+  gap: 4px;
+  margin-top: 14px;
+}
+
+.artist-home #musica .tracks .track-info strong {
+  font-size: clamp(15px,1.35vw,19px);
+  line-height: 1.15;
+}
+
+.artist-home #musica .tracks .track-info small {
+  line-height: 1.4;
+  letter-spacing: .08em;
+  color: rgba(235,232,226,.72);
+}
+
+.artist-home #musica .tracks .release-date {
+  grid-area: date;
+  align-self: center;
+  margin-top: 10px;
+  font-size: 11px !important;
+}
+
+.artist-home #musica .tracks .track .track-type {
+  grid-area: action;
+  justify-self: end;
+  align-self: center;
+  height: auto;
+  min-height: 0;
+  min-width: 0;
+  margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  font-size: 10px !important;
+  letter-spacing: .1em;
+  gap: 6px;
+}
+
+.artist-home #musica .tracks .track:focus-visible {
+  outline: 2px solid var(--bone);
+  outline-offset: 6px;
+}
+
+.artist-home #musica .tracks .track.is-current .track-cover {
+  box-shadow: inset 0 0 0 2px var(--red);
+}
+
+.artist-home #musica .tracks .track.is-playing .track-cover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--red);
+}
+
+/* Connected category tabs with a shared baseline and selected underline. */
+.artist-home .music-tabs {
+  display: flex;
+  gap: 0;
+  flex-wrap: nowrap;
+  border-bottom: 1px solid var(--line);
+}
+
+.artist-home .music-tabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin: 0 0 -1px;
+  padding: 0 22px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(235,232,226,.6);
+  font: 500 11px/1.4 var(--control-font);
+  text-align: center;
+  transition: border-color .2s,background-color .2s,box-shadow .2s;
+}
+
+.artist-home .music-tabs button[aria-selected="true"] {
+  border-bottom-color: var(--red);
+  background: transparent;
+  color: var(--bone);
+  box-shadow: none;
+}
+
+/* An ID has nothing to play yet: same row format, no play mark. */
+.artist-home .tracks .track.upcoming:not(.presave) .track-type::before {
+  display: none;
+}
+
+.artist-home .tracks .track.is-current .track-type {
+  color: var(--red);
+}
+
+.artist-home .tracks .track.is-playing:not(.presave) .track-type::before {
+  width: 6px;
+  height: 8px;
+  border-width: 0 2px;
+  border-color: currentColor;
+  border-style: solid;
+}
+
+@media (hover: hover) {
+  .artist-home #musica .tracks .track:hover .track-cover img,
+  .artist-home #musica .tracks .track:focus-visible .track-cover img {
+    filter: none;
+  }
+
+  .artist-home #musica .tracks .track:not(:disabled):hover {
+    background: none;
+  }
+
+  .artist-home #musica .tracks .track:not(:disabled):hover .track-cover img {
+    transform: scale(1.04);
+  }
+
+  .artist-home #musica .tracks .track:not(:disabled):hover .track-type {
+    background: none;
+    box-shadow: none;
+    color: var(--bone);
+    text-decoration: underline;
+    text-decoration-color: var(--red);
+    text-underline-offset: 5px;
+  }
+
+  .artist-home .music-tabs button:hover {
+    color: var(--bone);
+    background-color: rgba(235,232,226,.035);
+  }
+}
+
+@media (max-width: 1100px) {
+  .music-layout {
+    grid-template-columns: minmax(0,1fr);
+  }
+
+  /* Stacked releases need a fixed row gap so they stay inside the music section. */
+  .artist-home .music-layout {
+    row-gap: 28px;
+    column-gap: 0;
+  }
+}
+
+@media (max-width: 1099px) {
+  .artist-home #musica .tracks {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .music-tabs button:last-child {
+    grid-column: auto;
+  }
+
+  .artist-home .music-tabs {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+}
+
+@media (max-width: 719px) {
+  .artist-home #musica .tracks {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 32px 16px;
+  }
+
+  .artist-home #musica .tracks .release-date {
+    margin-top: 8px;
+  }
+
+  .artist-home #musica .tracks .track .track-type {
+    justify-self: start;
+    margin-top: 6px;
+  }
+}
+
+@media (max-width: 620px) {
+  .track h3 {
+    font-size: 30px;
+  }
+
+  .music-choice .track-n {
+    grid-area: number;
+  }
+
+  .music-choice .track-type {
+    margin: 0;
+  }
+
+  .artist-home .tracks .track:disabled .track-type {
+    font-size: 10px !important;
+    letter-spacing: 0;
+    white-space: normal;
+    max-width: 82px;
+    min-width: 0;
+    text-align: right;
+  }
+
+  .artist-home .tracks .music-choice.track {
+    padding-block: 12px;
+  }
+
+  .artist-home .tracks .track-n {
+    align-self: start;
+    padding-top: 2px;
+  }
+
+  .artist-home .tracks .track-info {
+    align-self: end;
+  }
+
+  .artist-home .music-tabs {
+    gap: 0;
+  }
+
+  .artist-home .music-tabs button {
+    padding: 0 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .platform-logo {
+    transition: none;
+  }
+}
+
+@supports (grid-template-rows: subgrid) {
+  /* Every card in a row shares the same tracks (subgrid): covers, titles, labels and dates line up across the row
+     even when a title or a label takes two lines. */
+  .artist-home #musica .tracks {
+    row-gap: 0;
+  }
+
+  .artist-home #musica .tracks .music-choice.track {
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    grid-template-areas: 'cover cover' 'title title' 'label label' 'date action';
+    align-content: normal;
+    padding-bottom: 44px;
+  }
+
+  .artist-home #musica .tracks .track-info {
+    display: contents;
+  }
+
+  .artist-home #musica .tracks .track-info strong {
+    grid-area: title;
+    align-self: start;
+    margin-top: 14px;
+  }
+
+  .artist-home #musica .tracks .track-info small {
+    grid-area: label;
+    align-self: start;
+    margin-top: 4px;
+  }
+}
+
+@supports (grid-template-rows: subgrid) {
+  @media (max-width: 719px) {
+    .artist-home #musica .tracks .music-choice.track {
+      grid-row: span 5;
+      grid-template-areas: 'cover cover' 'title title' 'label label' 'date date' 'action action';
+      padding-bottom: 32px;
+    }
+  }
+}

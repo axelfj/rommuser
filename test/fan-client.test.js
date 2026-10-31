@@ -1,6 +1,9 @@
-import { readFileSync } from 'node:fs';
-import { runInNewContext } from 'node:vm';
-import { it, expect, vi } from 'vitest';
+import { beforeAll, it, expect, vi } from 'vitest';
+
+let initFanForm;
+beforeAll(async () => {
+  ({ initFanForm } = await import('../site/js/fan-form.js'));
+});
 
 function client() {
   const listeners = {};
@@ -13,13 +16,13 @@ function client() {
   let callbacks;
   const turnstile = { render: vi.fn((_, options) => { callbacks = options; return 'widget-1'; }), reset: vi.fn() };
   const fetch = vi.fn(async () => ({ type: 'opaque' }));
-  const ctx = { window: { turnstile }, document: { querySelector: () => form, documentElement: { lang: 'es' }, referrer: '', addEventListener: vi.fn() },
-    location: { search: '' }, localStorage: { getItem: () => null }, URLSearchParams, URL,
-    FormData: class { *[Symbol.iterator]() { yield ['email', email.value]; } },
-    AbortSignal, fetch, tr: s => s };
-  const src = readFileSync(new URL('../site/app.js', import.meta.url), 'utf8');
-  runInNewContext(src.slice(src.indexOf('// Keep the existing Apps Script')), ctx);
-  ctx.window.initFanChallenge();
+  vi.stubGlobal('window', { turnstile });
+  vi.stubGlobal('document', { documentElement: { lang: 'es' }, referrer: '' });
+  vi.stubGlobal('location', { search: '' });
+  vi.stubGlobal('localStorage', { getItem: () => null, setItem: () => {} });
+  vi.stubGlobal('FormData', class { *[Symbol.iterator]() { yield ['email', email.value]; } });
+  vi.stubGlobal('fetch', fetch);
+  initFanForm(form);
   return { callbacks, turnstile, fetch, status, button, submit: () => listeners.submit({ preventDefault() {} }) };
 }
 
