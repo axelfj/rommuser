@@ -38,16 +38,15 @@ document.querySelectorAll('.music-choice:not(.presave):not(.track-link)').forEac
   });
   document.getElementById('listen-title').dataset.original=b.dataset.track;
   document.getElementById('listen-title').textContent=tr(b.dataset.track);
-  // Read top to bottom like a pre-save page: the cover, the title, who it is with, then one line of logos.
-  // The cover is the row's own artwork. A mixtape without one gets a plain black band with the RR mark, since its
-  // name is already the title right below.
-  const cover=b.querySelector('.track-cover'),art=listenDialog.querySelector('.listen-art'),credit=listenDialog.querySelector('.listen-credit');
+  // Read top to bottom like a pre-save page: the cover, then one line of logos. The title stays for screen readers only:
+  // most covers already carry the name and the label, and the card the fan tapped shows them too.
+  // The cover is the row's own artwork. A mixtape without one gets a plain black band with the RR mark: its name is
+  // on the card the fan just tapped.
+  const cover=b.querySelector('.track-cover'),art=listenDialog.querySelector('.listen-art');
   const typeset=!!cover?.hasAttribute('data-cover');
   art.hidden=!cover;art.toggleAttribute('data-cover',typeset);
   art.replaceChildren(...(cover&&!typeset?cover.cloneNode(true).childNodes:[]));
   const artImg=cover?.querySelector('img');listenDialog.style.setProperty('--listen-art',artImg?`url("${artImg.currentSrc||artImg.src}")`:'none');
-  const label=isTrack?b.querySelector('.track-info small')?.textContent||'':'';
-  credit.hidden=!label;credit.textContent=tr(label);
   listenDialog.showModal();
 }));document.querySelector('.dialog-close')?.addEventListener('click',()=>listenDialog.close());listenDialog?.addEventListener('click',e=>{if(e.target===listenDialog){const r=listenDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)listenDialog.close()}});
 // A completed date remains in the artist's show history, never as an upcoming show. It keeps its place and type and lands in date order.

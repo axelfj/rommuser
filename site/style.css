@@ -240,11 +240,10 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
  .artist-home .tracks .track-info strong{font-size:21px}
  .artist-home .tracks .track:disabled .track-type{font-size:10px!important;letter-spacing:0;white-space:normal;max-width:82px;min-width:0;text-align:right}
 }
-/* Platforms are a grid of tiles, logo over name; the whole tile is the link. */
-/* The listen dialog reads top to bottom like a pre-save page: cover, title, credit, then the platforms as one line of logos. */
+/* The listen dialog reads top to bottom like a pre-save page: the cover, then the platforms as one line of logos. */
 .artist-home #listen-dialog{max-width:420px;padding:0;text-align:center;isolation:isolate}
 /* The cover is planted in the dialog: it fills the whole top edge to edge, fades into Noche, and its own colours tint the
-   panel behind the text, so the page seems to open inside itself. */
+   panel below it, so the page seems to open inside itself. No title or credit: the cover already carries them. */
 .artist-home #listen-dialog::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--listen-art,none) center/cover no-repeat;filter:blur(48px) saturate(1.2) brightness(.32);opacity:.9;pointer-events:none}
 .artist-home #listen-dialog .dialog-close{position:absolute;top:8px;right:8px;z-index:2;width:44px;height:44px;min-height:44px;margin:0;border:0;background:none;color:#fff;font-size:30px;text-shadow:0 1px 10px rgba(0,0,0,.75)}
 @media(hover:hover){.artist-home #listen-dialog .dialog-close:hover{background:none;opacity:.7}}
@@ -253,10 +252,8 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
 .artist-home .listen-art img{display:block;width:100%;height:100%;object-fit:cover}
 .artist-home .listen-art[data-cover]{aspect-ratio:16/10;background:#000 url("assets/rr-light.svg") center 42%/72px no-repeat}
 .artist-home .listen-art[data-cover]::before{content:"";position:absolute;inset:0;background:#000;opacity:.8}
-.artist-home #listen-dialog h2{position:relative;margin:-30px 24px 0;font-size:clamp(26px,7.5vw,34px)}
-.artist-home .listen-art[hidden]+h2{margin-top:64px!important}
-.artist-home .listen-credit{margin:8px 24px 0;font-size:11px;line-height:1.4;letter-spacing:.08em;color:rgba(235,232,226,.72)}
-.artist-home .listen-hint{margin:26px 24px 12px}
+.artist-home .listen-art[hidden]~.listen-hint{margin-top:72px}
+.artist-home .listen-hint{position:relative;margin:-14px 24px 12px}
 .artist-home #listen-dialog .listen-links{margin:0 16px 28px}
 .artist-home .listen-links{display:flex;flex-wrap:nowrap;justify-content:center;gap:4px;border:0}
 .artist-home .listen-links a{display:flex;flex:0 1 44px;align-items:center;justify-content:center;min-width:0;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;opacity:.72;transition:opacity .2s,transform .2s}
