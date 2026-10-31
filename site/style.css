@@ -241,11 +241,28 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
  .artist-home .tracks .track:disabled .track-type{font-size:10px!important;letter-spacing:0;white-space:normal;max-width:82px;min-width:0;text-align:right}
 }
 /* Platforms are a grid of tiles, logo over name; the whole tile is the link. */
-.artist-home .listen-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;border:0}
-.artist-home .listen-links a{display:flex;flex-direction:column;justify-content:center;gap:10px;min-height:96px;padding:14px 6px;border:1px solid var(--line);border-radius:var(--control-radius);text-align:center;font:500 12px/1.2 var(--font-body);letter-spacing:.04em}
-.artist-home .listen-links a img{width:32px;height:32px;display:block}
-.artist-home .listen-links a>span{font:inherit;letter-spacing:inherit}
-@media(max-width:620px){.artist-home .listen-links{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* The listen dialog reads top to bottom like a pre-save page: cover, title, credit, then the platforms as one line of logos. */
+.artist-home #listen-dialog{max-width:420px;padding:0;text-align:center;isolation:isolate}
+/* The cover is planted in the dialog: it fills the whole top edge to edge, fades into Noche, and its own colours tint the
+   panel behind the text, so the page seems to open inside itself. */
+.artist-home #listen-dialog::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--listen-art,none) center/cover no-repeat;filter:blur(48px) saturate(1.2) brightness(.32);opacity:.9;pointer-events:none}
+.artist-home #listen-dialog .dialog-close{position:absolute;top:8px;right:8px;z-index:2;width:44px;height:44px;min-height:44px;margin:0;border:0;background:none;color:#fff;font-size:30px;text-shadow:0 1px 10px rgba(0,0,0,.75)}
+@media(hover:hover){.artist-home #listen-dialog .dialog-close:hover{background:none;opacity:.7}}
+.artist-home .listen-art{position:relative;width:100%;aspect-ratio:1;margin:0;overflow:hidden;background:#0b0b0b}
+.artist-home .listen-art::after{content:"";position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(to bottom,transparent,var(--night));pointer-events:none}
+.artist-home .listen-art img{display:block;width:100%;height:100%;object-fit:cover}
+.artist-home .listen-art[data-cover]{aspect-ratio:16/10;background:#000 url("assets/rr-light.svg") center 42%/72px no-repeat}
+.artist-home .listen-art[data-cover]::before{content:"";position:absolute;inset:0;background:#000;opacity:.8}
+.artist-home #listen-dialog h2{position:relative;margin:-30px 24px 0;font-size:clamp(26px,7.5vw,34px)}
+.artist-home .listen-art[hidden]+h2{margin-top:64px!important}
+.artist-home .listen-credit{margin:8px 24px 0;font-size:11px;line-height:1.4;letter-spacing:.08em;color:rgba(235,232,226,.72)}
+.artist-home .listen-hint{margin:26px 24px 12px}
+.artist-home #listen-dialog .listen-links{margin:0 16px 28px}
+.artist-home .listen-links{display:flex;flex-wrap:nowrap;justify-content:center;gap:4px;border:0}
+.artist-home .listen-links a{display:flex;flex:0 1 44px;align-items:center;justify-content:center;min-width:0;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;opacity:.72;transition:opacity .2s,transform .2s}
+.artist-home .listen-links a img{display:block;width:100%;max-width:28px;height:auto}
+@media(hover:hover){.artist-home .listen-links a:hover{opacity:1;transform:translateY(-2px);background:none}}
+.artist-home .listen-links a:focus-visible{opacity:1}
 @media(prefers-reduced-motion:reduce){.artist-home .listen-links a{transition:none}}/* One alignment contract for all row actions, regardless of title wrapping. */
 
 
@@ -285,6 +302,15 @@ nav .nav-soon{font-family:var(--font-body);font-size:14px;font-weight:700;letter
   .artist-home #musica .tracks .music-choice.track{grid-template-areas:'cover cover' 'info info' 'date date' 'action action'}
   .artist-home #musica .tracks .release-date{margin-top:8px}
   .artist-home #musica .tracks .track .track-type{justify-self:start;margin-top:6px}}
+/* Every card in a row shares the same tracks (subgrid): covers, titles, labels and dates line up across the row
+   even when a title or a label takes two lines. */
+@supports (grid-template-rows:subgrid){
+.artist-home #musica .tracks{row-gap:0}
+.artist-home #musica .tracks .music-choice.track{grid-row:span 4;grid-template-rows:subgrid;grid-template-areas:'cover cover' 'title title' 'label label' 'date action';align-content:normal;padding-bottom:44px}
+.artist-home #musica .tracks .track-info{display:contents}
+.artist-home #musica .tracks .track-info strong{grid-area:title;align-self:start;margin-top:14px}
+.artist-home #musica .tracks .track-info small{grid-area:label;align-self:start;margin-top:4px}
+@media(max-width:719px){.artist-home #musica .tracks .music-choice.track{grid-row:span 5;grid-template-areas:'cover cover' 'title title' 'label label' 'date date' 'action action';padding-bottom:32px}}}
 .artist-home :is(.button,.menu-toggle,.dialog-close){min-height:var(--control-height)}
 .artist-home :is(.menu-toggle,.dialog-close){border:1px solid var(--control-border);border-radius:var(--control-radius)}
 .artist-home .music-tabs button{font-family:var(--control-font);font-weight:500}
