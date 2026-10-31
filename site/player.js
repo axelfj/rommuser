@@ -1,7 +1,8 @@
-// One player for the whole page. The hero's ESCUCHAR, the MÚSICA rows (originals and remixes) and the planets in El artista all play
+// One player for the whole page. The hero's ESCUCHAR and the planets in El artista play
 // through the same SoundCloud widget, loaded only on the first tap, and a thin bar at the bottom of the screen
-// says what is sounding. The platform list stays one tap away (PLATAFORMAS). If SoundCloud can't load,
-// tapping a row opens that platform list as before. The same happens when a browser won't let the hidden widget
+// says what is sounding. A cover in MÚSICA never starts playback: it opens the platform list so the fan chooses
+// where to listen (Axel, 31.10). The list stays one tap away from the bar too (PLATAFORMAS). If SoundCloud can't load,
+// the hero and the planets open that platform list instead. The same happens when a browser won't let the hidden widget
 // start (iPhone Safari blocks it): after a few seconds without sound the page stops trying and uses the platform list.
 (()=>{
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Costa_Rica'}).format(new Date());
@@ -15,7 +16,7 @@ const tracks=[...document.querySelectorAll(ROWS)].map(row=>({
 })).filter(t=>!t.iso||t.iso<today).sort((a,b)=>b.iso.localeCompare(a.iso));
 if(!tracks.length)return;
 const listeners=new Set();
-let widget=null,current=null,playing=false,loading=false,failed=false,bypass=false,watchdog=0;
+let widget=null,current=null,playing=false,loading=false,failed=false,watchdog=0;
 const bar=document.createElement('div');bar.className='now-bar';bar.hidden=true;bar.setAttribute('role','region');bar.setAttribute('aria-label',tr('Reproductor'));
 bar.innerHTML='<span class="now-progress" aria-hidden="true"><span></span></span><button class="now-toggle" type="button"></button><p class="now-text" aria-live="polite"></p><button class="now-next" type="button"></button><button class="now-platforms" type="button"></button><button class="now-close" type="button"><span aria-hidden="true">×</span></button>';
 const $=s=>bar.querySelector(s),fill=$('.now-progress span');
@@ -31,7 +32,7 @@ function emit(){
   }
   listeners.forEach(fn=>fn(api));
 }
-function platforms(t){bypass=true;t.row.click();bypass=false}
+function platforms(t){t.row.click()}
 function fallback(t){clearTimeout(watchdog);widget?.pause();failed=true;current=null;loading=false;playing=false;bar.hidden=true;document.body.classList.remove('has-now-bar');emit();platforms(t)}
 function connect(frameEl){
   widget=SC.Widget(frameEl);const E=SC.Widget.Events;
@@ -61,11 +62,6 @@ $('.now-toggle').addEventListener('click',()=>widget?.toggle());
 $('.now-next').addEventListener('click',next);
 $('.now-platforms').addEventListener('click',()=>current&&platforms(current));
 $('.now-close').addEventListener('click',close);
-// Rows play here; capture runs before the row's own platform-list handler in app.js.
-document.addEventListener('click',e=>{
-  if(bypass)return;const row=e.target.closest?.(ROWS);const t=row&&tracks.find(t=>t.row===row);
-  if(!t||failed)return;e.preventDefault();e.stopPropagation();play(t);
-},true);
 // The hero's ESCUCHAR plays the newest release; without this script it still scrolls to MÚSICA.
 document.querySelector('.hero .actions a.button[href="#musica"]')?.addEventListener('click',e=>{e.preventDefault();play(current||tracks[0])});
 const api={tracks,play,next,close,on:fn=>{listeners.add(fn);fn(api)},get current(){return current},get playing(){return playing}};
