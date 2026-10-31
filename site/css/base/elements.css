@@ -1,0 +1,91 @@
+/* Plain HTML elements, before any class: box sizing, page colours, links, buttons, headings and focus rings. */
+
+/* Colores, letra y gutter vienen de /tokens.css (tokens/rommuser.tokens.json), que cada página carga antes que
+   este archivo. */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--bone);
+  font: 400 16px/1.65 var(--font-body);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+p,
+figure {
+  margin: 0;
+}
+
+h2 {
+  font-size: clamp(48px,6.4vw,94px);
+  line-height: .96;
+  letter-spacing: -.035em;
+}
+
+a,
+button {
+  touch-action: manipulation;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--bone);
+  outline-offset: 5px;
+}
+
+/* Music categories and listening destinations */
+[hidden] {
+  display: none !important;
+}
+
+/* Responsive layout across phone, tablet and desktop */
+img {
+  max-width: 100%;
+}
+
+.artist-home :is(a,button,summary):focus-visible {
+  outline: 2px solid var(--bone);
+  outline-offset: 4px;
+}
+
+@media (max-width: 620px) {
+  html {
+    scroll-padding-top: 90px;
+  }
+
+  h2 {
+    font-size: clamp(40px,12vw,68px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .artist-home * {
+    scroll-behavior: auto;
+    transition: none !important;
+  }
+}

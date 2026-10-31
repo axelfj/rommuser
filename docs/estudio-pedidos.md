@@ -11,7 +11,7 @@ El formulario PEDIR COTIZACIÓN de rommuser.com/estudio manda el pedido directo 
    Turnstile del Golden Circle. Opcional: `SHEET_ID` = ID de una hoja para guardar cada pedido (pestaña "Pedidos web").
 3. Elige `testPedido` y dale **Ejecutar**: acepta los permisos y revisa que llegue "Cotización · PRUEBA" a contact@.
 4. **Implementar > Nueva implementación > App web**: Ejecutar como *yo*, Acceso *cualquier usuario*. Copia la URL `/exec`.
-5. Pega la URL en `data-endpoint` de `.studio-form` en `site/estudio/index.html` y corre `npm run site:en`.
+5. Pega la URL en `data-endpoint` de `.studio-form` en `site/estudio/index.html` y corre `npm run site`.
 6. En Cloudflare Turnstile, el widget ya cubre `rommuser.com` y `www.rommuser.com`. Si studio.rommuser.com va a
    usar el mismo endpoint, agrega ese dominio al widget.
 7. Para studio.rommuser.com: en Cloudflare Pages > rommuser-studio > Settings > Environment variables, pon

@@ -1,0 +1,305 @@
+/* Inicio: photo, the line next to it, ESCUCHAR / BOOKINGS and the FIRMADO EN labels. */
+
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hero h1 {
+  font-size: clamp(66px,16.6vw,255px);
+  line-height: .95;
+  letter-spacing: -.055em;
+  margin: 27px 0 16px;
+  white-space: nowrap;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4.5%;
+}
+
+.hero-copy {
+  padding: 26px 0 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero h2 {
+  margin: 25px 0 24px;
+}
+
+.hero h2 span {
+  color: var(--bone);
+  display: inline-block;
+  border-bottom: 10px solid var(--red);
+}
+
+.hero-copy>p:not(.eyebrow) {
+  max-width: 340px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.portrait {
+  position: relative;
+  overflow: hidden;
+}
+
+.portrait img {
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Static surface texture: isolated from text, forms and navigation. */
+.artist-home .hero {
+  position: relative;
+  isolation: isolate;
+  padding-top: 32px;
+  padding-bottom: var(--section-space);
+}
+
+/* One grain over the whole page, the same treatment as the photos. */
+.artist-home .hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cfilter%20id%3D%22grain%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.88%22%20numOctaves%3D%223%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20opacity%3D%22.7%22%20filter%3D%22url%28%23grain%29%22%2F%3E%3C%2Fsvg%3E");
+  background-size: 160px 160px;
+  opacity: .09;
+  mask-image: linear-gradient(to bottom,transparent,#000 18%,#000 75%,transparent);
+  display: none;
+}
+
+.artist-home .hero>* {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-place {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-flag {
+  flex: none;
+  display: block;
+}
+
+/* The portrait keeps its own 4:5 frame, never cropped by the height of the text beside it. */
+.artist-home .portrait {
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 4/5;
+  align-self: start;
+  justify-self: end;
+  width: 100%;
+  max-width: 480px;
+}
+
+.artist-home .portrait img {
+  position: static;
+  height: 100%;
+  object-position: center top;
+}
+
+/* Hero: the one sentence of the bio that belongs up front. */
+.artist-home .hero-line {
+  margin: 24px 0 0;
+  font-size: clamp(16px,1.3vw,19px);
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.artist-home .hero-copy .actions {
+  margin-top: 32px;
+}
+
+/* FIRMADO EN moved into the hero: one quiet line of labels under the actions, so a promoter sees them first. */
+.artist-home .hero .music-labels {
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  max-width: 720px;
+}
+
+.artist-home .hero .music-labels>.eyebrow {
+  opacity: 1;
+}
+
+@media (max-width: 900px) {
+  .hero-copy .actions {
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .hero h2 {
+    font-size: clamp(48px,8vw,70px);
+  }
+}
+
+@media (max-width: 620px) {
+  .hero h1 {
+    font-size: 16.4vw;
+    margin-top: 28px;
+    margin-bottom: 24px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .hero-copy {
+    padding-top: 0;
+    padding-bottom: 30px;
+  }
+
+  .hero h2 {
+    margin: 20px 0;
+    font-size: clamp(52px,14vw,84px);
+  }
+
+  .hero-copy>p:not(.eyebrow) {
+    max-width: 100%;
+  }
+
+  .actions {
+    gap: 14px;
+  }
+
+  .actions .button {
+    padding: 14px 18px;
+    font-size: 12px;
+  }
+
+  .artist-home .hero::before {
+    opacity: .07;
+  }
+}
+
+@media (min-width: 901px) {
+  /* Desktop hero: the portrait takes the height of the copy beside it, so neither column leaves empty space. */
+  .hero-grid {
+    grid-template-columns: 1.1fr .9fr;
+    align-items: stretch;
+  }
+
+  .hero-copy {
+    justify-content: flex-start;
+    padding: 0;
+  }
+
+  .hero-copy>p:not(.eyebrow) {
+    max-width: 500px;
+    font-size: clamp(17px,1.25vw,20px);
+  }
+
+  /* Hero as one poster on desktop: the portrait bleeds off the right edge at full hero height, fades into Noche
+     under the text and carries the same grain as the photos, so wide screens get the photo instead of an empty gap.
+     Real photo only, toned down so the grey backdrop sits in the dark; nothing generated. */
+  .artist-home .hero {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 40%;
+    grid-template-areas: "top top" "name ." "copy .";
+    align-items: start;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: min(860px,calc(100vh - 94px - 52px));
+    padding-bottom: 40px;
+  }
+
+  .artist-home .hero-top {
+    grid-area: top;
+    position: relative;
+    z-index: 2;
+  }
+
+  .artist-home .hero-grid {
+    display: contents;
+  }
+
+  .artist-home .hero h1 {
+    grid-area: name;
+    font-size: clamp(80px,10.5vw,270px);
+    line-height: .9;
+    margin: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .artist-home .hero-copy {
+    grid-area: copy;
+    max-width: none;
+    position: relative;
+    z-index: 2;
+  }
+
+  .artist-home .hero .portrait {
+    position: absolute;
+    align-self: stretch;
+    justify-self: stretch;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(58%,1180px);
+    max-width: none;
+    height: auto;
+    aspect-ratio: auto;
+    margin: 0;
+    z-index: 0;
+    mask-image: linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 22%,#000 55%),linear-gradient(0deg,transparent 0,#000 42%),linear-gradient(180deg,rgba(0,0,0,.3) 0,#000 24%);
+    mask-composite: intersect;
+  }
+
+  .artist-home .hero .portrait img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 24%;
+    filter: grayscale(1) brightness(.72) contrast(1.18);
+  }
+
+  .artist-home .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: .1;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+
+  .artist-home .hero h2 {
+    font-size: clamp(52px,5.6vw,96px);
+    margin: 18px 0 16px;
+  }
+
+  .artist-home .hero .hero-copy {
+    padding-top: 24px;
+  }
+
+  .artist-home .hero .actions {
+    margin-top: 24px;
+  }
+
+  .artist-home .hero .music-labels {
+    margin-top: 28px;
+    padding-top: 16px;
+    max-width: 800px;
+  }
+}

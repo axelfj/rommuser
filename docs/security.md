@@ -5,7 +5,7 @@
 PR de preparación. **No fusionar hasta completar la configuración de Turnstile.**
 La clave pública de Turnstile ya está incorporada en `site/index.html` y su versión en inglés.
 Falta confirmar el secreto en Apps Script, publicar el backend y validar un registro real. No se usan claves de prueba en producción ni se aceptan tokens
-sin validarlos. `site/en/index.html` se genera con `npm run site:en`.
+sin validarlos. `site/en/index.html` se genera con `npm run site`.
 
 El sitio se publica automáticamente al fusionar en `main`. Apps Script se publica por separado.
 Los cambios de código no activan por sí solos DNSSEC, 2FA, Bot Fight Mode ni reglas de Cloudflare.
@@ -54,7 +54,7 @@ La URL pública de Apps Script aún puede recibir tráfico y consumir cuota ante
 
 ## Verificación y rollback
 
-- `npm test`, `npm run build`, `npm run site:en`, `git diff --check`.
+- `npm test`, `npm run build`, `npm run site`, `git diff --check`.
 - Pruebas unitarias cubren rechazo de tokens inválidos, replay reportado por Siteverify,
   hostname/acción incorrectos, errores de red/JSON, cuerpo excesivo y límite diario.
   No sustituyen la validación real con el secreto del backend.

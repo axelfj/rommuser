@@ -1,0 +1,136 @@
+/* The page frame: section padding and gutters, section labels ("01 / MÚSICA") and section headings. */
+
+.section {
+  padding: 88px 4.5%;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (max-width: 620px) {
+  .hero,
+  .section {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
+
+.section-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 52px;
+  font-size: 12px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.section-heading>p {
+  max-width: 380px;
+}
+
+.section-label>span {
+  overflow-wrap: anywhere;
+}
+
+.artist-home .section-label {
+  margin-bottom: 28px;
+}
+
+.artist-home .section-heading {
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0 0 var(--heading-space);
+}
+
+.artist-home .section-heading h2 {
+  flex: 1 1 460px;
+  font-size: clamp(40px,5vw,72px);
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+
+.artist-home .section-heading>p {
+  flex: 1 1 280px;
+}
+
+/* Shared interaction rhythm across navigation, cards, forms and dialogs. */
+/* Home system (2026-10-29): one gutter, one section rhythm, one hairline, one label style, two typefaces. Spacing
+   steps: 8 / 16 / 24 / 32 / 48 / 64 / 96. Everything above this block that disagrees loses here. */
+.artist-home {
+  --control-radius: 2px;
+  --control-border: var(--line-strong);
+  --control-hover: rgba(235,232,226,.08);
+  --control-height: 44px;
+  --control-font: var(--font-body);
+  --section-space: 96px;
+  --heading-space: 48px;
+}
+
+.artist-home .section-label>span {
+  max-width: none;
+  text-align: left;
+}
+
+.artist-home .section {
+  padding-top: var(--section-space);
+  padding-bottom: var(--section-space);
+  border-bottom: 0;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .section-label {
+    gap: 18px;
+  }
+
+  .section-label span:last-child {
+    text-align: right;
+  }
+}
+
+@media (max-width: 620px) {
+  .section-label {
+    font-size: 11px;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .section-heading {
+    display: block;
+  }
+
+  .section-heading>p {
+    margin-top: 25px;
+  }
+
+  .section {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .section-label span:last-child {
+    max-width: 52%;
+  }
+
+  .artist-home .section-label {
+    margin-bottom: 22px;
+  }
+
+  .artist-home {
+    --section-space: 64px;
+    --heading-space: 32px;
+  }
+}
+
+@media (min-width: 901px) {
+  .artist-home {
+    padding-top: 94px;
+  }
+}

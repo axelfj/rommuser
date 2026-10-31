@@ -1,0 +1,209 @@
+/* The "where to listen" dialog a cover opens: the cover planted on top, its blurred colours behind the panel, and
+   one line of platform logos. */
+
+dialog {
+  width: calc(100% - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  background: var(--night);
+  color: var(--bone);
+  border: 1px solid var(--bone);
+}
+
+dialog::backdrop {
+  background: color-mix(in srgb,var(--night) 85%,transparent);
+}
+
+dialog h2 {
+  font-size: 38px;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.listen-links a {
+  gap: 16px;
+}
+
+.listen-links a:hover {
+  text-decoration: underline;
+}
+
+.listen-links span {
+  font-size: 11px;
+  font-weight: 700;
+  align-self: center;
+}
+
+.artist-home .listen-links a:focus-visible {
+  outline: 2px solid var(--bone);
+  outline-offset: 4px;
+  opacity: 1;
+}
+
+.artist-home .dialog-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font: 400 28px/1 Arial,sans-serif;
+  letter-spacing: 0;
+}
+
+.artist-home .dialog-close span {
+  line-height: 1;
+}
+
+/* The listen dialog reads top to bottom like a pre-save page: the cover, then the platforms as one line of logos. */
+.artist-home #listen-dialog {
+  max-width: 420px;
+  padding: 0;
+  text-align: center;
+  isolation: isolate;
+}
+
+/* The cover is planted in the dialog: it fills the whole top edge to edge and runs into the band of logos, painted
+   with the colour of the cover's own bottom edge (--listen-tone, from js/lib/cover-tone.js; Noche without a cover).
+   No title or credit: the cover already carries them. */
+.artist-home #listen-dialog {
+  background: var(--listen-tone,var(--night));
+}
+
+.artist-home #listen-dialog .dialog-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 30px;
+  text-shadow: 0 1px 10px rgba(0,0,0,.75);
+}
+
+.artist-home .listen-art {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 0;
+  overflow: hidden;
+  background: #0b0b0b;
+}
+
+.artist-home .listen-art::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 38%;
+  background: linear-gradient(to bottom,transparent,var(--listen-tone,var(--night)));
+  pointer-events: none;
+}
+
+.artist-home .listen-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artist-home .listen-art[data-cover] {
+  aspect-ratio: 16/10;
+  background: #000 url("/assets/rr-light.svg") center 42%/72px no-repeat;
+}
+
+.artist-home .listen-art[data-cover]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: .8;
+}
+
+.artist-home #listen-dialog .listen-links {
+  margin: 0 16px 28px;
+}
+
+/* Without a cover (the hero's ESCUCHAR), the logos clear the close button. */
+.artist-home #listen-dialog .listen-art[hidden]~.listen-links {
+  margin-top: 72px;
+}
+
+.artist-home .listen-links {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 4px;
+  border: 0;
+}
+
+.artist-home .listen-links a {
+  display: flex;
+  flex: 0 1 44px;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  opacity: .72;
+  transition: opacity .2s,transform .2s;
+}
+
+.artist-home .listen-links a img {
+  display: block;
+  width: 100%;
+  max-width: 28px;
+  height: auto;
+}
+
+/* Keep each platform visible while its exact song URL is being verified. */
+.artist-home .listen-links a[aria-disabled="true"] {
+  color: var(--muted);
+  cursor: default;
+  background: transparent;
+  pointer-events: none;
+}
+
+.artist-home .listen-links a[aria-disabled="true"]>span {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .04em;
+}
+
+@media (hover: hover) {
+  .artist-home .listen-links a:hover,
+  .artist-home .dialog-close:hover {
+    border-color: var(--bone);
+  }
+
+  .artist-home #listen-dialog .dialog-close:hover {
+    background: none;
+    opacity: .7;
+  }
+
+  .artist-home .listen-links a:hover {
+    transform: translateY(-2px);
+    background: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .listen-links a {
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+
+  .listen-links span {
+    font-size: 11px;
+    overflow-wrap: anywhere;
+  }
+
+  dialog h2 {
+    font-size: 30px;
+  }
+}

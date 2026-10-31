@@ -1,7 +1,7 @@
-// Builds site/en/index.html from site/index.html (the Spanish source) and the dictionary in site/i18n.js,
-// so English visitors and search engines get a real English page at /en/.
-// Run after changing the site's copy: npm run site:en
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+// English pages: builds site/en/... from each Spanish page (the source) and the dictionary in site/i18n/en.json,
+// so English visitors and search engines get a real English page at /en/. Also writes site/es/index.html, the
+// Spanish home served at /es/. scripts/build-site.mjs runs it: npm run site
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -20,11 +20,11 @@ export const PAGES = [
   },
   {
     es: 'estudio/index.html', en: 'en/studio/index.html', esPath: '/estudio/', enPath: '/en/studio/',
-    description: 'House and techno mixing and mastering by ROMMUSER, a Costa Rican DJ and producer signed to Decypher, DENAR RCRDS and Electric Eden. Mixing from USD 250, mastering USD 50 and ghost production on request.',
+    description: 'House and techno mixing and mastering by ROMMUSER, a Costa Rican DJ and producer signed to Decypher, DENAR RCRDS and Electric Eden. Mixing USD 250, mixing and mastering USD 300, mastering USD 70 and ghost production on request.',
     ogTitle: 'ROMMUSER Studio | Mixing, mastering and ghost production',
-    ogDescription: 'Mixing from USD 250, mastering USD 50 and ghost production for house and techno.',
+    ogDescription: 'Mixing USD 250, mixing and mastering USD 300, mastering USD 70 and ghost production for house and techno.',
     ogImageAlt: 'ROMMUSER, DJ and producer from Costa Rica',
-    ld: [['Mezcla, mastering y ghost production de house y techno.', 'House and techno mixing, mastering and ghost production.'], ['Desde USD 250. 6 a 8 multipistas, 2 revisiones.', 'From USD 250. 6 to 8 multitracks, 2 revisions.'], ['Por track, 2 revisiones.', 'Per track, 2 revisions.']],
+    ld: [['Mezcla, mastering y ghost production de house y techno.', 'House and techno mixing, mastering and ghost production.'], ['"name":"Mixdown","price":"250","priceCurrency":"USD","description":"Hasta 20 stems agrupados, 2 revisiones."', '"name":"Mixing","price":"250","priceCurrency":"USD","description":"Up to 20 grouped stems, 2 revisions."'], ['"name":"Mixdown y mastering","price":"300","priceCurrency":"USD","description":"Hasta 20 stems agrupados, 2 revisiones."', '"name":"Mixing and mastering","price":"300","priceCurrency":"USD","description":"Up to 20 grouped stems, 2 revisions."'], ['Por track, 2 revisiones.', 'Per track, 2 revisions.'], ['"name":"Mixdown extendido","price":"350","priceCurrency":"USD","description":"De 21 a 40 stems agrupados o 3 revisiones."', '"name":"Extended mixing","price":"350","priceCurrency":"USD","description":"21 to 40 grouped stems or 3 revisions."']],
   },
   {
     es: 'tienda/index.html', en: 'en/store/index.html', esPath: '/tienda/', enPath: '/en/store/',
@@ -36,11 +36,7 @@ export const PAGES = [
   },
 ];
 
-export function readDictionary(i18nSource) {
-  const match = i18nSource.match(/const english=(\{.*?\});\n/s);
-  if (!match) throw new Error('No se encontró el diccionario english en i18n.js');
-  return JSON.parse(match[1]);
-}
+export const readDictionary = () => JSON.parse(readFileSync(join(siteDir, 'i18n', 'en.json'), 'utf8'));
 
 const decode = (s) => s.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 const encodeText = (s) => s.replace(/&/g, '&amp;').replace(/ /g, '&nbsp;').replace(/</g, '&lt;');
@@ -90,7 +86,8 @@ export function buildEnglishPage(html, dictionary, page = PAGES[0]) {
   out = out.replace(/<meta property="og:description" content="[^"]*">/, `<meta property="og:description" content="${encodeAttr(page.ogDescription)}">`);
   out = replaceOnce(out, `<meta property="og:url" content="${ORIGIN}${page.esPath}">`, `<meta property="og:url" content="${ORIGIN}${page.enPath}">`);
   out = out.replace(/<meta property="og:image:alt" content="[^"]*">/, `<meta property="og:image:alt" content="${encodeAttr(page.ogImageAlt)}">`);
-  out = replaceOnce(out, '<meta property="og:locale" content="es_CR"><meta property="og:locale:alternate" content="en_US">', '<meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="es_CR">');
+  out = replaceOnce(out, '<meta property="og:locale" content="es_CR">', '<meta property="og:locale" content="en_US">');
+  out = replaceOnce(out, '<meta property="og:locale:alternate" content="en_US">', '<meta property="og:locale:alternate" content="es_CR">');
   for (const [from, to] of page.ld) out = replaceOnce(out, from, to);
 
   // The page lives one folder down: local files load from the site root.
@@ -103,37 +100,40 @@ export function buildEnglishPage(html, dictionary, page = PAGES[0]) {
   });
 
   // Language link points back to the Spanish page.
-  const toggle = /<a class="language-toggle" id="site-language" href="[^"]*" hreflang="en"([^>]*)>ES<\/a>/;
+  const toggle = /<a\s+class="language-toggle"\s+id="site-language"\s+href="[^"]*"\s+hreflang="en"([^>]*)>ES<\/a>/;
   if (!toggle.test(out)) throw new Error('No se encontró el enlace de idioma');
   out = out.replace(toggle, `<a class="language-toggle" id="site-language" href="${page.esPath}" hreflang="es"$1>EN</a>`);
 
   // Press documents in English.
-  out = out.replace(/<a [^>]*data-en="[^"]+"[^>]*>/g, (tag) => {
+  out = out.replace(/<a\s[^>]*data-en="[^"]+"[^>]*>/g, (tag) => {
     const en = tag.match(/data-en="([^"]+)"/);
     return en ? tag.replace(/ href="[^"]*"/, ` href="${en[1]}"`) : tag;
   });
 
-  out = out.replace('<!DOCTYPE html>', `<!DOCTYPE html>\n<!-- Generado desde site/${page.es} por scripts/build-site-en.mjs. No editar a mano: npm run site:en -->`);
+  out = out.replace('<!DOCTYPE html>', `<!DOCTYPE html>\n<!-- Generado desde site/${page.es} por scripts/build-site-en.mjs. No editar a mano: npm run site -->`);
   return [out, [...missing]];
 }
 
 // Returns [{ page, html, missing }] for every page.
 export function buildFromDisk() {
-  const dictionary = readDictionary(readFileSync(join(siteDir, 'i18n.js'), 'utf8'));
+  const dictionary = readDictionary();
   return PAGES.map((page) => {
     const [html, missing] = buildEnglishPage(readFileSync(join(siteDir, page.es), 'utf8'), dictionary, page);
     return { page, html, missing };
   });
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const spanishHome = readFileSync(join(siteDir, 'index.html'), 'utf8').replace(/ (src|href)="(?![a-z]+:|#|\/)([^"]+)"/g, ' $1="/$2"');
-  mkdirSync(join(siteDir, 'es'), { recursive: true });
-  writeFileSync(join(siteDir, 'es/index.html'), spanishHome);
+// /es/ serves the Spanish home from one folder down, so its local files load from the site root.
+export const spanishHome = () => readFileSync(join(siteDir, 'index.html'), 'utf8').replace(/ (src|href)="(?![a-z]+:|#|\/)([^"]+)"/g, ' $1="/$2"');
+
+// Writes site/es/index.html and every English page; returns what it wrote, with the text left untranslated.
+export function writePages() {
+  const written = [{ path: 'es/index.html', missing: [] }];
+  writeFileSync(join(siteDir, 'es/index.html'), spanishHome());
   for (const { page, html, missing } of buildFromDisk()) {
     mkdirSync(dirname(join(siteDir, page.en)), { recursive: true });
     writeFileSync(join(siteDir, page.en), html);
-    console.log(`site/${page.en} listo.`);
-    if (missing.length) console.log('Sin traducción (se quedan igual):\n- ' + missing.join('\n- '));
+    written.push({ path: page.en, missing });
   }
+  return written;
 }

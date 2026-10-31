@@ -1,0 +1,4 @@
+/* Extra stylesheet for /estudio and /en/studio/, loaded after build/site.css. npm run site bundles it into
+   site/build/studio.css. */
+
+@import "pages/studio.css";

@@ -1,0 +1,59 @@
+/* Buttons (.button, .button.light) and text links (.text-link). */
+
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 52px;
+  padding: 15px 25px;
+  background: var(--red);
+  color: var(--bone);
+  border: 1px solid var(--red);
+  letter-spacing: .05em;
+  font-size: 14px;
+}
+
+.button:hover {
+  background: var(--bone);
+  color: var(--night);
+  border-color: var(--bone);
+}
+
+.button.light {
+  background: var(--bone);
+  color: var(--night);
+  border-color: var(--bone);
+}
+
+.button.light:hover {
+  background: var(--night);
+  color: var(--bone);
+  border-color: var(--bone);
+}
+
+.text-link {
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+button.text-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+}
+
+@media (max-width: 620px) {
+  .section-heading>.text-link {
+    display: inline-block;
+    margin-top: 24px;
+  }
+
+  .button {
+    padding: 15px 20px;
+  }
+}

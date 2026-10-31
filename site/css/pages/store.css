@@ -1,0 +1,19 @@
+/* /tienda: the "under construction" page. */
+
+.soon {
+  min-height: calc(100vh - 94px - 120px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+}
+
+.soon h1 {
+  font-size: clamp(38px,11vw,150px);
+  line-height: .95;
+  overflow-wrap: anywhere;
+}
+
+.soon .button {
+  align-self: flex-start;
+}

@@ -1,16 +1,29 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { PAGES, buildFromDisk } from '../scripts/build-site-en.mjs';
+import { PAGES, buildFromDisk, spanishHome } from '../scripts/build-site-en.mjs';
+import { buildBundles } from '../scripts/build-site.mjs';
 
-const read = (path) => readFileSync(new URL('../site/' + path, import.meta.url), 'utf8');
+const raw = (path) => readFileSync(new URL('../site/' + path, import.meta.url), 'utf8');
+// The pages are written one element per line; the checks below read them with the whitespace between tags removed.
+const flat = (html) => html.replace(/<[^>]+>/g, (tag) => tag.replace(/\s+/g, ' ').replace(/ (\/?>)$/, '$1')).replace(/>\s+</g, '><');
+const read = (path) => (path.endsWith('.html') ? flat(raw(path)) : raw(path));
+const scripts = () => readdirSync(new URL('../site/js', import.meta.url), { recursive: true }).filter((f) => f.endsWith('.js')).map((f) => read('js/' + f)).join('\n');
 const SPANISH = /\b(el|la|los|las|de|del|y|tu|tus|para|con|que|una?|más|sin|por)\b|[ñ¿¡]/i;
 const PLACES = new Set(['EL BOILER', 'Amón Solar, El Sótano · San José', 'Ivo Villalobos · San José', 'EL BOTECITO DELUXE,', 'San José, Costa Rica']);
 
 describe('rommuser.com', () => {
   const built = buildFromDisk();
 
-  it.each(built.map((b) => [b.page.en, b]))('%s está al día con su página en español e i18n.js (npm run site:en)', (path, { html }) => {
-    expect(read(path)).toBe(html);
+  it.each(built.map((b) => [b.page.en, b]))('%s está al día con su página en español e i18n/en.json (npm run site)', (path, { html }) => {
+    expect(raw(path)).toBe(html);
+  });
+
+  it('es/index.html está al día con index.html (npm run site)', () => {
+    expect(raw('es/index.html')).toBe(spanishHome());
+  });
+
+  it('build/ está al día con site/css y site/js (npm run site)', async () => {
+    for (const { to, text } of await buildBundles()) expect(raw(to), to).toBe(text);
   });
 
   it.each(built.map((b) => [b.page.es, b]))('todo texto en español visible de %s tiene traducción', (_, { missing }) => {
@@ -31,20 +44,20 @@ describe('rommuser.com', () => {
   it('English is the default entry and Spanish remains explicitly accessible', () => {
     expect(read('_redirects')).toMatch(/^\/ \/en\/ 302/m);
     expect(read('es/index.html')).toContain('<html lang="es">');
-    expect(read('es/index.html')).toContain('href="/style.css"');
+    expect(read('es/index.html')).toContain('href="/build/site.css"');
     expect(read('en/index.html')).toContain('href="/es/" hreflang="es"');
-    expect(read('i18n.js')).not.toContain('navigator.languages');
+    expect(scripts()).not.toContain('navigator.languages');
   });
 
   it('un solo reproductor: el hero, las filas de MÚSICA y el sistema suenan con SoundCloud, leyendo las filas de la lista', () => {
-    const system = read('system.js');
-    const player = read('player.js');
-    expect(system).toContain("#originales .track[data-track]");
-    expect(player).toContain("#musica .tracks .track[data-soundcloud]:not(.presave)");
-    expect(system).toContain('window.rommuserPlayer');
+    const system = read('js/artist-system.js');
+    const player = read('js/player.js');
+    expect(system).toContain("'#originales .track[data-track]'");
+    expect(player).toContain("'#musica .tracks .track[data-soundcloud]:not(.presave)'");
+    // The planets get the page's one player, created first.
+    expect(read('js/pages/home.js')).toContain('initArtistSystem(initPlayer());');
     for (const file of [system, player]) for (const name of ['HOLY', 'PIECES', 'JUST GROOVE', 'TIKIKAI']) expect(file).not.toContain(name);
-    // player.js has to load before system.js, which reads it.
-    expect(read('index.html')).toContain('<script src="player.js"></script><script src="system.js"></script>');
+    expect(read('index.html')).toContain('<script src="build/home.js"></script>');
     const headers = read('_headers');
     expect(headers.match(/script-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
     expect(headers.match(/frame-src ([^;]+);/)[1].split(' ')).toContain('https://w.soundcloud.com');
@@ -66,7 +79,7 @@ describe('rommuser.com', () => {
       for (const [, file] of html.matchAll(/src="\/?(assets\/covers\/[^"]+)"/g)) expect(existsSync(new URL(`../site/${file}`, import.meta.url))).toBe(true);
     }
     // A collection is a plain link out; it must not open the platform list meant for a single track.
-    expect(read('app.js')).toContain(".music-choice:not(.presave):not(.track-link)");
+    expect(read('js/listen-dialog.js')).toContain(".music-choice:not(.presave)");
   });
 
   it('cada sesión de Mixtapes tiene su tarjeta y suena en el reproductor', () => {
@@ -111,9 +124,9 @@ describe('rommuser.com', () => {
   it('la ventana de escuchar pone Spotify primero y no muestra plataformas sin enlace', () => {
     const ids = [...read('index.html').matchAll(/id="listen-([a-z]+)"/g)].map((m) => m[1]).filter((id) => !['dialog', 'title'].includes(id));
     expect(ids.slice(0, 3)).toEqual(['spotify', 'apple', 'soundcloud']);
-    const app = read('app.js');
+    const app = read('js/listen-dialog.js');
     expect(app).not.toContain('ENLACE PENDIENTE');
-    expect(app).toContain("element.hidden=isTrack&&!href");
+    expect(app).toContain("element.hidden = isTrack && !href;");
   });
 
   it('BOOKINGS, sin credenciales escritas, Golden Circle después de la música, sin repetir enlaces en la página', () => {
@@ -166,7 +179,7 @@ describe('rommuser.com', () => {
       expect(band).not.toBeNull();
       expect(band[0]).not.toMatch(/\d{2}\.\d{2}/);
     }
-    const script = read('dates.js');
+    const script = read('js/dates-band.js');
     expect(script).toContain("'.tracks .track[data-release]'");
     expect(script).toContain("'.next-show[data-show-date]'");
   });

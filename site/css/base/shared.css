@@ -1,0 +1,148 @@
+/* Rules that style several components at once: the shared label type (eyebrows, section labels, buttons), hover
+   underlines, control sizes and the 12px minimum. Change one here and it changes everywhere. */
+
+h1,
+h2,
+h3,
+.brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+nav a,
+.eyebrow,
+.section-label,
+.text-link,
+.button,
+.copy,
+footer,
+.track span,
+.show-row>span {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .09em;
+}
+
+.eyebrow {
+  font-size: 14px;
+}
+
+nav a:hover,
+.text-link:hover,
+footer a:hover {
+  color: var(--bone);
+  text-decoration: underline;
+  text-decoration-color: var(--red);
+  text-underline-offset: 8px;
+}
+
+.hero-grid>*,
+.music-layout>*,
+.show-row>* {
+  min-width: 0;
+}
+
+.music-tabs button,
+.menu-toggle,
+.copy,
+.show-video {
+  min-height: 44px;
+}
+
+.studio-contact a,
+footer>.brand {
+  display: inline-block;
+  padding: 12px 0;
+  margin: -12px 0;
+}
+
+.artist-home .button,
+.artist-home .music-tabs button,
+.artist-home .copy,
+.artist-home .dialog-close {
+  border-radius: var(--control-radius);
+}
+
+/* One alignment contract for all row actions, regardless of title wrapping. */
+.artist-home .tracks .track-type,
+#vivo .show-video {
+  align-self: center;
+  margin-block: 0;
+  box-sizing: border-box;
+}
+
+.artist-home :is(.button,.menu-toggle,.dialog-close) {
+  min-height: var(--control-height);
+}
+
+.artist-home :is(.menu-toggle,.dialog-close) {
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+}
+
+/* Vector arrows keep identical geometry across Windows and macOS font stacks. */
+#vivo .show-video::after,
+.artist-home .tracks .track.presave .track-type::after,
+.artist-home .tracks .track.track-link .track-type::after,
+.artist-home #contacto .contact-direct-links a::after {
+  content: "";
+  display: block;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 17 17 7M7 7h10v10' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* Nothing on the page reads smaller than 12px. */
+html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs button,.show-count,.tracks .track-n,.tracks .track-info small,.tracks .release-date,.tracks .track .track-type,.music-labels .eyebrow,.fan-strip h2,.fan-strip .fan-form .button,.show-row time,.show-row p,.show-row>span,.show-video,.contact-entry h3,.universe-footer>span) {
+  font-size: 12px !important;
+}
+
+.artist-home>header,
+.artist-home .hero,
+.artist-home .section,
+.artist-home .fan-strip,
+.artist-home>footer {
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* Labels: one size, one weight, one tracking. */
+.artist-home :is(.eyebrow,.show-history-label,.music-labels .eyebrow,.contact-entry h3,.fan-strip h2,.show-count,.show-year summary span) {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  line-height: 1.4;
+}
+
+.artist-home :is(.show-history-label,.music-labels .eyebrow,.contact-entry h3,.show-count) {
+  color: var(--muted);
+}
+
+/* Numbers line up without a monospace face. */
+.artist-home :is(time,.release-date,.track-n,.show-row time) {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .02em;
+}
+
+.artist-home :is(.tracks .track-type,.show-video,.music-tabs button) {
+  font-family: var(--font-body);
+  letter-spacing: .08em;
+}
+
+.artist-home #vivo .show-year>summary,
+.artist-home .tracks details>summary {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Honor the operating-system preference across every decorative animation. */
+  .artist-home .music-tabs button::after,
+  .artist-home #vivo .next-label::after {
+    animation: none !important;
+  }
+}

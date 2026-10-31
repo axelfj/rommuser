@@ -1,0 +1,159 @@
+/* Golden Circle: the sign-up strip and its form. */
+
+.fan-form-row {
+  display: flex;
+  border: 1px solid var(--bone);
+}
+
+.fan-form input[type=email] {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  color: var(--bone);
+  font: 400 16px var(--font-body);
+  border-radius: 0;
+}
+
+.fan-form input[type=email]::placeholder {
+  color: var(--bone);
+  opacity: .45;
+}
+
+.fan-form input[type=email]:focus-visible {
+  outline: 3px solid var(--bone);
+  outline-offset: -3px;
+}
+
+.fan-form .button {
+  border: 0;
+  flex-shrink: 0;
+}
+
+.fan-form .button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.fan-trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.fan-strip {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.fan-strip h2 {
+  flex-shrink: 0;
+  font: 600 12px/1.5 var(--font-body);
+}
+
+.fan-strip-copy {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--bone);
+}
+
+.fan-strip .fan-form {
+  margin-left: auto;
+  width: 360px;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+
+.fan-strip .fan-form-row {
+  flex-direction: row;
+  border-color: var(--line);
+}
+
+.fan-strip .fan-form input[type=email] {
+  padding: 10px 12px;
+}
+
+.fan-strip .fan-form .button {
+  width: auto;
+  padding: 10px 18px;
+}
+
+.fan-strip .fan-status:empty {
+  display: none;
+}
+
+.fan-strip .fan-status {
+  min-height: 0;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.artist-home .fan-form-row:focus-within {
+  border-color: var(--bone);
+}
+
+.artist-home .fan-strip-copy {
+  max-width: 480px;
+  opacity: .85;
+}
+
+.artist-home .fan-strip .fan-form input[type=email],
+.artist-home .fan-strip .fan-form .button {
+  min-height: 36px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+/* 16px keeps iPhones from zooming into the Golden Circle field on tap. */
+.artist-home .fan-strip .fan-form input[type=email] {
+  font-size: 16px;
+}
+
+.artist-home .fan-strip {
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+@media (max-width: 1100px) {
+  .fan-strip {
+    gap: 16px;
+  }
+
+  .fan-strip .fan-form {
+    width: 310px;
+  }
+}
+
+@media (max-width: 900px) {
+  .fan-strip {
+    flex-wrap: wrap;
+    gap: 10px 20px;
+  }
+
+  .fan-strip .fan-form {
+    flex: 1 0 100%;
+    width: auto;
+    margin: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .fan-strip {
+    gap: 10px 16px;
+  }
+
+  .artist-home .fan-strip-copy {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .artist-home .fan-strip .fan-form input[type=email],
+  .artist-home .fan-strip .fan-form .button {
+    min-height: 44px;
+  }
+}

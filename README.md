@@ -28,6 +28,10 @@ Texto y enlace de contratación: `index.html` (español/inglés). Contacto y ana
 - `src/lib/checks.ts`: convierte el análisis en hallazgos y el veredicto.
 - `src/worker.ts`, `src/main.ts`: análisis fuera del hilo principal y la página.
 
+## Sitio rommuser.com
+
+El sitio está en `site/`: páginas en español como fuente, un CSS por sección en `site/css/`, un JS por función en `site/js/` y el inglés en `site/i18n/en.json`. Después de cualquier cambio: `npm run site` y `npm test`. Qué archivo editar para cada cosa: [docs/editar-el-sitio.md](docs/editar-el-sitio.md).
+
 ## Publicar
 
 Es un sitio estático: Vercel o Cloudflare Pages con `npm run build` y carpeta `dist/`.

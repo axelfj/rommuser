@@ -1,0 +1,223 @@
+/* Top bar: RR logo, menu (a dropdown on phones), BOOKINGS and the language switch. On the home page it shrinks
+   while scrolling: js/header-shrink.js sets the --nav-* variables used here. */
+
+.skip {
+  position: fixed;
+  left: 12px;
+  top: -100px;
+  background: var(--bone);
+  color: var(--night);
+  padding: 12px;
+  z-index: 20;
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+/* Sticky top nav; booking email shown as the button label */
+header {
+  height: 94px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4.5%;
+  border-bottom: 1px solid var(--line);
+  background: var(--night);
+  position: sticky;
+  top: 0;
+  z-index: 15;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 25px;
+  letter-spacing: -.02em;
+}
+
+.brand img {
+  object-fit: contain;
+  width: 58px;
+  height: 58px;
+}
+
+nav {
+  display: flex;
+  gap: 32px;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+header>.brand {
+  min-width: 58px;
+}
+
+header nav {
+  margin-left: auto;
+  margin-right: 32px;
+}
+
+/* Release columns share one height; content sits at the center. */
+/* Studio, Golden Circle teaser, artist credentials, language link */
+.language-toggle {
+  font: 700 14px Poppins;
+  color: var(--bone);
+  background: transparent;
+  border: 1px solid var(--line);
+  min-width: 48px;
+  min-height: 44px;
+  padding: 9px 12px;
+  margin-right: 28px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.language-toggle:hover {
+  background: var(--bone);
+  color: var(--night);
+  border-color: var(--bone);
+}
+
+nav a[aria-current=page] {
+  text-decoration: underline;
+  text-decoration-color: var(--red);
+  text-underline-offset: 8px;
+}
+
+/* Keep the external studio destination distinct from in-page navigation. */
+nav a.nav-external {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 16px;
+  border-left: 1px solid var(--line);
+}
+
+nav a.nav-external svg {
+  flex: none;
+}
+
+@media (max-width: 900px) {
+  nav a {
+    font-size: 12px;
+  }
+
+  header {
+    height: 78px;
+  }
+
+  header .menu-toggle {
+    display: block;
+    min-height: 44px;
+    background: transparent;
+    border: 1px solid var(--line);
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-left: auto;
+    margin-right: 12px;
+  }
+
+  header .language-toggle {
+    margin-right: 0;
+  }
+
+  header nav {
+    display: none;
+    position: absolute;
+    top: 78px;
+    left: 0;
+    right: 0;
+    z-index: 11;
+    margin: 0;
+    padding: 18px 5%;
+    background: var(--night);
+    border-bottom: 1px solid var(--line);
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  header nav.open {
+    display: flex;
+  }
+
+  header nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  nav a.nav-external {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .brand {
+    font-size: 22px;
+  }
+
+  .brand img {
+    width: 46px;
+    height: 46px;
+  }
+
+  nav {
+    top: 78px;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    flex-direction: column;
+  }
+
+  nav a {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  header>.brand {
+    min-width: 46px;
+  }
+
+  .language-toggle {
+    font-size: 12px;
+    min-width: 44px;
+  }
+}
+
+@media (min-width: 901px) {
+  .artist-home>header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 15;
+    height: var(--nav-height,94px);
+  }
+
+  .artist-home>header .brand img {
+    width: var(--nav-logo-size,58px);
+    height: var(--nav-logo-size,58px);
+  }
+
+  .artist-home>header .language-toggle {
+    min-height: var(--nav-language-height,44px);
+    padding: var(--nav-language-padding,9px) 12px;
+  }
+
+  .artist-home>header nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
