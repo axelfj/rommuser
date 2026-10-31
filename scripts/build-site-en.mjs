@@ -20,11 +20,11 @@ export const PAGES = [
   },
   {
     es: 'estudio/index.html', en: 'en/studio/index.html', esPath: '/estudio/', enPath: '/en/studio/',
-    description: 'House and techno mixing and mastering by ROMMUSER, a Costa Rican DJ and producer signed to Decypher, DENAR RCRDS and Electric Eden. Mixing from USD 250, mastering USD 50 and ghost production on request.',
+    description: 'House and techno mixing and mastering by ROMMUSER, a Costa Rican DJ and producer signed to Decypher, DENAR RCRDS and Electric Eden. Mixing USD 250, mixing and mastering USD 300, mastering USD 70 and ghost production on request.',
     ogTitle: 'ROMMUSER Studio | Mixing, mastering and ghost production',
-    ogDescription: 'Mixing from USD 250, mastering USD 50 and ghost production for house and techno.',
+    ogDescription: 'Mixing USD 250, mixing and mastering USD 300, mastering USD 70 and ghost production for house and techno.',
     ogImageAlt: 'ROMMUSER, DJ and producer from Costa Rica',
-    ld: [['Mezcla, mastering y ghost production de house y techno.', 'House and techno mixing, mastering and ghost production.'], ['Desde USD 250. 6 a 8 multipistas, 2 revisiones.', 'From USD 250. 6 to 8 multitracks, 2 revisions.'], ['Por track, 2 revisiones.', 'Per track, 2 revisions.']],
+    ld: [['Mezcla, mastering y ghost production de house y techno.', 'House and techno mixing, mastering and ghost production.'], ['"name":"Mixdown","price":"250","priceCurrency":"USD","description":"Hasta 20 stems agrupados, 2 revisiones."', '"name":"Mixing","price":"250","priceCurrency":"USD","description":"Up to 20 grouped stems, 2 revisions."'], ['"name":"Mixdown y mastering","price":"300","priceCurrency":"USD","description":"Hasta 20 stems agrupados, 2 revisiones."', '"name":"Mixing and mastering","price":"300","priceCurrency":"USD","description":"Up to 20 grouped stems, 2 revisions."'], ['Por track, 2 revisiones.', 'Per track, 2 revisions.'], ['"name":"Mixdown extendido","price":"350","priceCurrency":"USD","description":"De 21 a 40 stems agrupados o 3 revisiones."', '"name":"Extended mixing","price":"350","priceCurrency":"USD","description":"21 to 40 grouped stems or 3 revisions."']],
   },
   {
     es: 'tienda/index.html', en: 'en/store/index.html', esPath: '/tienda/', enPath: '/en/store/',
