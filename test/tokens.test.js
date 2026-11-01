@@ -38,8 +38,36 @@ describe('tokens de marca', () => {
   });
 
   it('site/css/site.css importa tokens.css antes que cualquier otro archivo', () => {
-    const imports = [...read('site/css/site.css').matchAll(/@import "([^"]+)";/g)].map((m) => m[1]);
+    const imports = [...read('site/css/site.css').matchAll(/@import "([^"]+)"[^;]*;/g)].map((m) => m[1]);
     expect(imports[0]).toBe('../tokens.css');
+  });
+
+  it('cada archivo del CSS entra en una capa declarada, en el orden tokens, base, site, utilities', () => {
+    const order = ['tokens', 'base', 'site', 'utilities'];
+    for (const entry of ['site/css/site.css', 'site/css/studio.css']) {
+      const css = read(entry).replace(/\/\*[\s\S]*?\*\//g, '');
+      const imports = [...css.matchAll(/@import "([^"]+)"([^;]*);/g)];
+      if (entry.endsWith('site.css')) {
+        expect(css).toContain('@layer ' + order.join(', ') + ';');
+        expect(css.indexOf('@layer')).toBeLessThan(css.indexOf('@import'));
+      }
+      for (const [, file, rest] of imports) {
+        if (file === '../tokens.css') continue; // tokens.css declares @layer tokens itself
+        const layer = rest.match(/layer\((\w+)\)/)?.[1];
+        expect(order, `${entry}: ${file}`).toContain(layer);
+      }
+    }
+    expect(read('site/tokens.css')).toContain('@layer tokens {');
+  });
+
+  it('!important solo para lo oculto ([hidden]) y para quien pide menos movimiento', () => {
+    const dir = new URL('../site/css/', import.meta.url);
+    for (const file of readdirSync(dir, { recursive: true }).filter((f) => f.endsWith('.css'))) {
+      const css = read('site/css/' + file).replace(/\/\*[\s\S]*?\*\//g, '');
+      for (const [declaration] of css.matchAll(/[\w-]+:[^;{}]*!important/g)) {
+        expect(['display: none !important', 'transition: none !important', 'animation: none !important'], file).toContain(declaration);
+      }
+    }
   });
 
   it('el CSS del sitio no vuelve a definir los colores ni las fuentes de la marca', () => {

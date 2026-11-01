@@ -49,20 +49,16 @@
   white-space: nowrap;
 }
 
-/* Artist: the bio, at reading width. */
+/* El artista: the bio, at reading width, beside "el sistema", the originals orbiting the RR (artist-system.js). */
 .artist-home .artist {
+  position: relative;
+  overflow: hidden;
   padding-bottom: var(--section-space);
 }
 
 .artist-home .artist-bio p {
   font-size: clamp(17px,1.4vw,20px);
   line-height: 1.6;
-}
-
-/* Artist: the bio beside "el sistema", the originals orbiting the RR (system.js). */
-.artist-home #artista {
-  position: relative;
-  overflow: hidden;
 }
 
 .artist-home .artist-layout {

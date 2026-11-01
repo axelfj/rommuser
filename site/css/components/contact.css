@@ -31,7 +31,7 @@
   margin-bottom: 36px;
 }
 
-.contact.contact-simple h2 {
+.contact-simple h2 {
   font-size: clamp(48px,6vw,84px);
   line-height: 1.05;
   margin: 0 0 16px;
@@ -39,18 +39,18 @@
 }
 
 /* Contact directory: equal hierarchy and independent press resources. */
-.artist-home #contacto .contact-directory {
+.artist-home .contact .contact-directory {
   display: grid;
   grid-template-columns: minmax(0,1.2fr) minmax(0,1.2fr) minmax(140px,.6fr);
   gap: 32px 48px;
   text-align: left;
 }
 
-.artist-home #contacto .contact-entry {
+.artist-home .contact .contact-entry {
   min-width: 0;
 }
 
-.artist-home #contacto .contact-entry h3 {
+.artist-home .contact .contact-entry h3 {
   margin: 0 0 12px;
   font: 500 11px/1.5 var(--font-body);
   letter-spacing: .1em;
@@ -58,7 +58,7 @@
   margin-bottom: 4px;
 }
 
-.artist-home #contacto .contact-entry p {
+.artist-home .contact .contact-entry p {
   margin: 10px 0 0;
   font: 400 10px/1.6 var(--font-body);
   letter-spacing: .04em;
@@ -66,14 +66,14 @@
   margin-top: 4px;
 }
 
-.artist-home #contacto .contact-direct-links {
+.artist-home .contact .contact-direct-links {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 12px 24px;
 }
 
-.artist-home #contacto .contact-direct-links a {
+.artist-home .contact .contact-direct-links a {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -88,22 +88,22 @@
   text-decoration: none;
 }
 
-.artist-home #contacto .contact-direct-links a::after {
+.artist-home .contact .contact-direct-links a::after {
   color: var(--red);
 }
 
-.artist-home #contacto .section-label {
+.artist-home .contact .section-label {
   margin-bottom: 18px;
 }
 
-.artist-home #contacto.contact {
+.artist-home .contact {
   border-top: 1px solid var(--line);
   padding-top: 48px;
   padding-bottom: 48px;
 }
 
 @media (hover: hover) {
-  .artist-home #contacto .contact-direct-links a:hover {
+  .artist-home .contact .contact-direct-links a:hover {
     text-decoration: underline;
     text-decoration-color: var(--red);
     text-underline-offset: 6px;
@@ -111,19 +111,19 @@
 }
 
 @media (max-width: 1100px) {
-  .artist-home #contacto .contact-directory {
+  .artist-home .contact .contact-directory {
     grid-template-columns: repeat(2,minmax(0,1fr));
     gap: 32px;
   }
 }
 
 @media (max-width: 700px) {
-  .artist-home #contacto .contact-directory {
+  .artist-home .contact .contact-directory {
     grid-template-columns: minmax(0,1fr);
     gap: 20px;
   }
 
-  .artist-home #contacto .contact-entry p {
+  .artist-home .contact .contact-entry p {
     margin-top: 4px;
   }
 }
@@ -137,7 +137,7 @@
     margin-bottom: 28px;
   }
 
-  .contact.contact-simple h2 {
+  .contact-simple h2 {
     font-size: 44px;
     margin-bottom: 10px;
   }
