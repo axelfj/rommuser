@@ -1,6 +1,6 @@
 import { CONTACT_EMAIL, DONATION_URL, PLAUSIBLE_DOMAIN } from './config';
 import { lang, preferredLang, saveLang, setLang, tx, type Lang } from './lib/i18n';
-import { CATEGORIES, PLUGINS, downloadUrl, type Plugin } from './plugins-data';
+import { CATEGORIES, PLUGINS, downloadUrl, manualUrl, type Plugin } from './plugins-data';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
@@ -51,7 +51,18 @@ function card(p: Plugin): HTMLElement {
     'article',
     { class: 'plugin' },
     img,
-    el('div', { class: 'plugin-body' }, el('h3', {}, p.name), el('p', {}, tx(p.es, p.en)), download),
+    el(
+      'div',
+      { class: 'plugin-body' },
+      el('h3', {}, p.name),
+      el('p', {}, tx(p.es, p.en)),
+      el(
+        'div',
+        { class: 'plugin-actions' },
+        download,
+        el('a', { class: 'link', href: manualUrl(p.slug), target: '_blank', rel: 'noopener noreferrer' }, tx('Manual', 'Manual')),
+      ),
+    ),
   );
 }
 
@@ -67,6 +78,16 @@ function renderPlugins() {
       ),
     ),
   );
+}
+
+document.querySelectorAll<HTMLAnchorElement>('.bundle-download').forEach((a) =>
+  a.addEventListener('click', () => track('descarga_todos', { plataforma: a.dataset.bundle ?? '' })),
+);
+
+// Mac primero en una Mac: el botón de su sistema queda como principal.
+if (/Mac/.test(navigator.platform) || /Mac OS X/.test(navigator.userAgent)) {
+  document.querySelector('[data-bundle="windows"]')?.classList.add('ghost');
+  document.querySelector('[data-bundle="macos"]')?.classList.remove('ghost');
 }
 
 // --- Contacto y donación -----------------------------------------------------
@@ -89,11 +110,11 @@ if (DONATION_URL) {
 const META = {
   es: {
     title: 'Plugins gratis · ROMMUSER Studio',
-    description: '26 plugins de audio gratis y open source (VST3, AU, CLAP) para productores que están empezando. En beta, en español e inglés.',
+    description: '27 plugins de audio gratis y open source (VST3, AU, CLAP) para productores que están empezando. En beta, en español e inglés.',
   },
   en: {
     title: 'Free plugins · ROMMUSER Studio',
-    description: '26 free, open-source audio plugins (VST3, AU, CLAP) for producers who are just starting out. In beta, in Spanish and English.',
+    description: '27 free, open-source audio plugins (VST3, AU, CLAP) for producers who are just starting out. In beta, in Spanish and English.',
   },
 };
 
