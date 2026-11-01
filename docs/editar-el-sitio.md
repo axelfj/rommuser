@@ -26,6 +26,7 @@ próximo `npm run site` (o `npm run tokens`) borra lo que les cambies.
 | El aspecto de una sección | su archivo en `site/css/components/` (tabla abajo) | `npm run site` |
 | El aspecto de /estudio | `site/css/pages/studio.css` | `npm run site` |
 | Lo que hace una parte de la página | su archivo en `site/js/` (tabla abajo) | `npm run site` |
+| La velocidad de la franja roja de fechas | `PIXELS_PER_SECOND` en `site/js/dates-band.js` (hoy 22) | `npm run site` |
 | Las fechas que revela el bot de lanzamientos | `scripts/lanzamientos.json` | nada, corre solo cada día |
 
 Si cambias un texto en español, cambia también su línea en `en.json`. `npm run site` lista al final los textos que se
