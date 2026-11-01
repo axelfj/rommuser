@@ -528,6 +528,7 @@ button:focus-visible,
 }
 
 .beta-note,
+.get-all,
 .install,
 .donate {
   border: var(--control-border) solid var(--line);
@@ -609,8 +610,36 @@ button:focus-visible,
   flex: 1;
 }
 
+.plugin-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .plugin-download {
   align-self: flex-start;
+}
+
+.get-all h2 {
+  margin-top: 0;
+}
+
+.get-all .lead {
+  margin-bottom: 20px;
+}
+
+.get-all-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.get-all-more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 20px;
 }
 
 .install ol {

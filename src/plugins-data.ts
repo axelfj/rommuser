@@ -39,6 +39,7 @@ export const PLUGINS: Plugin[] = [
   { name: 'Chorus-R', slug: 'wide-ready', category: 'efectos', es: 'Chorus, ensemble y flanger para abrir sonidos.', en: 'Chorus, ensemble and flanger to widen sounds.' },
   { name: 'Phaser-R', slug: 'phase-ready', category: 'efectos', es: 'Phaser de 4 a 12 etapas con LFO al tempo.', en: '4 to 12-stage phaser with tempo-synced LFO.' },
   { name: 'Stutter-R', slug: 'stutter-ready', category: 'efectos', es: 'Stutter y glitch al tempo para builds y transiciones.', en: 'Tempo-synced stutter and glitch for builds and transitions.' },
+  { name: 'Pitch-R', slug: 'pitch-r', category: 'efectos', es: 'Cambia el tono de cualquier cosa sin artefactos, ±24 semitonos.', en: 'Shifts the pitch of anything without artifacts, ±24 semitones.' },
   { name: 'Tune-R', slug: 'tune-ready', category: 'voz', es: 'Afinación de voz en tiempo real por escala.', en: 'Real-time vocal tuning to a scale.' },
   { name: 'Vocoder-R', slug: 'vox-synth', category: 'voz', es: 'Armonías, vocoder y voz robot.', en: 'Harmonies, vocoder and robot voice.' },
   { name: 'De-Esser-R', slug: 'ess-clean', category: 'voz', es: 'Baja las eses y sibilancias que lastiman.', en: 'Tames harsh S sounds and sibilance.' },
@@ -49,6 +50,11 @@ export const PLUGINS: Plugin[] = [
 ];
 
 export const REPO_URL = 'https://github.com/axelfj/music-plugins';
+
+/** Manual del plugin (ES/EN) en docs/manuals/ del repo. */
+export function manualUrl(slug: string): string {
+  return `${REPO_URL}/blob/main/docs/manuals/${slug}.md`;
+}
 
 /** Lista de releases de un plugin; sigue sirviendo cuando sale una versión nueva. */
 export function downloadUrl(slug: string): string {
