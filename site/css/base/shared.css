@@ -66,7 +66,7 @@ footer>.brand {
 
 /* One alignment contract for all row actions, regardless of title wrapping. */
 .artist-home .tracks .track-type,
-#vivo .show-video {
+.live .show-video {
   align-self: center;
   margin-block: 0;
   box-sizing: border-box;
@@ -82,10 +82,10 @@ footer>.brand {
 }
 
 /* Vector arrows keep identical geometry across Windows and macOS font stacks. */
-#vivo .show-video::after,
+.live .show-video::after,
 .artist-home .tracks .track.presave .track-type::after,
 .artist-home .tracks .track.track-link .track-type::after,
-.artist-home #contacto .contact-direct-links a::after {
+.artist-home .contact .contact-direct-links a::after {
   content: "";
   display: block;
   flex-shrink: 0;
@@ -96,8 +96,8 @@ footer>.brand {
 }
 
 /* Nothing on the page reads smaller than 12px. */
-html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs button,.show-count,.tracks .track-n,.tracks .track-info small,.tracks .release-date,.tracks .track .track-type,.music-labels .eyebrow,.fan-strip h2,.fan-strip .fan-form .button,.show-row time,.show-row p,.show-row>span,.show-video,.contact-entry h3,.universe-footer>span) {
-  font-size: 12px !important;
+.artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs button,.show-count,.tracks .track-n,.tracks .track-info small,.music-labels .eyebrow,.fan-strip h2,.fan-strip .fan-form .button,.show-row time,.show-row p,.show-row>span,.show-video,.contact-entry h3,.universe-footer>span) {
+  font-size: 12px;
 }
 
 .artist-home>header,
@@ -128,12 +128,12 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
   letter-spacing: .02em;
 }
 
-.artist-home :is(.tracks .track-type,.show-video,.music-tabs button) {
+.artist-home :is(.tracks .track-type,.music-tabs button) {
   font-family: var(--font-body);
   letter-spacing: .08em;
 }
 
-.artist-home #vivo .show-year>summary,
+.artist-home .live .show-year>summary,
 .artist-home .tracks details>summary {
   padding-left: 0;
   padding-right: 0;
@@ -142,7 +142,7 @@ html:root .artist-home :is(.hero-top .eyebrow,.section-label span,.music-tabs bu
 @media (prefers-reduced-motion: reduce) {
   /* Honor the operating-system preference across every decorative animation. */
   .artist-home .music-tabs button::after,
-  .artist-home #vivo .next-label::after {
+  .artist-home .live .next-label::after {
     animation: none !important;
   }
 }

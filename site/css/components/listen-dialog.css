@@ -54,21 +54,18 @@ dialog h2 {
 }
 
 /* The listen dialog reads top to bottom like a pre-save page: the cover, then the platforms as one line of logos. */
-.artist-home #listen-dialog {
+.artist-home .listen-dialog {
   max-width: 420px;
   padding: 0;
   text-align: center;
   isolation: isolate;
-}
-
-/* The cover is planted in the dialog: it fills the whole top edge to edge and runs into the band of logos, painted
-   with the colour of the cover's own bottom edge (--listen-tone, from js/lib/cover-tone.js; Noche without a cover).
-   No title or credit: the cover already carries them. */
-.artist-home #listen-dialog {
+  /* The cover is planted in the dialog: it fills the whole top edge to edge and runs into the band of logos, painted
+     with the colour of the cover's own bottom edge (--listen-tone, from js/lib/cover-tone.js; Noche without a cover).
+     No title or credit: the cover already carries them. */
   background: var(--listen-tone,var(--night));
 }
 
-.artist-home #listen-dialog .dialog-close {
+.artist-home .listen-dialog .dialog-close {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -122,12 +119,12 @@ dialog h2 {
   opacity: .8;
 }
 
-.artist-home #listen-dialog .listen-links {
+.artist-home .listen-dialog .listen-links {
   margin: 0 16px 28px;
 }
 
 /* Without a cover (the hero's ESCUCHAR), the logos clear the close button. */
-.artist-home #listen-dialog .listen-art[hidden]~.listen-links {
+.artist-home .listen-dialog .listen-art[hidden]~.listen-links {
   margin-top: 72px;
 }
 
@@ -176,17 +173,13 @@ dialog h2 {
 }
 
 @media (hover: hover) {
-  .artist-home .listen-links a:hover,
-  .artist-home .dialog-close:hover {
-    border-color: var(--bone);
-  }
-
-  .artist-home #listen-dialog .dialog-close:hover {
+  .artist-home .listen-dialog .dialog-close:hover {
     background: none;
     opacity: .7;
   }
 
   .artist-home .listen-links a:hover {
+    border-color: var(--bone);
     transform: translateY(-2px);
     background: none;
   }

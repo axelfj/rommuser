@@ -41,7 +41,7 @@ footer.universe-footer.compact-footer {
   line-height: 1;
 }
 
-.compact-footer #footer-year {
+.compact-footer .footer-year {
   width: auto;
   font-size: 11px;
   font-weight: 400;
@@ -110,7 +110,7 @@ footer.universe-footer.compact-footer {
     flex-wrap: wrap;
   }
 
-  .compact-footer #footer-year {
+  .compact-footer .footer-year {
     width: 100%;
     text-align: center;
   }
@@ -151,7 +151,7 @@ footer.universe-footer.compact-footer {
     padding: 0;
   }
 
-  .compact-footer #footer-year {
+  .compact-footer .footer-year {
     font-size: 10px;
     white-space: normal;
   }

@@ -9,10 +9,11 @@
   padding-block: 14px;
 }
 
+/* js/dates-band.js sets --dates-duration from the length of the text, so the pace never changes. */
 .artist-home .dates-track {
   display: flex;
   width: max-content;
-  animation: dates-scroll 48s linear infinite;
+  animation: dates-scroll var(--dates-duration,48s) linear infinite;
 }
 
 .artist-home .dates-band:has(.dates-item:focus-visible) .dates-track {
@@ -56,7 +57,7 @@
   /* The band always moves, on every device (Axel's call). When the device asks for less motion it runs at half speed
      instead of standing still. */
   .artist-home .dates-track {
-    animation-duration: 96s;
+    animation-duration: calc(var(--dates-duration,48s) * 2);
   }
 }
 

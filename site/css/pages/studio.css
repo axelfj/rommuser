@@ -91,6 +91,8 @@ a.service-card:hover,
   padding: 0;
   margin: 0;
   display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 24px;
 }
 
 .studio-steps li {
@@ -270,11 +272,6 @@ a.service-card:hover,
 
 .studio-benefits .text-link {
   margin-top: auto;
-}
-
-.studio-steps {
-  grid-template-columns: repeat(3,1fr);
-  gap: 24px;
 }
 
 /* FAQ */

@@ -54,12 +54,11 @@ button:focus-visible {
   outline-offset: 5px;
 }
 
-/* Music categories and listening destinations */
+/* Anything the scripts hide (a closed tab, a platform without a link) stays hidden, whatever a section rule says. */
 [hidden] {
   display: none !important;
 }
 
-/* Responsive layout across phone, tablet and desktop */
 img {
   max-width: 100%;
 }
