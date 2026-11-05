@@ -46,7 +46,7 @@
   top: 50%;
   transform: translateY(-50%);
   white-space: nowrap;
-  font: 700 12px/1.2 var(--font-body);
+  font: 700 12px/1.2 var(--font-display);
   letter-spacing: .08em;
   color: var(--muted);
   pointer-events: none;
@@ -67,7 +67,7 @@
 }
 
 .artist-home .system-body.is-back .system-name {
-  opacity: .55;
+  opacity: .85;
 }
 
 .artist-home button.system-body {
@@ -107,7 +107,7 @@
   align-items: center;
   gap: 18px;
   flex-wrap: wrap;
-  font: 700 12px/1.5 var(--font-body);
+  font: 700 12px/1.5 var(--font-display);
   letter-spacing: .08em;
   color: var(--muted);
 }

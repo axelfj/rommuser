@@ -51,7 +51,7 @@
 
 .fan-strip h2 {
   flex-shrink: 0;
-  font: 600 12px/1.5 var(--font-body);
+  font: 600 12px/1.5 var(--font-display);
 }
 
 .fan-strip-copy {

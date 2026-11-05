@@ -4,13 +4,13 @@
     --night: #121212; /* Noche: el negro de la marca (preset NOCHE, ~7%) */
     --bone: #ebe8e2; /* Hueso: el blanco de la marca (~92%) */
     --red: #c81d25; /* El único acento: acción principal y lo que hay que corregir */
-    --muted: #a8a59f; /* Texto secundario sobre Noche */
+    --muted: #c6c3bc; /* Texto secundario sobre Noche */
     --line: rgba(235,232,226,0.16); /* Divisores y bordes suaves */
     --line-strong: rgba(235,232,226,0.32); /* Bordes que tienen que verse */
     --wash: rgba(235,232,226,0.06); /* Fondo apenas levantado (zona activa, hover) */
     --ink-muted: rgba(18,18,18,0.62); /* Texto secundario sobre Hueso */
-    --font-display: 'League Spartan',Arial,sans-serif; /* Titulares y la marca */
-    --font-body: Poppins,Arial,sans-serif; /* Todo lo demás */
+    --font-display: 'League Spartan',Arial,sans-serif; /* Titulares, etiquetas, botones y la marca */
+    --font-body: Poppins,Arial,sans-serif; /* Texto corrido (bio, párrafos, formularios) */
     --step--2: 12px; /* Notas, metadatos */
     --step--1: 14px; /* Etiquetas, menú, botones */
     --step-0: 16px; /* Texto corrido */

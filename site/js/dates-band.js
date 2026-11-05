@@ -1,7 +1,7 @@
 // The red band under the hero: the next releases and shows, read from the MÚSICA cards (data-release) and the
 // next-show card (data-show-date), so a date only ever lives in one place. Past dates drop out on their own; with
-// nothing ahead the band stays hidden. Each item says whether it is a release or a show and jumps to its section.
-// The items are written twice so the band can scroll in a loop; the copy is hidden from screen readers and Tab.
+// nothing ahead the band stays hidden. It stands still: a labelled list of real dates, each saying whether it is a
+// release or a show and jumping to its section.
 import { MONTHS, todayInCostaRica } from './lib/dates.js';
 import { pageLanguage, tr } from './lib/i18n.js';
 
@@ -19,15 +19,13 @@ function upcomingDates(today) {
   return items.sort((a, b) => (a.date < b.date ? -1 : 1));
 }
 
-function group(items, copy) {
+function list(items) {
   const months = MONTHS[pageLanguage()];
-  const g = document.createElement('span');
-  g.className = 'dates-group';
+  const g = document.createDocumentFragment();
   for (const { date, text, kind, href } of items) {
     const item = document.createElement('a');
     item.className = 'dates-item';
     item.href = href;
-    if (copy) item.tabIndex = -1;
     const time = document.createElement('time');
     time.dateTime = date;
     const [, m, d] = date.split('-');
@@ -46,8 +44,6 @@ export function initDatesBand() {
   if (!track) return;
   const items = upcomingDates(todayInCostaRica());
   if (!items.length) return;
-  const copy = group(items, true);
-  copy.setAttribute('aria-hidden', 'true');
-  track.append(group(items, false), copy);
+  track.append(list(items));
   band.hidden = false;
 }

@@ -34,7 +34,22 @@ quedaron sin traducción ("Sin traducción"); los nombres propios (sellos, ROMMU
 ## CSS: un archivo por sección
 
 `site/css/site.css` solo importa los archivos en orden; `site/css/studio.css` hace lo mismo para /estudio. Para
-agregar un archivo nuevo, lo creas y agregas su `@import` en el lugar que le toca.
+agregar un archivo nuevo, lo creas y agregas su `@import` en el lugar que le toca, con su capa: casi siempre
+`layer(site)`.
+
+Las capas (`@layer`) ordenan quién gana, de la más débil a la más fuerte:
+
+| Capa | Qué tiene | Gana sobre |
+|---|---|---|
+| `tokens` | Las variables de la marca (`tokens.css`) | nada |
+| `base` | Las fuentes y las etiquetas sueltas (`fonts.css`, `elements.css`) | `tokens` |
+| `site` | Todas las secciones y páginas | `tokens` y `base`, aunque la regla de abajo sea más específica |
+| `utilities` | `.sr-only` y `.red` | todo lo anterior |
+
+Dentro de `site` manda lo de siempre: la regla más específica gana y, si empatan, la del archivo que se importa
+después. Las secciones se escriben con clases (`.music`, `.live`, `.contact`, `.artist`), no con ids, para que
+ninguna regla gane solo por tener un id. `!important` queda únicamente para `[hidden]` y para quien pide menos
+movimiento; una prueba falla si aparece en otro lado.
 
 | Archivo | Qué estiliza |
 |---|---|

@@ -63,7 +63,7 @@
   --control-border: var(--line-strong);
   --control-hover: rgba(235,232,226,.08);
   --control-height: 44px;
-  --control-font: var(--font-body);
+  --control-font: var(--font-display);
   --section-space: 96px;
   --heading-space: 48px;
 }

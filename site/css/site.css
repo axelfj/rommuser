@@ -1,25 +1,34 @@
 /* Stylesheet for every page of rommuser.com. npm run site bundles these files, in this order, into
-   site/build/site.css (the file the pages load). Order matters: when two rules are equally specific, the one in the
-   later file wins. Colours, type and spacing come from ../tokens.css (generated from tokens/rommuser.tokens.json). */
+   site/build/site.css (the file the pages load). Colours, type and spacing come from ../tokens.css (generated from
+   tokens/rommuser.tokens.json).
+
+   Four layers, weakest first. A rule in a later layer wins over any rule in an earlier one, however specific:
+     tokens     the brand variables (tokens.css declares this layer itself)
+     base       fonts and bare tags (body, a, button, h1…)
+     site       every section and page, in the order below; inside it, the more specific rule wins and, when two
+                are equally specific, the one in the later file
+     utilities  small helpers that must always win, such as .sr-only */
+
+@layer tokens, base, site, utilities;
 
 @import "../tokens.css";
-@import "base/fonts.css";
-@import "base/elements.css";
-@import "base/utilities.css";
-@import "base/shared.css";
-@import "base/grain.css";
-@import "layout/sections.css";
-@import "components/buttons.css";
-@import "components/header.css";
-@import "components/hero.css";
-@import "components/dates-band.css";
-@import "components/music.css";
-@import "components/listen-dialog.css";
-@import "components/player.css";
-@import "components/artist.css";
-@import "components/artist-system.css";
-@import "components/shows.css";
-@import "components/fans.css";
-@import "components/contact.css";
-@import "components/footer.css";
-@import "pages/store.css";
+@import "base/fonts.css" layer(base);
+@import "base/elements.css" layer(base);
+@import "base/utilities.css" layer(utilities);
+@import "base/shared.css" layer(site);
+@import "base/grain.css" layer(site);
+@import "layout/sections.css" layer(site);
+@import "components/buttons.css" layer(site);
+@import "components/header.css" layer(site);
+@import "components/hero.css" layer(site);
+@import "components/dates-band.css" layer(site);
+@import "components/music.css" layer(site);
+@import "components/listen-dialog.css" layer(site);
+@import "components/player.css" layer(site);
+@import "components/artist.css" layer(site);
+@import "components/artist-system.css" layer(site);
+@import "components/shows.css" layer(site);
+@import "components/fans.css" layer(site);
+@import "components/contact.css" layer(site);
+@import "components/footer.css" layer(site);
+@import "pages/store.css" layer(site);
