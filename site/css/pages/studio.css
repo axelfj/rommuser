@@ -142,10 +142,6 @@ a.service-card:hover,
 
 /* /estudio landing page: one offer, one action (PEDIR COTIZACIÓN). Loaded after style.css on the studio pages
    only. Spacing steps 8/12/16/24/32/48/64/80/96, one curve for every move, transform and opacity only. */
-.studio-page {
-  --muted: rgba(234,230,229,.3);
-}
-
 .studio-page h1,
 .studio-page h2 {
   text-wrap: balance;

@@ -5,7 +5,7 @@
     "night": { "$description": "Noche: el negro de la marca (preset NOCHE, ~7%)", "$value": { "colorSpace": "srgb", "components": [0.0706, 0.0706, 0.0706], "hex": "#121212" } },
     "bone": { "$description": "Hueso: el blanco de la marca (~92%)", "$value": { "colorSpace": "srgb", "components": [0.9216, 0.9098, 0.8863], "hex": "#ebe8e2" } },
     "red": { "$description": "El único acento: acción principal y lo que hay que corregir", "$value": { "colorSpace": "srgb", "components": [0.7843, 0.1137, 0.1451], "hex": "#c81d25" } },
-    "muted": { "$description": "Texto secundario sobre Noche", "$value": { "colorSpace": "srgb", "components": [0.6588, 0.6471, 0.6235], "hex": "#a8a59f" } },
+    "muted": { "$description": "Texto secundario sobre Noche", "$value": { "colorSpace": "srgb", "components": [0.7765, 0.7647, 0.7373], "hex": "#c6c3bc" } },
     "line": { "$description": "Divisores y bordes suaves", "$value": { "colorSpace": "srgb", "components": [0.9216, 0.9098, 0.8863], "alpha": 0.16, "hex": "#ebe8e2" } },
     "line-strong": { "$description": "Bordes que tienen que verse", "$value": { "colorSpace": "srgb", "components": [0.9216, 0.9098, 0.8863], "alpha": 0.32, "hex": "#ebe8e2" } },
     "wash": { "$description": "Fondo apenas levantado (zona activa, hover)", "$value": { "colorSpace": "srgb", "components": [0.9216, 0.9098, 0.8863], "alpha": 0.06, "hex": "#ebe8e2" } },
@@ -13,8 +13,8 @@
   },
   "font": {
     "$type": "fontFamily",
-    "display": { "$description": "Titulares y la marca", "$value": ["League Spartan", "Arial", "sans-serif"] },
-    "body": { "$description": "Todo lo demás", "$value": ["Poppins", "Arial", "sans-serif"] }
+    "display": { "$description": "Titulares, etiquetas, botones y la marca", "$value": ["League Spartan", "Arial", "sans-serif"] },
+    "body": { "$description": "Texto corrido (bio, párrafos, formularios)", "$value": ["Poppins", "Arial", "sans-serif"] }
   },
   "step": {
     "$description": "Escala de letra. Los pasos fluidos crecen con el ancho entre min y max.",

@@ -64,7 +64,7 @@ header nav {
 /* Release columns share one height; content sits at the center. */
 /* Studio, Golden Circle teaser, artist credentials, language link */
 .language-toggle {
-  font: 700 14px Poppins;
+  font: 700 14px var(--font-display);
   color: var(--bone);
   background: transparent;
   border: 1px solid var(--line);

@@ -75,7 +75,7 @@
 }
 
 .artist-home .hero .music-labels .label-list li {
-  font: 700 13px/1.2 var(--font-body);
+  font: 700 13px/1.2 var(--font-display);
   letter-spacing: .06em;
   opacity: 1;
 }

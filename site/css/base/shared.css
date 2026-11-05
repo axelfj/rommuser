@@ -18,7 +18,7 @@ nav a,
 footer,
 .track span,
 .show-row>span {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-size: 14px;
   font-weight: 700;
   letter-spacing: .09em;
@@ -111,7 +111,7 @@ footer>.brand {
 
 /* Labels: one size, one weight, one tracking. */
 .artist-home :is(.eyebrow,.show-history-label,.music-labels .eyebrow,.contact-entry h3,.fan-strip h2,.show-count,.show-year summary span) {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: .12em;
@@ -129,7 +129,7 @@ footer>.brand {
 }
 
 .artist-home :is(.tracks .track-type,.music-tabs button) {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   letter-spacing: .08em;
 }
 

@@ -52,7 +52,7 @@
 
 .artist-home .contact .contact-entry h3 {
   margin: 0 0 12px;
-  font: 500 11px/1.5 var(--font-body);
+  font: 500 11px/1.5 var(--font-display);
   letter-spacing: .1em;
   color: var(--muted);
   margin-bottom: 4px;

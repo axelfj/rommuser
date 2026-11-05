@@ -42,7 +42,7 @@
 }
 
 .release-date {
-  font: 700 12px Poppins;
+  font: 700 12px var(--font-display);
   white-space: nowrap;
   display: block;
   margin: 0;
@@ -76,7 +76,7 @@
 
 .artist-home .tracks .track-n,
 .artist-home .tracks .release-date {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: .04em;
   color: var(--muted);
@@ -178,7 +178,7 @@
 }
 
 .artist-home .music .track-cover[data-cover] i {
-  font: 600 8px/1 var(--font-body);
+  font: 600 8px/1 var(--font-display);
   font-size: max(8px,3.6cqi);
   font-style: normal;
   letter-spacing: .12em;
@@ -200,9 +200,10 @@
 }
 
 .artist-home .music .tracks .track-info small {
+  font-family: var(--font-display);
   line-height: 1.4;
   letter-spacing: .08em;
-  color: rgba(235,232,226,.72);
+  color: var(--muted);
 }
 
 .artist-home .music .tracks .release-date {
@@ -267,7 +268,7 @@
   border-bottom: 2px solid transparent;
   border-radius: 0;
   background: transparent;
-  color: rgba(235,232,226,.6);
+  color: var(--muted);
   font: 500 11px/1.4 var(--control-font);
   text-align: center;
   transition: border-color .2s,background-color .2s,box-shadow .2s;
