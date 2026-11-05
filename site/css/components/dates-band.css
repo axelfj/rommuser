@@ -12,10 +12,15 @@
   padding: 16px var(--gutter);
 }
 
+/* The label is the loudest thing on the strip: a Noche block cut into the red, Hueso letters, bigger than the dates. */
 .artist-home .dates-label {
   margin: 0;
-  font: 700 12px/1.2 var(--font-display);
-  letter-spacing: .14em;
+  padding: 8px 14px 6px;
+  background: var(--night);
+  color: var(--bone);
+  font: 700 clamp(18px,2.2vw,28px)/1 var(--font-display);
+  letter-spacing: .08em;
+  white-space: nowrap;
 }
 
 .artist-home .dates-track {
