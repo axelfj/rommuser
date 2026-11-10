@@ -76,9 +76,12 @@ function sendPending() {
   const sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME);
   const last = sheet.getLastRow();
   if (last < 2) return;
-  const rows = sheet.getRange(2, 2, last - 1, 4).getValues();
+  const rows = sheet.getRange(2, 2, last - 1, COL.estado - 1).getValues();
+  const optedOut = bajas_();
   for (let i = 0; i < rows.length; i++) {
     if (rows[i][3] !== PENDING) continue;
+    const email = String(rows[i][0]).trim().toLowerCase();
+    if (String(rows[i][COL.estado - 2]).trim() === 'Baja' || optedOut.has(email)) continue;
     const lang = rows[i][1] === 'EN' ? 'en' : 'es';
     if (!welcomeRow_(sheet, i + 2, rows[i][0], lang)) return;
   }
