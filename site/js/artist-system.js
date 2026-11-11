@@ -31,7 +31,7 @@ export function initArtistSystem(player) {
         label: row.querySelector('.track-info small')?.textContent || '',
         iso,
         track: player?.tracks.find((t) => t.row === row),
-        upcoming: !iso || iso >= today,
+        upcoming: !iso || iso > today,
       };
     })
     .filter((b) => b.iso);
