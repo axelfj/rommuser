@@ -55,7 +55,7 @@ describe('rommuser.com', () => {
     expect(system).toContain("'#originales .track[data-track]'");
     expect(player).toContain("'#musica .tracks .track[data-soundcloud]:not(.presave)'");
     // The planets get the page's one player, created first.
-    expect(read('js/pages/home.js')).toContain('initArtistSystem(initPlayer());');
+    expect(read('js/pages/home.js')).toContain('initArtistSystem(player);');
     for (const file of [system, player]) for (const name of ['HOLY', 'PIECES', 'JUST GROOVE', 'TIKIKAI']) expect(file).not.toContain(name);
     expect(read('index.html')).toContain('<script src="build/home.js"></script>');
     const headers = read('_headers');

@@ -3,7 +3,7 @@
 // A cover in MÚSICA never starts playback: it opens the listen dialog (listen-dialog.js); the bar's PLATAFORMAS
 // opens that same dialog. If SoundCloud can't load, or a browser won't let the hidden widget start (iPhone Safari
 // blocks it), after 7 seconds without sound the page stops trying and opens the listen dialog instead.
-// The tracks are the released MÚSICA cards that have a SoundCloud link, newest first, then the remixes (no date).
+// The tracks are the released MÚSICA cards (a release counts from its own day, Costa Rica time) that have a SoundCloud link, newest first, then the remixes (no date).
 // initPlayer() returns { tracks, play, next, close, on(listener), current, playing } for artist-system.js.
 import { shortDate, todayInCostaRica } from './lib/dates.js';
 import { tr } from './lib/i18n.js';
@@ -24,7 +24,7 @@ function readTracks() {
       type: row.querySelector('.track-type'),
       typeText: row.querySelector('.track-type')?.textContent || '',
     }))
-    .filter((t) => !t.iso || t.iso < today)
+    .filter((t) => !t.iso || t.iso <= today)
     .sort((a, b) => b.iso.localeCompare(a.iso));
 }
 
