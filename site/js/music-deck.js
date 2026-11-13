@@ -11,11 +11,14 @@ import { youtubeId } from './hero-release.js';
 
 const CARDS = ':scope > .tracks > .track';
 
-// The platforms in the order the listen dialog shows them, with its logo and name.
+// The platforms under the deck, streaming first, then where DJs buy: the logo and name come from the listen dialog.
+const ORDER = ['spotify', 'apple', 'youtube', 'soundcloud', 'amazon', 'deezer', 'tidal', 'beatport', 'bandcamp'];
+
 function platformLogos() {
   return [...document.querySelectorAll('#listen-dialog .listen-links a[id^="listen-"]')]
-    .map((a) => ({ key: a.id.slice('listen-'.length), name: a.getAttribute('aria-label') || a.title || '', icon: a.querySelector('img')?.getAttribute('src') }))
-    .filter((p) => PLATFORMS.includes(p.key) && p.icon);
+    .map((a) => ({ key: a.id.slice('listen-'.length), name: a.title || a.getAttribute('aria-label') || '', icon: a.querySelector('img')?.getAttribute('src') }))
+    .filter((p) => PLATFORMS.includes(p.key) && p.icon)
+    .sort((a, b) => (ORDER.indexOf(a.key) + 1 || 99) - (ORDER.indexOf(b.key) + 1 || 99));
 }
 
 function buildDeck(panel) {
@@ -24,7 +27,7 @@ function buildDeck(panel) {
   deck.innerHTML =
     '<div class="deck-cover"></div>' +
     '<div class="deck-info"><p class="deck-freq"></p><p class="deck-title"></p><p class="deck-meta"></p>' +
-    '<p class="deck-links"></p><div class="deck-actions"><button class="deck-play" type="button"></button><a class="deck-presave" target="_blank" rel="noopener noreferrer"></a></div></div>';
+    '<div class="deck-actions"><button class="deck-play" type="button"></button><a class="deck-presave" target="_blank" rel="noopener noreferrer"></a></div><p class="deck-links"></p></div>';
   panel.prepend(deck);
   const $ = (s) => deck.querySelector(s);
   return { deck, cover: $('.deck-cover'), freq: $('.deck-freq'), title: $('.deck-title'), meta: $('.deck-meta'), links: $('.deck-links'), play: $('.deck-play'), presave: $('.deck-presave') };
@@ -77,9 +80,11 @@ export function initMusicDeck(player) {
             const img = document.createElement('img');
             img.src = p.icon;
             img.alt = '';
-            img.width = 26;
-            img.height = 26;
-            a.append(img);
+            img.width = 20;
+            img.height = 20;
+            const name = document.createElement('span');
+            name.textContent = p.name;
+            a.append(img, name);
             return a;
           }),
       );

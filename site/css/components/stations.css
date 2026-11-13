@@ -129,28 +129,44 @@
   overflow-wrap: anywhere;
 }
 
-/* One logo per platform, each straight to the track. */
+/* One tile per platform, each straight to the track: logo and name, in an even grid as wide as the cover. */
 .artist-home .music .deck-links {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
   gap: 6px;
-  margin: 6px 0 0;
+  width: 100%;
+  margin: 8px 0 0;
 }
 
 .artist-home .music .deck-links a {
-  display: grid;
-  place-items: center;
-  width: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
   height: 44px;
+  padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: var(--control-radius);
+  color: var(--bone);
+  font: 700 10px/1.1 var(--font-display);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
   transition: border-color .2s,background-color .2s;
+}
+
+.artist-home .music .deck-links a span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .artist-home .music .deck-links img {
   display: block;
-  width: 24px;
-  height: 24px;
+  flex: none;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
 }
 
