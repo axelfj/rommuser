@@ -3,6 +3,7 @@
 // player and the planets read them.
 import { initArtistSystem } from '../artist-system.js';
 import { initDatesBand } from '../dates-band.js';
+import { initEra3000 } from '../era-3000.js';
 import { initFanForm } from '../fan-form.js';
 import { initFooterYear } from '../footer-year.js';
 import { initHeroRelease } from '../hero-release.js';
@@ -30,3 +31,4 @@ const player = initPlayer();
 initArtistSystem(player);
 initHeroRelease(player);
 initPageMotion();
+initEra3000();

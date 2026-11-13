@@ -32,4 +32,5 @@
 @import "components/contact.css" layer(site);
 @import "components/footer.css" layer(site);
 @import "components/motion.css" layer(site);
+@import "components/era-3000.css" layer(site);
 @import "pages/store.css" layer(site);
