@@ -5,17 +5,20 @@
 .artist-home .dates-band {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 10px 40px;
+  align-items: stretch;
+  gap: 0 40px;
   background: var(--red);
   color: var(--bone);
-  padding: 16px var(--gutter);
+  padding: 0 var(--gutter) 0 0;
 }
 
-/* The label is the loudest thing on the strip: a Noche block cut into the red, Hueso letters, bigger than the dates. */
+/* The label is the loudest thing on the strip: a Noche block the full height of the band, from the page's left edge,
+   so the strip reads as two solid colours side by side instead of a box floating on the red. */
 .artist-home .dates-label {
+  display: flex;
+  align-items: center;
   margin: 0;
-  padding: 8px 14px 6px;
+  padding: 18px 24px 16px var(--gutter);
   background: var(--night);
   color: var(--bone);
   font: 700 clamp(18px,2.2vw,28px)/1 var(--font-display);
@@ -26,7 +29,25 @@
 .artist-home .dates-track {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 10px 40px;
+  padding: 16px 0;
+}
+
+/* On a phone the label takes its own row, edge to edge, and the dates sit under it on the red. */
+@media (max-width: 620px) {
+  .artist-home .dates-band {
+    padding: 0;
+  }
+
+  .artist-home .dates-label {
+    flex: 1 0 100%;
+    padding: 14px var(--gutter) 12px;
+  }
+
+  .artist-home .dates-track {
+    padding: 16px var(--gutter);
+  }
 }
 
 .artist-home .dates-item {
