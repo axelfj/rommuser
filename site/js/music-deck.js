@@ -12,13 +12,15 @@ import { youtubeId } from './hero-release.js';
 const CARDS = ':scope > .tracks > .track';
 
 // The platforms under the deck, streaming first, then where DJs buy: the logo and name come from the listen dialog.
-const ORDER = ['spotify', 'apple', 'youtube', 'soundcloud', 'amazon', 'deezer', 'tidal', 'beatport', 'bandcamp'];
+// Every release shows this same set (Axel, 13.11), so Bandcamp, which only has The Number EP, stays in the listen
+// dialog and out of the deck.
+const ORDER = ['spotify', 'apple', 'youtube', 'soundcloud', 'amazon', 'deezer', 'tidal', 'beatport'];
 
 function platformLogos() {
   return [...document.querySelectorAll('#listen-dialog .listen-links a[id^="listen-"]')]
     .map((a) => ({ key: a.id.slice('listen-'.length), name: a.title || a.getAttribute('aria-label') || '', icon: a.querySelector('img')?.getAttribute('src') }))
-    .filter((p) => PLATFORMS.includes(p.key) && p.icon)
-    .sort((a, b) => (ORDER.indexOf(a.key) + 1 || 99) - (ORDER.indexOf(b.key) + 1 || 99));
+    .filter((p) => PLATFORMS.includes(p.key) && ORDER.includes(p.key) && p.icon)
+    .sort((a, b) => ORDER.indexOf(a.key) - ORDER.indexOf(b.key));
 }
 
 function buildDeck(panel) {
