@@ -645,7 +645,7 @@
   }
 }
 
-/* Under each address: COPIADO when a tap copied it, and ESCRIBIR EN GMAIL (js/contact-mail.js). */
+/* Under each address: COPIADO when a tap copied it (js/contact-mail.js). */
 .artist-home .contact .mail-note {
   min-height: 1.4em;
   margin: 4px 0 0;
@@ -654,21 +654,6 @@
   color: var(--red);
 }
 
-.artist-home .contact .mail-gmail {
-  display: inline-block;
-  margin-top: 4px;
-  font: 700 10px/1 var(--font-display);
-  letter-spacing: .16em;
-  color: var(--muted);
-  text-decoration: underline;
-  text-decoration-color: var(--line-strong);
-  text-underline-offset: 5px;
-}
-
-.artist-home .contact .mail-gmail:hover {
-  color: var(--bone);
-  text-decoration-color: var(--red);
-}
 
 /* Golden Circle: on a wide screen the one line of copy stays one line. */
 @media (min-width: 1100px) {
