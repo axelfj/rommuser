@@ -31,4 +31,5 @@
 @import "components/fans.css" layer(site);
 @import "components/contact.css" layer(site);
 @import "components/footer.css" layer(site);
+@import "components/motion.css" layer(site);
 @import "pages/store.css" layer(site);
