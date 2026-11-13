@@ -1,61 +1,141 @@
-// MÚSICA as a deck and a dial of frequencies. On wide screens each tab shows one release as big as the screen
-// allows (cover, name, label, date and its action) beside the list of every release; pointing at or focusing a row
-// tunes the deck to it, and the deck's button does exactly what the row does (opens the listen window, plays the
-// mixtape or opens the pre-save). On phones the deck stays hidden and the cards are a carousel you swipe
-// (css/components/stations.css). The cards themselves are untouched, so player.js, release-day.js, the planets and
-// the release automation read them as before.
+// MÚSICA as a deck and a list of frequencies (Axel, 13.11). Each tab shows one release at a time on the deck: its
+// cover, name, label and date, one logo per platform it is on (each logo goes straight to it, one click, no window
+// in between) and, when the page can play it, ▶ VER EL VISUALIZER (the cover turns into the video) or
+// ▶ ESCUCHAR AQUÍ (the SoundCloud player at the foot of the page). A pre-save shows PRE-SAVE instead.
+// Pointing at, focusing or tapping a row of the list tunes the deck to it. The cards themselves are untouched, so
+// player.js, release-day.js, the planets and the release automation read them as before; a click that a script
+// sends to a card (the player's PLATAFORMAS) still opens the listen dialog.
+import { tr } from './lib/i18n.js';
+import { PLATFORMS } from './lib/platforms.js';
+import { youtubeId } from './hero-release.js';
 
 const CARDS = ':scope > .tracks > .track';
+
+// The platforms in the order the listen dialog shows them, with its logo and name.
+function platformLogos() {
+  return [...document.querySelectorAll('#listen-dialog .listen-links a[id^="listen-"]')]
+    .map((a) => ({ key: a.id.slice('listen-'.length), name: a.getAttribute('aria-label') || a.title || '', icon: a.querySelector('img')?.getAttribute('src') }))
+    .filter((p) => PLATFORMS.includes(p.key) && p.icon);
+}
 
 function buildDeck(panel) {
   const deck = document.createElement('div');
   deck.className = 'deck';
   deck.innerHTML =
-    '<div class="deck-cover" aria-hidden="true"></div>' +
+    '<div class="deck-cover"></div>' +
     '<div class="deck-info"><p class="deck-freq"></p><p class="deck-title"></p><p class="deck-meta"></p>' +
-    '<button class="deck-action" type="button"></button></div>';
+    '<p class="deck-links"></p><div class="deck-actions"><button class="deck-play" type="button"></button><a class="deck-presave" target="_blank" rel="noopener noreferrer"></a></div></div>';
   panel.prepend(deck);
-  return {
-    deck,
-    cover: deck.querySelector('.deck-cover'),
-    freq: deck.querySelector('.deck-freq'),
-    title: deck.querySelector('.deck-title'),
-    meta: deck.querySelector('.deck-meta'),
-    action: deck.querySelector('.deck-action'),
-  };
+  const $ = (s) => deck.querySelector(s);
+  return { deck, cover: $('.deck-cover'), freq: $('.deck-freq'), title: $('.deck-title'), meta: $('.deck-meta'), links: $('.deck-links'), play: $('.deck-play'), presave: $('.deck-presave') };
 }
 
-export function initMusicDeck() {
+export function initMusicDeck(player) {
+  const logos = platformLogos();
   for (const panel of document.querySelectorAll('#musica [role="tabpanel"]')) {
     const cards = [...panel.querySelectorAll(CARDS)];
     if (!cards.length) continue;
+    panel.classList.add('has-deck');
     const parts = buildDeck(panel);
+    const total = String(cards.length).padStart(2, '0');
     let current = null;
+
+    const showCover = (card) => {
+      const cover = card.querySelector('.track-cover');
+      parts.cover.replaceChildren(...[...(cover?.childNodes || [])].map((n) => n.cloneNode(true)));
+      parts.cover.querySelectorAll('img').forEach((img) => {
+        img.loading = 'eager';
+      });
+      parts.cover.toggleAttribute('data-cover', !!cover?.hasAttribute('data-cover'));
+      parts.cover.classList.remove('swap', 'is-video');
+      void parts.cover.offsetWidth;
+      parts.cover.classList.add('swap');
+    };
+
     const tune = (card) => {
       if (card === current) return;
       current?.classList.remove('is-tuned');
       current = card;
       card.classList.add('is-tuned');
-      const cover = card.querySelector('.track-cover');
-      parts.cover.replaceChildren(...[...(cover?.childNodes || [])].map((n) => n.cloneNode(true)));
-      if (cover?.dataset.cover !== undefined) parts.cover.dataset.cover = '';
-      else delete parts.cover.dataset.cover;
-      parts.cover.classList.remove('swap');
-      void parts.cover.offsetWidth;
-      parts.cover.classList.add('swap');
-      parts.freq.textContent = `${card.querySelector('.track-n')?.textContent || ''} / ${String(cards.length).padStart(2, '0')}`;
+      showCover(card);
+      parts.freq.textContent = `${card.querySelector('.track-n')?.textContent || ''} / ${total}`;
       parts.title.textContent = card.querySelector('.track-info strong')?.textContent || '';
       const label = card.querySelector('.track-info small')?.textContent || '';
       const date = card.querySelector('.release-date')?.textContent || '';
       parts.meta.textContent = [label, date].filter(Boolean).join(' · ');
-      parts.action.textContent = card.querySelector('.track-type')?.textContent || '';
-      parts.action.disabled = card.disabled === true;
-      parts.action.classList.toggle('is-presave', card.classList.contains('presave'));
+      const presave = card.classList.contains('presave');
+      parts.links.replaceChildren(
+        ...logos
+          .filter((p) => !presave && card.dataset[p.key])
+          .map((p) => {
+            const a = document.createElement('a');
+            a.href = card.dataset[p.key];
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.setAttribute('aria-label', `${p.name}: ${parts.title.textContent}`);
+            a.title = p.name;
+            const img = document.createElement('img');
+            img.src = p.icon;
+            img.alt = '';
+            img.width = 26;
+            img.height = 26;
+            a.append(img);
+            return a;
+          }),
+      );
+      parts.links.hidden = !parts.links.childElementCount;
+      parts.presave.hidden = !presave;
+      if (presave) {
+        parts.presave.href = card.href;
+        parts.presave.textContent = card.querySelector('.track-type')?.textContent || 'PRE-SAVE';
+      }
+      const video = youtubeId(card.dataset.video);
+      const track = player?.tracks?.find((t) => t.row === card);
+      parts.play.hidden = presave || (!video && !track);
+      parts.play.dataset.mode = video ? 'video' : 'audio';
+      parts.play.textContent = video ? tr('VER EL VISUALIZER') : tr('ESCUCHAR AQUÍ');
+      if (!presave && !parts.links.childElementCount && parts.play.hidden) {
+        parts.meta.textContent = [parts.meta.textContent, card.querySelector('.track-type')?.textContent].filter(Boolean).join(' · ');
+      }
     };
-    parts.action.addEventListener('click', () => current?.click());
+
+    parts.play.addEventListener('click', () => {
+      if (!current) return;
+      if (parts.play.dataset.mode === 'video') {
+        player?.close?.();
+        const frame = document.createElement('iframe');
+        frame.title = parts.title.textContent;
+        frame.allow = 'autoplay; encrypted-media; picture-in-picture';
+        frame.allowFullscreen = true;
+        frame.src = `https://www.youtube-nocookie.com/embed/${youtubeId(current.dataset.video)}?autoplay=1&playsinline=1&rel=0`;
+        parts.cover.removeAttribute('data-cover');
+        parts.cover.classList.add('is-video');
+        parts.cover.replaceChildren(frame);
+        parts.play.hidden = true;
+        return;
+      }
+      const track = player?.tracks?.find((t) => t.row === current);
+      if (track) player.play(track);
+    });
+
     for (const card of cards) {
-      card.addEventListener('pointerenter', () => tune(card));
+      card.addEventListener('pointerenter', (event) => {
+        if (event.pointerType === 'mouse') tune(card);
+      });
       card.addEventListener('focus', () => tune(card));
+      // A visitor's click on a row tunes the deck instead of opening the listen dialog or the pre-save page.
+      card.addEventListener(
+        'click',
+        (event) => {
+          if (!event.isTrusted) return;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          tune(card);
+          const top = parts.deck.getBoundingClientRect().top;
+          if (top < 0) parts.deck.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        },
+        { capture: true },
+      );
     }
     tune(cards[0]);
   }

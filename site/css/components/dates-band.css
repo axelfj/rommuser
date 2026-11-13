@@ -1,61 +1,62 @@
-/* The red band under the hero with the next releases and shows. js/dates-band.js fills it from the MÚSICA rows and
-   the next-show card. It stands still: the label, then each date with what it is. */
+/* The red band under the hero with the next releases and shows (js/dates-band.js fills it from the MÚSICA rows and
+   the next-show card). It reads like the scale of a radio dial: one red strip edge to edge, a fine tick scale along
+   its foot, PRÓXIMAS FECHAS in Noche ink with an on-air light, and each date as a station: the day big in Noche,
+   the name in Hueso, what it is underneath. It stands still; only a date that is today pulses. */
 
-/* Date band: real dates in the one red block of the page, like a flyer strip. */
 .artist-home .dates-band {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
-  gap: 0 40px;
-  background: var(--red);
+  gap: 0;
+  padding: 0 var(--gutter) 14px;
+  background:
+    linear-gradient(90deg,var(--night) 1px,transparent 1px) 0 100%/48px 12px repeat-x,
+    linear-gradient(90deg,color-mix(in srgb,var(--night) 55%,transparent) 1px,transparent 1px) 0 100%/8px 6px repeat-x,
+    var(--red);
   color: var(--bone);
-  padding: 0 var(--gutter) 0 0;
 }
 
-/* The label is the loudest thing on the strip: a Noche block the full height of the band, from the page's left edge,
-   so the strip reads as two solid colours side by side instead of a box floating on the red. */
 .artist-home .dates-label {
   display: flex;
   align-items: center;
+  gap: 12px;
   margin: 0;
-  padding: 18px 24px 16px var(--gutter);
-  background: var(--night);
-  color: var(--bone);
-  font: 700 clamp(18px,2.2vw,28px)/1 var(--font-display);
-  letter-spacing: .08em;
+  padding: 18px 32px 14px 0;
+  color: var(--night);
+  font: 700 clamp(13px,1.2vw,16px)/1 var(--font-display);
+  letter-spacing: .2em;
   white-space: nowrap;
+}
+
+/* The on-air light. */
+.artist-home .dates-label::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--night);
+  box-shadow: 0 0 0 3px color-mix(in srgb,var(--night) 25%,transparent);
 }
 
 .artist-home .dates-track {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 40px;
-  padding: 16px 0;
-}
-
-/* On a phone the label takes its own row, edge to edge, and the dates sit under it on the red. */
-@media (max-width: 620px) {
-  .artist-home .dates-band {
-    padding: 0;
-  }
-
-  .artist-home .dates-label {
-    flex: 1 0 100%;
-    padding: 14px var(--gutter) 12px;
-  }
-
-  .artist-home .dates-track {
-    padding: 16px var(--gutter);
-  }
+  align-items: stretch;
+  gap: 0;
 }
 
 .artist-home .dates-item {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 12px;
-  font: 700 clamp(15px,1.6vw,20px)/1.2 var(--font-display);
-  letter-spacing: .04em;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas: "time name" "time kind";
+  align-items: center;
+  column-gap: 14px;
+  padding: 14px 32px 10px;
+  border-left: 1px solid color-mix(in srgb,var(--night) 40%,transparent);
+  font: 700 clamp(15px,1.5vw,20px)/1.1 var(--font-display);
+  letter-spacing: .03em;
   white-space: nowrap;
   text-transform: uppercase;
   color: var(--bone);
@@ -63,23 +64,75 @@
 }
 
 .artist-home .dates-item time {
-  font: 600 12px/1 var(--font-display);
-  letter-spacing: .12em;
-  font-variant-numeric: tabular-nums;
+  grid-area: time;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--night);
+  font: 700 10px/1 var(--font-display);
+  letter-spacing: .16em;
+}
+
+.artist-home .dates-item time b {
+  font: 700 clamp(28px,2.6vw,38px)/.9 var(--font-display);
+  letter-spacing: -.02em;
 }
 
 .artist-home .dates-item small {
-  font: 600 11px/1 var(--font-display);
-  letter-spacing: .12em;
+  grid-area: kind;
+  color: var(--night);
+  font: 700 10px/1.2 var(--font-display);
+  letter-spacing: .18em;
+}
+
+.artist-home .dates-item.is-today small::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--bone);
+  vertical-align: 1px;
+  animation: show-signal 1.6s ease-in-out infinite;
 }
 
 .artist-home .dates-item:hover {
-  text-decoration: underline;
-  text-decoration-color: var(--bone);
-  text-underline-offset: 6px;
+  background: color-mix(in srgb,var(--night) 12%,transparent);
 }
 
 .artist-home .dates-item:focus-visible {
   outline: 2px solid var(--bone);
-  outline-offset: 4px;
+  outline-offset: -4px;
+}
+
+@media (max-width: 620px) {
+  .artist-home .dates-label {
+    flex: 1 0 100%;
+    padding: 16px 0 8px;
+  }
+
+  .artist-home .dates-track {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .artist-home .dates-item {
+    padding: 10px 0;
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb,var(--night) 40%,transparent);
+    grid-template-columns: 52px auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artist-home .dates-item.is-today small::before {
+    animation: none;
+  }
+}
+
+/* The on-air pulse, shared with the next-show light in EN VIVO. */
+@keyframes show-signal {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .25; }
 }

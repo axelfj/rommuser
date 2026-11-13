@@ -1,87 +1,6 @@
-/* The tuner (js/page-motion.js): the page is a radio. A dial down the right edge of the screen with a red needle
-   and the frequency; a red line sweeps the screen when a new station comes in; each section opens like a slit of
-   light the first time it is seen; rows tip up into place. Everything that hides waits for html.motion. */
-
-/* The dial takes its own strip on the right: the page makes room for it. */
-.tuned .artist-home {
-  --tuner: 72px;
-  padding-right: var(--tuner);
-}
-
-.tuner {
-  position: fixed;
-  z-index: 40;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: var(--tuner,72px);
-  border-left: 1px solid var(--line);
-  background: var(--night);
-  font: 700 9px/1 var(--font-display);
-  letter-spacing: .22em;
-  color: var(--muted);
-}
-
-.tuner-fm {
-  position: absolute;
-  top: 28px;
-  left: 0;
-  right: 0;
-  text-align: center;
-}
-
-.tuner-ruler {
-  position: absolute;
-  top: 96px;
-  bottom: 140px;
-  left: 0;
-  right: 0;
-  background: repeating-linear-gradient(180deg,var(--line-strong) 0 1px,transparent 1px 9px) left/14px 100% no-repeat;
-}
-
-.tuner-needle {
-  position: absolute;
-  left: 0;
-  top: -1px;
-  width: 100%;
-  height: 2px;
-  background: var(--red);
-  box-shadow: 0 0 16px 1px rgba(200,29,37,.8);
-  will-change: transform;
-}
-
-.tuner-mark {
-  position: absolute;
-  left: 22px;
-  translate: 0 -50%;
-  writing-mode: vertical-rl;
-  rotate: 180deg;
-  white-space: nowrap;
-  transition: color .3s;
-}
-
-.tuner-mark.is-on {
-  color: var(--bone);
-}
-
-.tuner-freq {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 28px;
-  text-align: center;
-  font-size: 8px;
-}
-
-.tuner-freq b {
-  display: block;
-  margin-bottom: 6px;
-  font: 700 17px/1 var(--font-display);
-  letter-spacing: 0;
-  color: var(--red);
-  text-shadow: 0 0 14px rgba(200,29,37,.75);
-  font-variant-numeric: tabular-nums;
-}
+/* Motion (js/page-motion.js): the page is a radio. The menu underlines the station on screen; a red line sweeps the
+   screen when a new station comes in; each section opens like a slit of light the first time it is seen; rows tip up
+   into place. Everything that hides waits for html.motion. */
 
 .artist-home>header nav a.is-tuned {
   text-decoration: underline;
@@ -96,7 +15,7 @@
   z-index: 35;
   top: 0;
   left: 0;
-  right: var(--tuner,72px);
+  right: 0;
   height: 2px;
   background: var(--red);
   box-shadow: 0 0 24px 4px rgba(200,29,37,.8);
@@ -170,15 +89,4 @@
 @keyframes slit-fade {
   0% { opacity: 1; transform: scaleY(1); }
   100% { opacity: 0; transform: scaleY(30); }
-}
-
-/* Phones keep the whole width for the page: no dial, each section still shows its frequency and the sweep still runs. */
-@media (max-width: 760px) {
-  .tuned .artist-home {
-    --tuner: 0px;
-  }
-
-  .tuner {
-    display: none;
-  }
 }

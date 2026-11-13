@@ -27,248 +27,336 @@
   letter-spacing: -.035em;
 }
 
-/* ── MÚSICA ── */
+/* ── MÚSICA: the deck (js/music-deck.js) and the list of frequencies ── */
+
+.artist-home .music [role="tabpanel"].has-deck:not([hidden]) {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  gap: 32px;
+  align-items: start;
+}
 
 .artist-home .music .deck {
+  display: grid;
+  grid-template-columns: min(40vw,220px) minmax(0,1fr);
+  gap: 18px 20px;
+  align-items: start;
+}
+
+.artist-home .music .deck-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #0b0b0b;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.artist-home .music .deck-cover img,
+.artist-home .music .deck-cover iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+/* The visualizer is 16:9: the cover frame widens to hold it. */
+.artist-home .music .deck-cover.is-video {
+  grid-column: 1 / -1;
+  aspect-ratio: 16/9;
+}
+
+.artist-home .music .deck-cover:empty::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/assets/rr-light.svg") center/30% no-repeat;
+  opacity: .2;
+}
+
+.artist-home .music .deck-cover[data-cover] {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12%;
+  text-align: center;
+  background: #000;
+}
+
+.artist-home .music .deck-cover[data-cover] b {
+  font: 700 clamp(16px,11cqi,44px)/1 var(--font-display);
+  letter-spacing: -.01em;
+}
+
+.artist-home .music .deck-cover[data-cover] i {
+  font: 600 clamp(8px,3.6cqi,13px)/1 var(--font-display);
+  font-style: normal;
+  letter-spacing: .14em;
+}
+
+/* A new station comes in as a slit of light that opens. */
+.motion .artist-home .music .deck-cover.swap > * {
+  animation: deck-slit .6s cubic-bezier(.75,0,.15,1) both;
+}
+
+.artist-home .music .deck-info {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  min-width: 0;
+}
+
+.artist-home .music .deck-freq,
+.artist-home .music .deck-meta {
+  margin: 0;
+  font: 700 10px/1.5 var(--font-display);
+  letter-spacing: .18em;
+  color: var(--muted);
+}
+
+.artist-home .music .deck-freq {
+  color: var(--red);
+}
+
+.artist-home .music .deck-title {
+  margin: 0;
+  font: 700 clamp(26px,4.4vw,72px)/.95 var(--font-display);
+  letter-spacing: -.03em;
+  overflow-wrap: anywhere;
+}
+
+/* One logo per platform, each straight to the track. */
+.artist-home .music .deck-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 0;
+}
+
+.artist-home .music .deck-links a {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--control-radius);
+  transition: border-color .2s,background-color .2s;
+}
+
+.artist-home .music .deck-links img {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.artist-home .music .deck-links a:hover,
+.artist-home .music .deck-links a:focus-visible {
+  border-color: var(--red);
+  background: rgba(200,29,37,.12);
+}
+
+.artist-home .music .deck-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.artist-home .music .deck-play,
+.artist-home .music .deck-presave {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--control-radius);
+  background: var(--red);
+  color: var(--bone);
+  font: 700 11px/1 var(--font-display);
+  letter-spacing: .14em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .2s,color .2s;
+}
+
+.artist-home .music .deck-play::before {
+  content: "";
+  border-style: solid;
+  border-width: 5px 0 5px 8px;
+  border-color: transparent transparent transparent currentColor;
+}
+
+.artist-home .music .deck-presave::after {
+  content: "↗";
+}
+
+.artist-home .music .deck-play:hover,
+.artist-home .music .deck-presave:hover {
+  background: var(--bone);
+  color: var(--night);
+}
+
+.artist-home .music .deck-play[hidden],
+.artist-home .music .deck-presave[hidden],
+.artist-home .music .deck-links[hidden] {
   display: none;
 }
 
-/* Phones and tablets: every tab is a carousel of covers you swipe. */
-@media (max-width: 1099px) {
-  .artist-home .music .tracks {
-    grid-template-columns: none;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(200px,38%);
-    gap: 0 16px;
-    margin-right: calc(-1 * var(--gutter));
-    padding-right: var(--gutter);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 0;
-    scrollbar-width: none;
+/* The list: number, a small cover, name and label, date. The deck carries the links, so a row has no button. */
+.artist-home .music .has-deck .tracks {
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border-top: 1px solid var(--line);
+}
+
+.artist-home .music .has-deck .tracks .music-choice.track {
+  display: grid;
+  grid-row: auto;
+  grid-template-rows: auto auto;
+  grid-template-columns: 26px 44px minmax(0,1fr) auto;
+  grid-template-areas: "n cover title date" "n cover label date";
+  gap: 2px 14px;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  cursor: pointer;
+  transition: padding .3s cubic-bezier(.16,1,.3,1),color .25s;
+}
+
+.artist-home .music .has-deck .tracks .track .track-cover {
+  grid-area: cover;
+  width: 44px;
+}
+
+.artist-home .music .has-deck .tracks .track .track-cover[data-cover] {
+  padding: 6%;
+  gap: 1px;
+}
+
+.artist-home .music .has-deck .tracks .track .track-cover[data-cover] b {
+  font-size: 6px;
+}
+
+.artist-home .music .has-deck .tracks .track .track-cover[data-cover] i {
+  display: none;
+}
+
+.artist-home .music .has-deck .tracks .track .track-n {
+  display: block;
+  grid-area: n;
+  font: 700 11px/1 var(--font-display);
+  letter-spacing: .08em;
+}
+
+.artist-home .music .has-deck .tracks .track .track-info {
+  display: contents;
+}
+
+.artist-home .music .has-deck .tracks .track .track-info strong {
+  grid-area: title;
+  align-self: end;
+  margin: 0;
+  font-size: clamp(15px,1.4vw,21px);
+  color: var(--bone);
+  opacity: .75;
+  transition: opacity .25s;
+}
+
+.artist-home .music .has-deck .tracks .track .track-info small {
+  grid-area: label;
+  align-self: start;
+  margin: 0;
+  font-size: 10px;
+}
+
+.artist-home .music .has-deck .tracks .track .release-date {
+  grid-area: date;
+  margin: 0;
+  font-size: 10px;
+}
+
+.artist-home .music .has-deck .tracks .track .track-type {
+  display: none;
+}
+
+.artist-home .music .has-deck .tracks .track.is-tuned {
+  padding-left: 8px;
+  color: var(--bone);
+}
+
+.artist-home .music .has-deck .tracks .track.is-tuned .track-info strong {
+  opacity: 1;
+}
+
+.artist-home .music .has-deck .tracks .track.is-tuned .track-n {
+  color: var(--red);
+}
+
+.artist-home .music .has-deck .tracks .track.is-tuned .track-cover img {
+  filter: none;
+}
+
+@media (hover: hover) {
+  .artist-home .music .has-deck .tracks .track:hover .track-info strong {
+    opacity: 1;
   }
 
-  .artist-home .music .tracks::-webkit-scrollbar {
-    display: none;
-  }
-
-  .artist-home .music .tracks .music-choice.track {
-    scroll-snap-align: start;
+  .artist-home .music .has-deck .tracks .track:not(:disabled):hover .track-cover img {
+    transform: none;
   }
 }
 
-@media (max-width: 719px) {
-  .artist-home .music .tracks {
-    grid-auto-columns: 68%;
-    gap: 0 14px;
-  }
-}
-
-/* Wide screens: the deck on the left, the list of frequencies on the right. */
+/* Wide screens: the deck stands on the left (a cover the size the artwork holds sharp), the list on the right. */
 @media (min-width: 1100px) {
-  .artist-home .music [role="tabpanel"]:not([hidden]) {
-    display: grid;
-    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-    gap: clamp(32px,4.5vw,80px);
-    align-items: start;
+  .artist-home .music [role="tabpanel"].has-deck:not([hidden]) {
+    grid-template-columns: minmax(0,360px) minmax(0,1fr);
+    gap: clamp(40px,5vw,96px);
   }
 
   .artist-home .music .deck {
     position: sticky;
-    top: 120px;
-    display: grid;
-    gap: 22px;
-  }
-
-  .artist-home .music .deck-cover {
-    position: relative;
-    width: min(100%,64vh);
-    aspect-ratio: 1;
-    overflow: hidden;
-    background: #0b0b0b;
-    box-shadow: inset 0 0 0 1px var(--line);
-  }
-
-  .artist-home .music .deck-cover img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .artist-home .music .deck-cover:empty::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: url("/assets/rr-light.svg") center/30% no-repeat;
-    opacity: .2;
-  }
-
-  .artist-home .music .deck-cover[data-cover] {
-    container-type: inline-size;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 12%;
-    text-align: center;
-    background: #000;
-  }
-
-  .artist-home .music .deck-cover[data-cover] b {
-    font: 700 clamp(28px,10cqi,72px)/1 var(--font-display);
-    letter-spacing: -.01em;
-  }
-
-  .artist-home .music .deck-cover[data-cover] i {
-    font: 600 clamp(10px,3.4cqi,16px)/1 var(--font-display);
-    font-style: normal;
-    letter-spacing: .14em;
-  }
-
-  /* A new station comes in as a slit of light that opens. */
-  .motion .artist-home .music .deck-cover.swap > * {
-    animation: deck-slit .6s cubic-bezier(.75,0,.15,1) both;
-  }
-
-  .artist-home .music .deck-info {
-    display: grid;
-    gap: 10px;
-    justify-items: start;
-  }
-
-  .artist-home .music .deck-freq,
-  .artist-home .music .deck-meta {
-    margin: 0;
-    font: 700 11px/1.4 var(--font-display);
-    letter-spacing: .2em;
-    color: var(--muted);
-  }
-
-  .artist-home .music .deck-freq {
-    color: var(--red);
-    text-shadow: var(--glow-soft);
+    top: 110px;
+    grid-template-columns: minmax(0,1fr);
+    gap: 20px;
   }
 
   .artist-home .music .deck-title {
-    margin: 0;
-    font: 700 clamp(40px,4.6vw,88px)/.92 var(--font-display);
-    letter-spacing: -.035em;
-    overflow-wrap: anywhere;
+    font-size: clamp(36px,3.2vw,56px);
   }
 
-  .artist-home .music .deck-action {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    min-height: 48px;
-    margin-top: 8px;
-    padding: 0 24px;
-    border: 0;
-    border-radius: var(--control-radius);
-    background: var(--red);
-    color: var(--bone);
-    font: 700 12px/1 var(--font-display);
-    letter-spacing: .14em;
-    cursor: pointer;
-    transition: background-color .2s,color .2s,box-shadow .2s;
+  .artist-home .music .has-deck .tracks .music-choice.track {
+    grid-template-columns: 34px 52px minmax(0,1fr) auto;
+    gap: 3px 18px;
+    padding: 12px 0;
   }
 
-  .artist-home .music .deck-action:not(.is-presave)::before {
-    content: "";
-    border-style: solid;
-    border-width: 5px 0 5px 8px;
-    border-color: transparent transparent transparent currentColor;
+  .artist-home .music .has-deck .tracks .track .track-cover {
+    width: 52px;
   }
+}
 
-  .artist-home .music .deck-action:hover {
-    background: var(--bone);
-    color: var(--night);
-  }
-
-  .artist-home .music .deck-action:disabled {
-    background: none;
-    color: var(--muted);
-    box-shadow: inset 0 0 0 1px var(--line-strong);
-    cursor: default;
-  }
-
-  .artist-home .music .tracks {
-    display: block;
-    border-top: 1px solid var(--line);
-  }
-
-  .artist-home .music .tracks .music-choice.track {
-    display: grid;
-    grid-row: auto;
-    grid-template-rows: auto auto;
-    grid-template-columns: 40px minmax(0,1fr) auto 112px;
-    grid-template-areas: "n title date action" "n label date action";
-    gap: 3px 20px;
-    align-items: center;
-    width: 100%;
-    padding: 15px 0;
-    border-bottom: 1px solid var(--line);
-    color: var(--muted);
-    transition: padding .3s cubic-bezier(.16,1,.3,1),color .25s;
-  }
-
-  .artist-home .music .tracks .track .track-cover {
-    display: none;
-  }
-
-  .artist-home .music .tracks .track .track-n {
-    display: block;
-    grid-area: n;
+@media (max-width: 1099px) {
+  .artist-home .music .deck-info {
     align-self: center;
-    font: 700 12px/1 var(--font-display);
-    letter-spacing: .1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .artist-home .music .deck {
+    grid-template-columns: minmax(0,1fr);
   }
 
-  .artist-home .music .tracks .track .track-info {
-    display: contents;
-  }
-
-  .artist-home .music .tracks .track .track-info strong {
-    grid-area: title;
-    align-self: end;
-    margin: 0;
-    font-size: clamp(17px,1.5vw,24px);
-    color: var(--bone);
-    opacity: .72;
-    transition: opacity .25s;
-  }
-
-  .artist-home .music .tracks .track .track-info small {
-    grid-area: label;
-    align-self: start;
-    margin: 0;
-    font-size: 10px;
-  }
-
-  .artist-home .music .tracks .track .release-date {
-    grid-area: date;
-    margin: 0;
-  }
-
-  .artist-home .music .tracks .track .track-type {
-    grid-area: action;
-    margin: 0;
-  }
-
-  .artist-home .music .tracks .track.is-tuned {
-    padding-left: 12px;
-    color: var(--bone);
-  }
-
-  .artist-home .music .tracks .track.is-tuned .track-info strong {
-    opacity: 1;
-  }
-
-  .artist-home .music .tracks .track.is-tuned .track-n {
-    color: var(--red);
+  .artist-home .music .deck-cover:not(.is-video) {
+    width: min(100%,300px);
   }
 }
 
