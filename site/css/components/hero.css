@@ -289,3 +289,32 @@
   border: 0;
   background: var(--night);
 }
+
+/* On a narrow phone the card stacks too, so the label keeps one line and the button sits under the name. */
+@media (max-width: 479px) {
+  .artist-home .hero .hero-release-play {
+    display: grid;
+    grid-template-columns: 84px minmax(0,1fr);
+    grid-template-areas: "img info" "img cta";
+    gap: 8px 14px;
+    padding: 0 12px 0 0;
+  }
+
+  .artist-home .hero .hero-release-play img {
+    grid-area: img;
+    width: 84px;
+    height: 84px;
+  }
+
+  .artist-home .hero .hero-release-info {
+    grid-area: info;
+    align-self: end;
+  }
+
+  .artist-home .hero .hero-release-cta {
+    grid-area: cta;
+    justify-self: start;
+    align-self: start;
+  }
+}
+

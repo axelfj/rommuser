@@ -2,7 +2,7 @@
 // cover, name, label and date, one logo per platform it is on (each logo goes straight to it, one click, no window
 // in between) and, when the page can play it, ▶ VER EL VISUALIZER (the cover turns into the video) or
 // ▶ ESCUCHAR AQUÍ (the SoundCloud player at the foot of the page). A pre-save shows PRE-SAVE instead.
-// Pointing at, focusing or tapping a row of the list tunes the deck to it. The cards themselves are untouched, so
+// Clicking or tapping a row of the list tunes the deck to it; hovering does not. The cards themselves are untouched, so
 // player.js, release-day.js, the planets and the release automation read them as before; a click that a script
 // sends to a card (the player's PLATAFORMAS) still opens the listen dialog.
 import { tr } from './lib/i18n.js';
@@ -126,11 +126,9 @@ export function initMusicDeck(player) {
     });
 
     for (const card of cards) {
-      card.addEventListener('pointerenter', (event) => {
-        if (event.pointerType === 'mouse') tune(card);
-      });
-      card.addEventListener('focus', () => tune(card));
-      // A visitor's click on a row tunes the deck instead of opening the listen dialog or the pre-save page.
+      // Only a click (or Enter / Space, which click) changes the release on the deck: hovering or tabbing past a row
+      // leaves it where it is (Axel, 13.11). The click tunes the deck instead of opening the listen dialog or the
+      // pre-save page.
       card.addEventListener(
         'click',
         (event) => {

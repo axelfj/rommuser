@@ -89,3 +89,16 @@
     gap: 12px 16px;
   }
 }
+
+/* The narrowest phones (320 px): smaller type so HOUSE OF BOOGIE fits beside its column. */
+@media (max-width: 359px) {
+  .artist-home .hero .music-labels .label-list {
+    gap: 12px 10px;
+  }
+
+  .artist-home .hero .music-labels .label-list li {
+    gap: 6px;
+    font-size: 11px;
+    letter-spacing: .04em;
+  }
+}
