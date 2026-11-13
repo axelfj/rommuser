@@ -369,49 +369,61 @@
 
 .artist-home .live .next-show {
   display: grid;
-  grid-template-columns: minmax(0,1fr) auto;
-  grid-template-areas: "info when" "count count";
-  align-items: end;
-  gap: 8px 32px;
-  margin: 0 0 72px;
+  grid-template-columns: minmax(0,1fr);
+  grid-template-areas: "label" "name" "when" "count";
+  justify-items: start;
+  gap: 0;
+  margin: 0 0 80px;
   padding: 0;
   border: 0;
 }
 
 .artist-home .live .next-show>div {
-  grid-area: info;
-  min-width: 0;
+  display: contents;
 }
 
 .artist-home .live .next-label {
+  grid-area: label;
   color: var(--red);
   text-shadow: var(--glow-soft);
 }
 
 .artist-home .live .next-show h3 {
-  margin: 14px 0 10px;
-  font-size: clamp(72px,15vw,260px);
+  grid-area: name;
+  margin: 14px 0 18px;
+  font-size: clamp(72px,15vw,240px);
   line-height: .84;
   letter-spacing: -.05em;
   overflow-wrap: anywhere;
 }
 
+/* One line under the name: the place, then the date. */
 .artist-home .live .next-show>div>p {
+  grid-area: when;
   margin: 0;
   font: 700 clamp(18px,2vw,28px)/1.2 var(--font-display);
   letter-spacing: .04em;
 }
 
 .artist-home .live .next-show time {
-  grid-area: when;
-  font-size: clamp(28px,3.4vw,56px);
-  text-align: right;
+  grid-area: count;
+  margin-top: 12px;
+  font-size: clamp(20px,2vw,28px);
+}
+
+.artist-home .live .next-show.has-when time {
+  display: none;
+}
+
+.artist-home .live .next-show.has-when>div>p::after {
+  content: " · " attr(data-when);
+  color: var(--muted);
 }
 
 .artist-home .live .next-count {
   grid-area: count;
   margin: 18px 0 0;
-  font: 700 clamp(20px,2.8vw,40px)/1 var(--font-display);
+  font: 700 clamp(20px,2.6vw,36px)/1 var(--font-display);
   letter-spacing: .06em;
   font-variant-numeric: tabular-nums;
   color: var(--bone);
@@ -430,61 +442,90 @@
   content: "● ";
 }
 
-/* The log: every night played, side by side, the older ones fading a little. */
-.artist-home .live .show-log {
+/* The log: one ledger per year. The year stands on the left; each night is one line: date, name, place and, when
+   there is one, the set to watch. */
+.artist-home .live .show-history-label {
+  margin: 0 0 16px;
+}
+
+.artist-home .live .show-log-year {
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(min(100%,300px),1fr));
-  column-gap: 32px;
+  grid-template-columns: 120px minmax(0,1fr);
+  gap: 0 24px;
+  padding: 18px 0 22px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.artist-home .live .show-log-label {
+  margin: 4px 0 0;
+  font: 700 clamp(28px,2.6vw,40px)/1 var(--font-display);
+  letter-spacing: -.02em;
+  color: var(--bone);
+}
+
+.artist-home .live .show-log-rows {
+  display: grid;
 }
 
 .artist-home .live .show-log .show-row {
-  grid-template-columns: 86px minmax(0,1fr);
-  align-items: start;
-  gap: 4px 14px;
+  display: grid;
+  grid-template-columns: 64px minmax(0,1fr) minmax(0,1.2fr) 120px;
+  align-items: baseline;
+  gap: 4px 24px;
   min-height: 0;
-  padding: 16px 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 0;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
   opacity: var(--fade,1);
 }
 
+.artist-home .live .show-log .show-row:last-child {
+  border-bottom: 0;
+}
+
 .artist-home .live .show-log .show-row time {
-  padding-top: 5px;
   font: 700 11px/1 var(--font-display);
-  letter-spacing: .14em;
+  letter-spacing: .12em;
+  color: var(--muted);
 }
 
 .artist-home .live .show-log .show-row>div {
-  display: block;
+  display: contents;
 }
 
 .artist-home .live .show-log .show-row h3 {
-  margin: 0 0 4px;
-  font-size: 19px;
+  grid-column: 2;
+  margin: 0;
+  font-size: clamp(16px,1.4vw,20px);
+  line-height: 1.2;
 }
 
 .artist-home .live .show-log .show-row p {
+  grid-column: 3;
+  grid-row: 1;
+  margin: 0;
   font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 .artist-home .live .show-log .show-row>span {
-  grid-column: 2;
-  text-align: left;
-  font: 700 10px/1 var(--font-display);
-  letter-spacing: .18em;
-}
-
-.artist-home .live .show-log .show-row>span:empty {
   display: none;
 }
 
 .artist-home .live .show-log .show-video {
+  grid-column: 4;
+  grid-row: 1;
+  justify-self: end;
   display: inline-flex;
+  align-items: center;
+  gap: 8px;
   height: auto;
-  margin-top: 10px;
+  margin: 0;
   color: var(--red);
   font: 700 10px/1 var(--font-display);
   letter-spacing: .16em;
+  white-space: nowrap;
   text-decoration: none;
 }
 
@@ -500,19 +541,34 @@
   }
 }
 
-@media (max-width: 620px) {
-  .artist-home .live .next-show {
-    grid-template-areas: "info" "when" "count";
+@media (max-width: 900px) {
+  .artist-home .live .show-log-year {
     grid-template-columns: minmax(0,1fr);
+    gap: 10px;
   }
 
-  .artist-home .live .next-show time {
-    text-align: left;
+  .artist-home .live .show-log .show-row {
+    grid-template-columns: 64px minmax(0,1fr);
+    gap: 4px 16px;
   }
 
-  .artist-home .live .next-show time span {
-    display: inline;
-    margin-left: 8px;
+  .artist-home .live .show-log .show-row h3 {
+    grid-row: 1;
+  }
+
+  .artist-home .live .show-log .show-row p {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .artist-home .live .show-log .show-video {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: start;
+  }
+
+  .artist-home .live .show-log .show-video {
+    margin-top: 6px;
   }
 }
 
@@ -571,4 +627,29 @@
   .artist-home .music .tracks .music-choice.track {
     transition: none;
   }
+}
+
+/* Under each address: COPIADO when a tap copied it, and ESCRIBIR EN GMAIL (js/contact-mail.js). */
+.artist-home .contact .mail-note {
+  min-height: 1.4em;
+  margin: 4px 0 0;
+  font: 700 10px/1.4 var(--font-display);
+  letter-spacing: .16em;
+  color: var(--red);
+}
+
+.artist-home .contact .mail-gmail {
+  display: inline-block;
+  margin-top: 4px;
+  font: 700 10px/1 var(--font-display);
+  letter-spacing: .16em;
+  color: var(--muted);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 5px;
+}
+
+.artist-home .contact .mail-gmail:hover {
+  color: var(--bone);
+  text-decoration-color: var(--red);
 }

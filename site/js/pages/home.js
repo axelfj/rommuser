@@ -2,6 +2,7 @@
 // site/build/home.js. The order matters: release-day.js and shows.js update the cards before the dates band, the
 // player and the planets read them.
 import { initArtistSystem } from '../artist-system.js';
+import { initContactMail } from '../contact-mail.js';
 import { initDatesBand } from '../dates-band.js';
 import { initFanForm } from '../fan-form.js';
 import { initFooterYear } from '../footer-year.js';
@@ -26,6 +27,7 @@ initShows();
 initFooterYear();
 initHeaderShrink();
 initFanForm();
+initContactMail();
 initDatesBand();
 const player = initPlayer();
 initMusicDeck(player);

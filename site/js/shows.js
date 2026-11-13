@@ -1,7 +1,7 @@
 // EN VIVO. The page lists the next show as a card (.next-show with data-show-date) above the history of past
 // nights (.show-row). Once a show's date has passed (Costa Rica time) the card turns into a history row, keeping
 // its place and type, in date order; a tentative date that passed simply disappears. The next night counts down to
-// itself, and the past nights read as one log.
+// itself, and the past nights read as one log, year by year.
 import { todayInCostaRica } from './lib/dates.js';
 import { tr } from './lib/i18n.js';
 
@@ -40,18 +40,34 @@ function toHistoryRow(show) {
   else document.querySelector('.show-history-label').after(show);
 }
 
-// The past nights become a log: every show at once, newest first, older ones fading a little.
+// The past nights become a log: one ledger per year, the year on the left, newest first, older nights fading a
+// little.
 function buildLog() {
   const rows = [...document.querySelectorAll('#vivo .show-row')];
   if (!rows.length) return;
   const log = document.createElement('div');
   log.className = 'show-log';
-  log.setAttribute('role', 'list');
   rows[0].before(log);
+  let group = null;
+  let year = '';
   rows.forEach((row, i) => {
+    const y = row.querySelector('time')?.dateTime.slice(0, 4) || '';
+    if (!group || y !== year) {
+      year = y;
+      group = document.createElement('div');
+      group.className = 'show-log-year';
+      const label = document.createElement('p');
+      label.className = 'show-log-label';
+      label.textContent = year;
+      const list = document.createElement('div');
+      list.className = 'show-log-rows';
+      list.setAttribute('role', 'list');
+      group.append(label, list);
+      log.append(group);
+    }
     row.setAttribute('role', 'listitem');
     row.style.setProperty('--fade', String(1 - (0.4 * i) / Math.max(rows.length - 1, 1)));
-    log.append(row);
+    group.lastChild.append(row);
   });
 }
 
@@ -74,6 +90,13 @@ function startCountdown(today) {
   next.append(count);
   const { showDate } = next.dataset;
   if (showDate === today) next.classList.add('is-tonight');
+  // The date joins the place on one line under the name (css/components/stations.css).
+  const place = next.querySelector(':scope > div > p');
+  const when = next.querySelector(':scope > time');
+  if (place && when) {
+    place.dataset.when = when.textContent.replace(/\s+/g, ' ').trim();
+    next.classList.add('has-when');
+  }
   const tick = () => {
     count.textContent = countdown(showDate, Date.now(), today);
   };
