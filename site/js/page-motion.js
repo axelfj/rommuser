@@ -1,5 +1,4 @@
-// Home page motion: the page is a radio. Each section is a station (its frequency is data-mhz on its heading, shown
-// over the title, see index.html); the menu underlines the station on screen, and each time a new station comes in
+// Home page motion: the page is a radio. Each section is a station; the menu underlines the station on screen, and each time a new station comes in
 // one red line sweeps down the screen. Each station opens like a slit of light the first time it is seen, and shows,
 // contacts and the Golden Circle tip up into place. Transforms and opacity only, so iPhones keep 60 fps.
 // Visitors who ask for less motion keep the menu underline and nothing else.

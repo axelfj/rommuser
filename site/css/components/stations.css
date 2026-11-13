@@ -1,5 +1,4 @@
-/* Stations: each section of the home page is a station of the dial (js/page-motion.js). Its frequency sits over
-   its heading; MÚSICA is a deck beside a list of frequencies (a carousel on phones, js/music-deck.js); EN VIVO is the
+/* Stations: each section of the home page is a station of the dial (js/page-motion.js). MÚSICA is a deck beside a list of frequencies (a carousel on phones, js/music-deck.js); EN VIVO is the
    next night as big as it gets with its countdown, and the past nights as a log (js/shows.js); EL ARTISTA reads as
    a manifesto; BOOKINGS is the booking address across the screen. Loaded after the component files, so equal
    selectors here win. */
@@ -7,18 +6,6 @@
 .artist-home {
   --glow: 0 0 16px rgba(200,29,37,.7);
   --glow-soft: 0 0 8px rgba(200,29,37,.35);
-}
-
-/* The frequency of each station over its heading. */
-.artist-home .section-heading[data-mhz]::before {
-  content: attr(data-mhz) " MHZ";
-  flex: 0 0 100%;
-  order: -1;
-  margin-bottom: 6px;
-  font: 700 11px/1 var(--font-display);
-  letter-spacing: .24em;
-  color: var(--red);
-  text-shadow: var(--glow-soft);
 }
 
 .artist-home .section-heading h2 {
