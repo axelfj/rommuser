@@ -2,7 +2,9 @@
 // the core. Tapping a planet plays that track through the page's one player (player.js), and while it plays the RR
 // turns like a record at 33⅓, the core breathes on the beat and notes leave the planet. Releases still to come cross
 // the frame as comets, one at a time and soonest first, carrying their name and date like an announcement; each
-// pass comes in from a random side and the core's gravity bends it.
+// pass comes in from a random side and the core's gravity bends it. The newest release is caught by that gravity the
+// first time each visitor sees it: it comes in from outside the frame as a comet, spirals in and settles on the
+// innermost orbit (once per release and visitor, remembered in localStorage; skipped for reduced motion).
 // Everything is read from the MÚSICA cards, so nothing here is typed twice. It always moves (Axel's call, like the red
 // band); a device that asks for less motion gets it at half speed. Colours come from the brand tokens (--bone, --red).
 import { shortDate, todayInCostaRica } from './lib/dates.js';
@@ -82,6 +84,21 @@ export function initArtistSystem(player) {
     layer.append(tag);
     b.el = tag;
   });
+  // The newest release's capture: plays once per visitor and release, when the system first comes into view.
+  const CAPTURE = 6,
+    SEEN_KEY = 'rommuser-orbit';
+  const newest = released[0];
+  let seen = '';
+  try {
+    seen = localStorage.getItem(SEEN_KEY) || '';
+  } catch {}
+  let capture = newest && seen !== newest.name && !reduce.matches ? { from: Math.random() * Math.PI * 2, trail: [], ring: 0, done: false } : null;
+  const remember = () => {
+    try {
+      localStorage.setItem(SEEN_KEY, newest.name);
+    } catch {}
+  };
+  if (newest && !capture) remember();
   const logo = new Image();
   logo.src = '/assets/rr-light.svg';
   logo.addEventListener('load', paint);
@@ -303,12 +320,67 @@ export function initArtistSystem(player) {
       ctx.lineWidth = 1;
     }
   }
+  // The capture path: from just outside the frame it falls inward along a spiral that tightens and speeds up as it
+  // nears the core (r and the extra sweep both shrink with (1 - p)²), and lands exactly on the planet's own orbit.
+  function captured(g) {
+    const b = newest,
+      p = Math.min(1, t / CAPTURE);
+    if (p >= 1) {
+      if (!capture.done) {
+        capture.done = true;
+        capture.ring = 1;
+        remember();
+      }
+      return;
+    }
+    const k = (1 - p) * (1 - p),
+      R = orbitRadius(g, 0),
+      far = Math.hypot(w, h * (g.rx / g.ry)) * 0.62 + 40,
+      a = Math.atan2((b.y - g.cy) * (g.rx / g.ry), b.x - g.cx) - k * Math.PI * 2.4,
+      r = R + (far - R) * k;
+    b.x = g.cx + Math.cos(a) * r;
+    b.y = g.cy + Math.sin(a) * r * (g.ry / g.rx);
+    b.z = Math.sin(a);
+    b.s = 0.78 + (0.22 * (b.z + 1)) / 2;
+  }
+  function drawCapture(g) {
+    const b = newest;
+    if (!capture.done) {
+      const last = capture.trail[capture.trail.length - 1];
+      if (!last || Math.hypot(last.x - b.x, last.y - b.y) > 2) capture.trail.push({ x: b.x, y: b.y });
+      if (capture.trail.length > 70) capture.trail.shift();
+    } else capture.trail.shift();
+    // The tail it leaves on the way in, red near the planet and fading out behind it.
+    const trail = capture.trail;
+    for (let k = 1; k < trail.length; k++) {
+      const f = k / trail.length;
+      ctx.globalAlpha = 0.6 * f * f;
+      ctx.strokeStyle = f > 0.7 ? RED : BONE;
+      ctx.lineWidth = 0.5 + f * 2.5;
+      ctx.beginPath();
+      ctx.moveTo(trail[k - 1].x, trail[k - 1].y);
+      ctx.lineTo(trail[k].x, trail[k].y);
+      ctx.stroke();
+    }
+    // Once it settles, one red ring spreads from the planet and fades.
+    if (capture.ring > 0) {
+      ctx.globalAlpha = capture.ring * 0.8;
+      ctx.strokeStyle = RED;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, (g.mobile ? 7 : 9) + (1 - capture.ring) * 34, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.lineWidth = 1;
+    if (capture.done && !trail.length && capture.ring <= 0) capture = null;
+  }
   function paint() {
     if (!w) return;
     const g = geometry();
     ctx.clearRect(0, 0, w, h);
     ctx.lineWidth = 1;
     released.forEach((b, i) => place(g, b, orbitRadius(g, i), 0.2 * Math.pow(g.inner / orbitRadius(g, i), 1.5)));
+    if (capture) captured(g);
     upcoming.forEach((b, i) => comet(g, b, i));
     // Grooves and the fixed light across them, so the system reads as a record seen at an angle.
     ctx.save();
@@ -379,6 +451,7 @@ export function initArtistSystem(player) {
     upcoming.forEach((b) => {
       if (b.on) drawComet(g, b);
     });
+    if (capture) drawCapture(g);
     // Notes drift on a loose halo around the system.
     ctx.fillStyle = BONE;
     ctx.strokeStyle = BONE;
@@ -451,6 +524,7 @@ export function initArtistSystem(player) {
         }
       }
       pulse = Math.max(0, pulse - dt * 3.2);
+      if (capture?.ring > 0) capture.ring = Math.max(0, capture.ring - dt * 0.8);
       // Like a turntable: it spins up when a track plays and runs down on pause, then rests where it stopped.
       spin += ((playing ? RPM33 : 0) - spin) * Math.min(1, dt * (playing ? 2.4 : 1.4));
       if (!playing && spin < 0.01) spin = 0;

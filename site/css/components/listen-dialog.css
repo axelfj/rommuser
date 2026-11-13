@@ -200,3 +200,48 @@ dialog h2 {
     font-size: 30px;
   }
 }
+
+/* VER EL VISUALIZER: a red tab on the cover's lower edge; a tap turns the cover into the 16:9 video. */
+.artist-home .listen-video {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: -58px auto 22px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  background: var(--red);
+  color: var(--bone);
+  font: 700 12px/1 var(--font-display);
+  letter-spacing: .1em;
+  cursor: pointer;
+}
+
+.artist-home .listen-video:hover {
+  background: var(--bone);
+  color: var(--night);
+}
+
+.artist-home .listen-video:focus-visible {
+  outline: 2px solid var(--bone);
+  outline-offset: 4px;
+}
+
+.artist-home .listen-art[data-video] {
+  aspect-ratio: 16/9;
+  margin-top: 56px;
+  background: #000;
+}
+
+.artist-home .listen-art[data-video]::after {
+  display: none;
+}
+
+.artist-home .listen-art iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

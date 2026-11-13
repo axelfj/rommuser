@@ -1,7 +1,7 @@
 // EN VIVO. The page lists the next show as a card (.next-show with data-show-date) above the history of past
 // nights (.show-row). Once a show's date has passed (Costa Rica time) the card turns into a history row, keeping
-// its place and type, in date order; a tentative date that passed simply disappears. Then the history folds into
-// one dropdown per year, the latest open, and older nights fade a little.
+// its place and type, in date order; a tentative date that passed simply disappears. The next night counts down to
+// itself, and the past nights read as one log, year by year.
 import { todayInCostaRica } from './lib/dates.js';
 import { tr } from './lib/i18n.js';
 
@@ -40,29 +40,68 @@ function toHistoryRow(show) {
   else document.querySelector('.show-history-label').after(show);
 }
 
-function foldByYear() {
+// The past nights become a log: one ledger per year, the year on the left, newest first, older nights fading a
+// little.
+function buildLog() {
   const rows = [...document.querySelectorAll('#vivo .show-row')];
-  const years = new Map();
+  if (!rows.length) return;
+  const log = document.createElement('div');
+  log.className = 'show-log';
+  rows[0].before(log);
+  let group = null;
+  let year = '';
   rows.forEach((row, i) => {
+    const y = row.querySelector('time')?.dateTime.slice(0, 4) || '';
+    if (!group || y !== year) {
+      year = y;
+      group = document.createElement('div');
+      group.className = 'show-log-year';
+      const label = document.createElement('p');
+      label.className = 'show-log-label';
+      label.textContent = year;
+      const list = document.createElement('div');
+      list.className = 'show-log-rows';
+      list.setAttribute('role', 'list');
+      group.append(label, list);
+      log.append(group);
+    }
+    row.setAttribute('role', 'listitem');
     row.style.setProperty('--fade', String(1 - (0.4 * i) / Math.max(rows.length - 1, 1)));
-    const year = row.querySelector('time')?.dateTime.slice(0, 4) || '';
-    if (!years.has(year)) years.set(year, []);
-    years.get(year).push(row);
+    group.lastChild.append(row);
   });
-  [...years].forEach(([year, list], i) => {
-    const box = document.createElement('details');
-    box.className = 'show-year';
-    box.open = i === 0;
-    const summary = document.createElement('summary');
-    const label = document.createElement('span');
-    label.textContent = year;
-    const count = document.createElement('span');
-    count.className = 'show-count';
-    count.textContent = `${list.length} ${tr(list.length === 1 ? 'SHOW' : 'SHOWS')}`;
-    summary.append(label, count);
-    list[0].before(box);
-    box.append(summary, ...list);
-  });
+}
+
+// T− 03D 04H 12M 09S to the next night (21:00 in Costa Rica, UTC−6), or EN VIVO HOY on the day itself.
+export function countdown(showDate, now, today) {
+  if (showDate === today) return tr('EN VIVO HOY');
+  const ms = Date.parse(`${showDate}T21:00:00-06:00`) - now;
+  if (!(ms > 0)) return '';
+  const s = Math.floor(ms / 1000);
+  const two = (n) => String(n).padStart(2, '0');
+  return `T− ${two(Math.floor(s / 86400))}D ${two(Math.floor(s / 3600) % 24)}H ${two(Math.floor(s / 60) % 60)}M ${two(s % 60)}S`;
+}
+
+function startCountdown(today) {
+  const next = document.querySelector('#vivo .next-show[data-show-date]');
+  if (!next) return;
+  const count = document.createElement('p');
+  count.className = 'next-count';
+  count.setAttribute('aria-hidden', 'true');
+  next.append(count);
+  const { showDate } = next.dataset;
+  if (showDate === today) next.classList.add('is-tonight');
+  // The date joins the place on one line under the name (css/components/stations.css).
+  const place = next.querySelector(':scope > div > p');
+  const when = next.querySelector(':scope > time');
+  if (place && when) {
+    place.dataset.when = when.textContent.replace(/\s+/g, ' ').trim();
+    next.classList.add('has-when');
+  }
+  const tick = () => {
+    count.textContent = countdown(showDate, Date.now(), today);
+  };
+  tick();
+  if (showDate !== today) setInterval(tick, 1000);
 }
 
 export function initShows() {
@@ -72,5 +111,6 @@ export function initShows() {
     if (show.dataset.showStatus === 'tentative') show.remove();
     else toHistoryRow(show);
   }
-  foldByYear();
+  buildLog();
+  startCountdown(today);
 }

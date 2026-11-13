@@ -1,0 +1,92 @@
+/* Motion (js/page-motion.js): the page is a radio. The menu underlines the station on screen; a red line sweeps the
+   screen when a new station comes in; each section opens like a slit of light the first time it is seen; rows tip up
+   into place. Everything that hides waits for html.motion. */
+
+.artist-home>header nav a.is-tuned {
+  text-decoration: underline;
+  text-decoration-color: var(--red);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+
+/* The sweep: one red line down the whole screen when the station changes. */
+.tuner-sweep {
+  position: fixed;
+  z-index: 35;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--red);
+  box-shadow: 0 0 24px 4px rgba(200,29,37,.8);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tuner-sweep.go {
+  animation: sweep .75s cubic-bezier(.6,0,.3,1) both;
+}
+
+/* Apertures: a section waits as a red slit of light across its middle and opens to its full height. */
+.motion .aperture {
+  position: relative;
+}
+
+.motion .aperture:not(.is-open) {
+  clip-path: inset(49.6% 0 49.6% 0);
+}
+
+.motion .aperture.is-open {
+  animation: aperture 1.1s cubic-bezier(.75,0,.15,1) both;
+}
+
+.motion .aperture::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--red);
+  box-shadow: 0 0 22px 3px rgba(200,29,37,.85);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.motion .aperture:not(.is-open)::after {
+  opacity: 1;
+}
+
+.motion .aperture.is-open::after {
+  animation: slit-fade 1.1s ease-out both;
+}
+
+/* Rising: tipped back and below, then up into place, a few hundredths of a second apart. */
+.motion .rise {
+  opacity: 0;
+  transform: perspective(900px) translate3d(0,40px,0) rotateX(16deg);
+  transform-origin: 50% 100%;
+}
+
+.motion .rise.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity .7s ease-out, transform 1s cubic-bezier(.16,1,.3,1);
+}
+
+@keyframes sweep {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@keyframes aperture {
+  from { clip-path: inset(49.6% 0 49.6% 0); }
+  to { clip-path: inset(0); }
+}
+
+@keyframes slit-fade {
+  0% { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(30); }
+}

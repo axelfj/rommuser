@@ -1,0 +1,653 @@
+/* Stations: each section of the home page is a station of the dial (js/page-motion.js). MÚSICA is a deck beside a list of frequencies (a carousel on phones, js/music-deck.js); EN VIVO is the
+   next night as big as it gets with its countdown, and the past nights as a log (js/shows.js); EL ARTISTA reads as
+   a manifesto; BOOKINGS is the booking address across the screen. Loaded after the component files, so equal
+   selectors here win. */
+
+.artist-home {
+  --glow: 0 0 16px rgba(200,29,37,.7);
+  --glow-soft: 0 0 8px rgba(200,29,37,.35);
+}
+
+.artist-home .section-heading h2 {
+  font-size: clamp(48px,7vw,120px);
+  line-height: .9;
+  letter-spacing: -.035em;
+}
+
+/* ── MÚSICA: the deck (js/music-deck.js) and the list of frequencies ── */
+
+.artist-home .music [role="tabpanel"].has-deck:not([hidden]) {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.artist-home .music .deck {
+  display: grid;
+  grid-template-columns: min(40vw,220px) minmax(0,1fr);
+  gap: 18px 20px;
+  align-items: start;
+}
+
+.artist-home .music .deck-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #0b0b0b;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.artist-home .music .deck-cover img,
+.artist-home .music .deck-cover iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+/* The visualizer is 16:9: the cover frame widens to hold it. */
+.artist-home .music .deck-cover.is-video {
+  grid-column: 1 / -1;
+  aspect-ratio: 16/9;
+}
+
+.artist-home .music .deck-cover:empty::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/assets/rr-light.svg") center/30% no-repeat;
+  opacity: .2;
+}
+
+.artist-home .music .deck-cover[data-cover] {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12%;
+  text-align: center;
+  background: #000;
+}
+
+.artist-home .music .deck-cover[data-cover] b {
+  font: 700 clamp(16px,11cqi,44px)/1 var(--font-display);
+  letter-spacing: -.01em;
+}
+
+.artist-home .music .deck-cover[data-cover] i {
+  font: 600 clamp(8px,3.6cqi,13px)/1 var(--font-display);
+  font-style: normal;
+  letter-spacing: .14em;
+}
+
+/* A new station comes in as a slit of light that opens. */
+.motion .artist-home .music .deck-cover.swap > * {
+  animation: deck-slit .6s cubic-bezier(.75,0,.15,1) both;
+}
+
+.artist-home .music .deck-info {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  min-width: 0;
+}
+
+.artist-home .music .deck-freq,
+.artist-home .music .deck-meta {
+  margin: 0;
+  font: 700 10px/1.5 var(--font-display);
+  letter-spacing: .18em;
+  color: var(--muted);
+}
+
+.artist-home .music .deck-freq {
+  color: var(--red);
+}
+
+.artist-home .music .deck-title {
+  margin: 0;
+  font: 700 clamp(26px,4.4vw,72px)/.95 var(--font-display);
+  letter-spacing: -.03em;
+  overflow-wrap: anywhere;
+}
+
+/* One tile per platform, each straight to the track: logo and name, in an even grid as wide as the cover. */
+.artist-home .music .deck-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
+  gap: 6px;
+  width: 100%;
+  margin: 8px 0 0;
+}
+
+.artist-home .music .deck-links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--control-radius);
+  color: var(--bone);
+  font: 700 10px/1.1 var(--font-display);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color .2s,background-color .2s;
+}
+
+.artist-home .music .deck-links a span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artist-home .music .deck-links img {
+  display: block;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.artist-home .music .deck-links a:hover,
+.artist-home .music .deck-links a:focus-visible {
+  border-color: var(--red);
+  background: rgba(200,29,37,.12);
+}
+
+.artist-home .music .deck-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.artist-home .music .deck-play,
+.artist-home .music .deck-presave {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--control-radius);
+  background: var(--red);
+  color: var(--bone);
+  font: 700 11px/1 var(--font-display);
+  letter-spacing: .14em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .2s,color .2s;
+}
+
+.artist-home .music .deck-play::before {
+  content: "";
+  border-style: solid;
+  border-width: 5px 0 5px 8px;
+  border-color: transparent transparent transparent currentColor;
+}
+
+.artist-home .music .deck-presave::after {
+  content: "↗";
+}
+
+.artist-home .music .deck-play:hover,
+.artist-home .music .deck-presave:hover {
+  background: var(--bone);
+  color: var(--night);
+}
+
+.artist-home .music .deck-play[hidden],
+.artist-home .music .deck-presave[hidden],
+.artist-home .music .deck-links[hidden] {
+  display: none;
+}
+
+/* The list: number, a small cover, name and label, date. The deck carries the links, so a row has no button. */
+.artist-home .music .has-deck .tracks {
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border-top: 1px solid var(--line);
+}
+
+.artist-home .music .has-deck .tracks .music-choice.track {
+  display: grid;
+  grid-row: auto;
+  grid-template-rows: auto auto;
+  grid-template-columns: 26px 44px minmax(0,1fr) auto;
+  grid-template-areas: "n cover title date" "n cover label date";
+  gap: 2px 14px;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  cursor: pointer;
+  transition: padding .3s cubic-bezier(.16,1,.3,1),color .25s;
+}
+
+.artist-home .music .has-deck .tracks .track .track-cover {
+  grid-area: cover;
+  width: 44px;
+}
+
+.artist-home .music .has-deck .tracks .track .track-cover[data-cover] {
+  padding: 6%;
+  gap: 1px;
+}
+
+.artist-home .music .has-deck .tracks .track .track-cover[data-cover] b {
+  font-size: 6px;
+}
+
+.artist-home .music .has-deck .tracks .track .track-cover[data-cover] i {
+  display: none;
+}
+
+.artist-home .music .has-deck .tracks .track .track-n {
+  display: block;
+  grid-area: n;
+  font: 700 11px/1 var(--font-display);
+  letter-spacing: .08em;
+}
+
+.artist-home .music .has-deck .tracks .track .track-info {
+  display: contents;
+}
+
+.artist-home .music .has-deck .tracks .track .track-info strong {
+  grid-area: title;
+  align-self: end;
+  margin: 0;
+  font-size: clamp(15px,1.4vw,21px);
+  color: var(--bone);
+  opacity: .75;
+  transition: opacity .25s;
+}
+
+.artist-home .music .has-deck .tracks .track .track-info small {
+  grid-area: label;
+  align-self: start;
+  margin: 0;
+  font-size: 10px;
+}
+
+.artist-home .music .has-deck .tracks .track .release-date {
+  grid-area: date;
+  margin: 0;
+  font-size: 10px;
+}
+
+.artist-home .music .has-deck .tracks .track .track-type {
+  display: none;
+}
+
+.artist-home .music .has-deck .tracks .track.is-tuned {
+  padding-left: 8px;
+  color: var(--bone);
+}
+
+.artist-home .music .has-deck .tracks .track.is-tuned .track-info strong {
+  opacity: 1;
+}
+
+.artist-home .music .has-deck .tracks .track.is-tuned .track-n {
+  color: var(--red);
+}
+
+.artist-home .music .has-deck .tracks .track.is-tuned .track-cover img {
+  filter: none;
+}
+
+@media (hover: hover) {
+  .artist-home .music .has-deck .tracks .track:hover .track-info strong {
+    opacity: 1;
+  }
+
+  .artist-home .music .has-deck .tracks .track:not(:disabled):hover .track-cover img {
+    transform: none;
+  }
+}
+
+/* Wide screens: the deck stands on the left (a cover the size the artwork holds sharp), the list on the right. */
+@media (min-width: 1100px) {
+  .artist-home .music [role="tabpanel"].has-deck:not([hidden]) {
+    grid-template-columns: minmax(0,360px) minmax(0,1fr);
+    gap: clamp(40px,5vw,96px);
+  }
+
+  .artist-home .music .deck {
+    position: sticky;
+    top: 110px;
+    grid-template-columns: minmax(0,1fr);
+    gap: 20px;
+  }
+
+  .artist-home .music .deck-title {
+    font-size: clamp(36px,3.2vw,56px);
+  }
+
+  .artist-home .music .has-deck .tracks .music-choice.track {
+    grid-template-columns: 34px 52px minmax(0,1fr) auto;
+    gap: 3px 18px;
+    padding: 12px 0;
+  }
+
+  .artist-home .music .has-deck .tracks .track .track-cover {
+    width: 52px;
+  }
+}
+
+@media (max-width: 1099px) {
+  .artist-home .music .deck-info {
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .artist-home .music .deck {
+    grid-template-columns: minmax(0,1fr);
+  }
+
+  .artist-home .music .deck-cover:not(.is-video) {
+    width: min(100%,240px);
+  }
+}
+
+@keyframes deck-slit {
+  from { clip-path: inset(49% 0 49% 0); filter: brightness(2); }
+  to { clip-path: inset(0); filter: none; }
+}
+
+/* ── EN VIVO ── */
+
+.artist-home .live .next-show {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  grid-template-areas: "label" "name" "when" "count";
+  justify-items: start;
+  gap: 0;
+  margin: 0 0 80px;
+  padding: 0;
+  border: 0;
+}
+
+.artist-home .live .next-show>div {
+  display: contents;
+}
+
+.artist-home .live .next-label {
+  grid-area: label;
+  color: var(--red);
+  text-shadow: var(--glow-soft);
+}
+
+.artist-home .live .next-show h3 {
+  grid-area: name;
+  margin: 14px 0 18px;
+  font-size: clamp(72px,15vw,240px);
+  line-height: .84;
+  letter-spacing: -.05em;
+  overflow-wrap: anywhere;
+}
+
+/* One line under the name: the place, then the date. */
+.artist-home .live .next-show>div>p {
+  grid-area: when;
+  margin: 0;
+  font: 700 clamp(18px,2vw,28px)/1.2 var(--font-display);
+  letter-spacing: .04em;
+}
+
+.artist-home .live .next-show time {
+  grid-area: count;
+  margin-top: 12px;
+  font-size: clamp(20px,2vw,28px);
+}
+
+.artist-home .live .next-show.has-when time {
+  display: none;
+}
+
+.artist-home .live .next-show.has-when>div>p::after {
+  content: " · " attr(data-when);
+  color: var(--muted);
+}
+
+.artist-home .live .next-count {
+  grid-area: count;
+  margin: 18px 0 0;
+  font: 700 clamp(20px,2.6vw,36px)/1 var(--font-display);
+  letter-spacing: .06em;
+  font-variant-numeric: tabular-nums;
+  color: var(--bone);
+}
+
+.artist-home .live .next-count:empty {
+  display: none;
+}
+
+.artist-home .live .next-show.is-tonight .next-count {
+  color: var(--red);
+  text-shadow: var(--glow);
+}
+
+.artist-home .live .next-show.is-tonight .next-count::before {
+  content: "● ";
+}
+
+/* The log: one ledger per year. The year stands on the left; each night is one line: date, name, place and, when
+   there is one, the set to watch. */
+.artist-home .live .show-history-label {
+  margin: 0 0 16px;
+}
+
+.artist-home .live .show-log-year {
+  display: grid;
+  grid-template-columns: 120px minmax(0,1fr);
+  gap: 0 24px;
+  padding: 18px 0 22px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.artist-home .live .show-log-label {
+  margin: 4px 0 0;
+  font: 700 clamp(28px,2.6vw,40px)/1 var(--font-display);
+  letter-spacing: -.02em;
+  color: var(--bone);
+}
+
+.artist-home .live .show-log-rows {
+  display: grid;
+}
+
+.artist-home .live .show-log .show-row {
+  display: grid;
+  grid-template-columns: 64px minmax(0,1fr) minmax(0,1.2fr) 120px;
+  align-items: baseline;
+  gap: 4px 24px;
+  min-height: 0;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  opacity: var(--fade,1);
+}
+
+.artist-home .live .show-log .show-row:last-child {
+  border-bottom: 0;
+}
+
+.artist-home .live .show-log .show-row time {
+  font: 700 11px/1 var(--font-display);
+  letter-spacing: .12em;
+  color: var(--muted);
+}
+
+.artist-home .live .show-log .show-row>div {
+  display: contents;
+}
+
+.artist-home .live .show-log .show-row h3 {
+  grid-column: 2;
+  margin: 0;
+  font-size: clamp(16px,1.4vw,20px);
+  line-height: 1.2;
+}
+
+.artist-home .live .show-log .show-row p {
+  grid-column: 3;
+  grid-row: 1;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.artist-home .live .show-log .show-row>span {
+  display: none;
+}
+
+.artist-home .live .show-log .show-video {
+  grid-column: 4;
+  grid-row: 1;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: auto;
+  margin: 0;
+  color: var(--red);
+  font: 700 10px/1 var(--font-display);
+  letter-spacing: .16em;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.artist-home .live .show-log .show-video:hover {
+  color: var(--bone);
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  .artist-home .live .show-log .show-row:hover {
+    background: none;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .artist-home .live .show-log-year {
+    grid-template-columns: minmax(0,1fr);
+    gap: 10px;
+  }
+
+  .artist-home .live .show-log .show-row {
+    grid-template-columns: 64px minmax(0,1fr);
+    gap: 4px 16px;
+  }
+
+  .artist-home .live .show-log .show-row h3 {
+    grid-row: 1;
+  }
+
+  .artist-home .live .show-log .show-row p {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .artist-home .live .show-log .show-video {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: start;
+  }
+
+  .artist-home .live .show-log .show-video {
+    margin-top: 6px;
+  }
+}
+
+/* ── EL ARTISTA: the bio at the size of a manifesto, then the planets. ── */
+
+.artist-home .artist .artist-bio {
+  max-width: none;
+}
+
+.artist-home .artist .artist-bio p {
+  max-width: 24em;
+  margin: 0;
+  font: 700 clamp(24px,3.3vw,56px)/1.06 var(--font-display);
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+/* ── BOOKINGS: the booking address across the screen, the rest in one line under it. ── */
+
+.artist-home .contact .contact-directory {
+  grid-template-columns: repeat(2,minmax(0,max-content));
+  column-gap: clamp(32px,6vw,96px);
+}
+
+.artist-home .contact .contact-entry:first-child {
+  grid-column: 1 / -1;
+}
+
+.artist-home .contact .contact-entry:first-child h3 {
+  color: var(--red);
+}
+
+.artist-home .contact .contact-entry:first-child .contact-direct-links a {
+  font: 700 clamp(22px,7.2vw,128px)/1 var(--font-display);
+  letter-spacing: -.045em;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  transition: color .2s,text-shadow .2s;
+}
+
+@media (hover: hover) {
+  .artist-home .contact .contact-entry:first-child .contact-direct-links a:hover {
+    color: var(--red);
+    text-shadow: var(--glow);
+  }
+}
+
+@media (max-width: 620px) {
+  .artist-home .contact .contact-directory {
+    grid-template-columns: minmax(0,1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artist-home .music .tracks .music-choice.track {
+    transition: none;
+  }
+}
+
+/* Under each address: COPIADO when a tap copied it (js/contact-mail.js). */
+.artist-home .contact .mail-note {
+  min-height: 1.4em;
+  margin: 4px 0 0;
+  font: 700 10px/1.4 var(--font-display);
+  letter-spacing: .16em;
+  color: var(--red);
+}
+
+
+/* Golden Circle: on a wide screen the one line of copy stays one line. */
+@media (min-width: 1100px) {
+  .artist-home .fan-strip-copy {
+    flex: 1 1 auto;
+    max-width: none;
+    min-width: 0;
+    white-space: nowrap;
+  }
+}

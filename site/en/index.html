@@ -66,6 +66,14 @@
             <a class="button" href="#musica">LISTEN</a>
             <a class="text-link" href="#contacto">BOOKINGS</a>
           </div>
+          <div class="hero-release" hidden>
+            <p class="eyebrow">ON AIR NOW</p>
+            <button class="hero-release-play" type="button">
+              <img alt="" width="72" height="72">
+              <span class="hero-release-info"><strong></strong><small></small></span>
+              <span class="hero-release-cta">PLAY HERE</span>
+            </button>
+          </div>
           <div class="music-labels">
             <p class="eyebrow">SIGNED TO</p>
             <ul class="label-list">
@@ -128,8 +136,15 @@
           <button
             class="track music-choice"
             data-track="PIECES"
+            data-video="https://www.youtube.com/watch?v=IS_lo4vZUDU"
+            data-spotify="https://open.spotify.com/track/5hqLEhT5AOde38BWGExhtd"
+            data-amazon="https://music.amazon.com/albums/B0HMX5WVCC?trackAsin=B0HMX9Q9SX"
+            data-apple="https://music.apple.com/us/album/pieces-single/6822369362"
+            data-deezer="https://www.deezer.com/track/4345430882"
             data-soundcloud="https://on.soundcloud.com/zYPBqwIx9xIhiN3U4Z"
+            data-tidal="https://tidal.com/browse/track/569492540"
             data-youtube="https://www.youtube.com/watch?v=yOZEs1BBfC4"
+            data-beatport="https://link.tracks.id/dItL/ms-beatp-7"
           >
             <span class="track-cover">
               <img src="/assets/covers/pieces.webp" alt="" width="640" height="640" loading="lazy" decoding="async">
@@ -145,6 +160,7 @@
           <button
             class="track music-choice"
             data-track="DON'T WANNA"
+            data-video="https://www.youtube.com/watch?v=ZA9uOBhCU7Y"
             data-spotify="https://open.spotify.com/track/29ySEAWQWgIw00MjWrPIOP"
             data-tidal="https://tidal.com/browse/track/571997469"
             data-youtube="https://www.youtube.com/watch?v=ZA9uOBhCU7Y"
@@ -687,11 +703,11 @@
       <div class="show-row">
         <time datetime="2026-06-20">20.06.26</time>
         <div>
-          <h3>KAPOK</h3>
+          <h3>KAPOK FESTIVAL</h3>
           <p>Uvita, Costa Rica</p>
           <a class="show-video" href="https://youtu.be/HbsjPDnovKE?t=105" target="_blank" rel="noopener noreferrer">WATCH IT</a>
         </div>
-        <span>FESTIVAL</span>
+        <span></span>
       </div>
       <div class="show-row">
         <time datetime="2026-06-19">19.06.26</time>
@@ -728,6 +744,14 @@
         <div>
           <h3>EL BOILER</h3>
           <p>San José, Costa Rica</p>
+        </div>
+        <span></span>
+      </div>
+      <div class="show-row">
+        <time datetime="2025-08-30">30.08.25</time>
+        <div>
+          <h3>MAMBO</h3>
+          <p>Casa Grande · Costa Rica</p>
         </div>
         <span></span>
       </div>
@@ -925,6 +949,7 @@
       <span aria-hidden="true">×</span>
     </button>
     <figure class="listen-art" aria-hidden="true" hidden></figure>
+    <button class="listen-video" type="button" hidden><span aria-hidden="true">▶</span> WATCH THE VISUALIZER</button>
     <h2 id="listen-title" class="sr-only">MUSIC BY ROMMUSER</h2>
     <div class="listen-links">
       <a
