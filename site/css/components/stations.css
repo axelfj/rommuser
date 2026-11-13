@@ -669,3 +669,13 @@
   color: var(--bone);
   text-decoration-color: var(--red);
 }
+
+/* Golden Circle: on a wide screen the one line of copy stays one line. */
+@media (min-width: 1100px) {
+  .artist-home .fan-strip-copy {
+    flex: 1 1 auto;
+    max-width: none;
+    min-width: 0;
+    white-space: nowrap;
+  }
+}
