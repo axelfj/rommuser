@@ -69,7 +69,6 @@
   "ESCUCHA MI MÚSICA": "LISTEN TO MY MUSIC",
   "ESCUCHAR": "LISTEN",
   "ESCUCHAR AQUÍ": "PLAY HERE",
-  "AÑO": "YEAR",
   "VER EL VISUALIZER": "WATCH THE VISUALIZER",
   "Escuchar aquí": "Play here",
   "ESCUCHAR LA COLECCIÓN": "LISTEN TO THE COLLECTION",
@@ -94,6 +93,8 @@
   "La emoción ya está en tu track": "The emotion is already in your track",
   "La emoción ya está en tu track.": "The emotion is already in your track.",
   "La mezcla cuesta USD 250, con hasta 20 stems agrupados y 2 revisiones. Con mastering incluido son USD 300. El mastering solo cuesta USD 70 por track. De 21 a 40 stems, o con 3 revisiones, la mezcla cuesta USD 350. La ghost production se cotiza aparte.": "Mixing is USD 250, with up to 20 grouped stems and 2 revisions. With mastering included it is USD 300. Mastering alone is USD 70 per track. For 21 to 40 stems, or 3 revisions, mixing is USD 350. Ghost production is quoted separately.",
+  "LA MÚSICA YA EXISTE · ROMMUSER LA SINTONIZA Y LA TRAE A LA TIERRA ·": "THE MUSIC ALREADY EXISTS · ROMMUSER TUNES INTO IT AND BRINGS IT DOWN TO EARTH ·",
+  "AHORA EN EL AIRE": "ON AIR NOW",
   "La música ya existe. ROMMUSER la sintoniza y la trae a la tierra.": "The music already exists. ROMMUSER tunes into it and brings it down to earth.",
   "LA PISTA.": "THE FLOOR.",
   "La señal te llega primero: cada track antes de que salga, cada fecha antes de anunciarse.": "The signal reaches you first: every track before it’s out, every date before it’s announced.",
@@ -208,5 +209,7 @@
   "¿Prefieres escribir directo?": "Prefer to write directly?",
   "¿Qué géneros mezclas?": "Which genres do you mix?",
   "¿Qué te envío?": "What do I send you?",
-  "¿Trabajas con cualquier proyecto?": "Do you take any project?"
+  "¿Trabajas con cualquier proyecto?": "Do you take any project?",
+  "INICIO": "HOME",
+  "EN VIVO HOY": "LIVE TONIGHT"
 }

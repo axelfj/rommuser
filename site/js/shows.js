@@ -1,7 +1,7 @@
 // EN VIVO. The page lists the next show as a card (.next-show with data-show-date) above the history of past
 // nights (.show-row). Once a show's date has passed (Costa Rica time) the card turns into a history row, keeping
-// its place and type, in date order; a tentative date that passed simply disappears. Then the history folds into
-// one dropdown per year, the latest open, and older nights fade a little.
+// its place and type, in date order; a tentative date that passed simply disappears. The next night counts down to
+// itself, and the past nights read as one log.
 import { todayInCostaRica } from './lib/dates.js';
 import { tr } from './lib/i18n.js';
 
@@ -40,29 +40,45 @@ function toHistoryRow(show) {
   else document.querySelector('.show-history-label').after(show);
 }
 
-function foldByYear() {
+// The past nights become a log: every show at once, newest first, older ones fading a little.
+function buildLog() {
   const rows = [...document.querySelectorAll('#vivo .show-row')];
-  const years = new Map();
+  if (!rows.length) return;
+  const log = document.createElement('div');
+  log.className = 'show-log';
+  log.setAttribute('role', 'list');
+  rows[0].before(log);
   rows.forEach((row, i) => {
+    row.setAttribute('role', 'listitem');
     row.style.setProperty('--fade', String(1 - (0.4 * i) / Math.max(rows.length - 1, 1)));
-    const year = row.querySelector('time')?.dateTime.slice(0, 4) || '';
-    if (!years.has(year)) years.set(year, []);
-    years.get(year).push(row);
+    log.append(row);
   });
-  [...years].forEach(([year, list], i) => {
-    const box = document.createElement('details');
-    box.className = 'show-year';
-    box.open = i === 0;
-    const summary = document.createElement('summary');
-    const label = document.createElement('span');
-    label.textContent = year;
-    const count = document.createElement('span');
-    count.className = 'show-count';
-    count.textContent = `${list.length} ${tr(list.length === 1 ? 'SHOW' : 'SHOWS')}`;
-    summary.append(label, count);
-    list[0].before(box);
-    box.append(summary, ...list);
-  });
+}
+
+// T− 03D 04H 12M 09S to the next night (21:00 in Costa Rica, UTC−6), or EN VIVO HOY on the day itself.
+export function countdown(showDate, now, today) {
+  if (showDate === today) return tr('EN VIVO HOY');
+  const ms = Date.parse(`${showDate}T21:00:00-06:00`) - now;
+  if (!(ms > 0)) return '';
+  const s = Math.floor(ms / 1000);
+  const two = (n) => String(n).padStart(2, '0');
+  return `T− ${two(Math.floor(s / 86400))}D ${two(Math.floor(s / 3600) % 24)}H ${two(Math.floor(s / 60) % 60)}M ${two(s % 60)}S`;
+}
+
+function startCountdown(today) {
+  const next = document.querySelector('#vivo .next-show[data-show-date]');
+  if (!next) return;
+  const count = document.createElement('p');
+  count.className = 'next-count';
+  count.setAttribute('aria-hidden', 'true');
+  next.append(count);
+  const { showDate } = next.dataset;
+  if (showDate === today) next.classList.add('is-tonight');
+  const tick = () => {
+    count.textContent = countdown(showDate, Date.now(), today);
+  };
+  tick();
+  if (showDate !== today) setInterval(tick, 1000);
 }
 
 export function initShows() {
@@ -72,5 +88,6 @@ export function initShows() {
     if (show.dataset.showStatus === 'tentative') show.remove();
     else toHistoryRow(show);
   }
-  foldByYear();
+  buildLog();
+  startCountdown(today);
 }

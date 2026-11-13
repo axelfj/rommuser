@@ -1,13 +1,20 @@
 import { expect, it } from 'vitest';
-import { needleAt } from '../site/js/page-motion.js';
+import { frequencyAt, stationProgress } from '../site/js/page-motion.js';
 
-const stops = [{ x: 100, y: 1000 }, { x: 200, y: 3000 }, { x: 300, y: 4000 }];
+const tops = [0, 1000, 3000, 4000];
 
-it('the dial needle rests on a station when its section reaches the top and glides in between', () => {
-  expect(needleAt(0, stops)).toBe(0);
-  expect(needleAt(500, stops)).toBe(50);
-  expect(needleAt(1000, stops)).toBe(100);
-  expect(needleAt(2000, stops)).toBe(150);
-  expect(needleAt(4000, stops)).toBe(300);
-  expect(needleAt(9000, stops)).toBe(300);
+it('the dial counts the stations as the page scrolls: whole numbers at each station, fractions in between', () => {
+  expect(stationProgress(0, tops)).toBe(0);
+  expect(stationProgress(500, tops)).toBe(0.5);
+  expect(stationProgress(1000, tops)).toBe(1);
+  expect(stationProgress(2000, tops)).toBe(1.5);
+  expect(stationProgress(4000, tops)).toBe(3);
+  expect(stationProgress(9000, tops)).toBe(3);
+});
+
+it('the frequency glides between the stations', () => {
+  const mhz = [88.1, 92.7, 97.3, 101.9];
+  expect(frequencyAt(0, mhz)).toBe('88.1');
+  expect(frequencyAt(0.5, mhz)).toBe('90.4');
+  expect(frequencyAt(3, mhz)).toBe('101.9');
 });
