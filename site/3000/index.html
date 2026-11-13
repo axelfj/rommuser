@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>ROMMUSER · Transmisión 3000</title>
+  <meta name="description" content="Propuesta de rediseño de rommuser.com: la página como un sintonizador desde el año 3000.">
+  <meta name="theme-color" content="#12130F">
+  <link rel="icon" href="/assets/rr-192.png">
+  <link rel="preload" href="/assets/fonts/league-spartan-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/poppins-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- PROPOSAL (Axel, 13.11: "be riskier, redesign everything if needed"). A whole new rommuser.com, not a layer on the
+       current one: the page is a tuner from the year 3000 and every section is a station. The current site is not
+       touched; this page lives at /3000/ only to be compared, and nothing links to it. -->
+  <style>
+    @font-face { font-family: "League Spartan"; font-weight: 700; font-display: swap; src: url("/assets/fonts/league-spartan-latin-700-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Poppins"; font-weight: 400; font-display: swap; src: url("/assets/fonts/poppins-latin-400-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Poppins"; font-weight: 700; font-display: swap; src: url("/assets/fonts/poppins-latin-700-normal.woff2") format("woff2"); }
+
+    :root {
+      --night: #12130f;
+      --bone: #eae6e5;
+      --red: #c81d25;
+      --dim: rgba(234,230,229,.56);
+      --hair: rgba(234,230,229,.16);
+      --glow: 0 0 18px rgba(200,29,37,.75);
+      --display: "League Spartan", Arial, sans-serif;
+      --body: Poppins, Arial, sans-serif;
+      --edge: clamp(16px, 3.4vw, 48px);
+      --tuner: 72px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-snap-type: y proximity; scroll-behavior: smooth; background: var(--night); }
+    body { margin: 0; background: var(--night); color: var(--bone); font: 400 16px/1.6 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .mono { font: 700 11px/1 var(--display); letter-spacing: .22em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+    :focus-visible { outline: 2px solid var(--bone); outline-offset: 4px; }
+
+    /* The faint measuring grid of the instrument, behind everything. */
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        linear-gradient(90deg, var(--hair) 1px, transparent 1px) 0 0 / 25vw 100%,
+        linear-gradient(0deg, rgba(234,230,229,.05) 1px, transparent 1px) 0 0 / 100% 25vh;
+      opacity: .5;
+    }
+
+    /* ── Chrome: mark, clock and the way back ── */
+    .chrome { position: fixed; z-index: 30; top: 0; left: 0; right: var(--tuner); display: flex; align-items: center; gap: 24px; padding: 18px var(--edge); pointer-events: none; }
+    .chrome > * { pointer-events: auto; }
+    .mark { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .mark img { width: 30px; height: 30px; }
+    .chrome .clock { margin-left: auto; color: var(--dim); }
+    .chrome .back { color: var(--dim); text-decoration: none; border-bottom: 1px solid var(--hair); padding-bottom: 4px; }
+    .chrome .back:hover { color: var(--bone); border-color: var(--red); }
+
+    /* ── The tuner: a vertical ruler on the right edge, a red needle, the stations and the frequency ── */
+    .tuner { position: fixed; z-index: 40; top: 0; right: 0; bottom: 0; width: var(--tuner); border-left: 1px solid var(--hair); background: var(--night); }
+    .tuner-ruler { position: absolute; top: 90px; bottom: 140px; left: 0; right: 0;
+      background: repeating-linear-gradient(180deg, var(--hair) 0 1px, transparent 1px 9px) left / 14px 100% no-repeat; }
+    .tuner-needle { position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: var(--red); box-shadow: var(--glow); will-change: transform; }
+    .tuner-stations { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
+    .tuner-stations a { position: absolute; left: 18px; translate: 0 -50%; writing-mode: vertical-rl; rotate: 180deg; text-decoration: none; color: var(--dim); padding: 6px 0; transition: color .3s; }
+    .tuner-stations a.on { color: var(--bone); }
+    .tuner-freq { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; }
+    .tuner-freq b { display: block; font: 700 18px/1 var(--display); letter-spacing: 0; color: var(--red); text-shadow: var(--glow); font-variant-numeric: tabular-nums; }
+    .tuner-freq span { color: var(--dim); font-size: 9px; }
+    .tuner-top { position: absolute; top: 24px; left: 0; right: 0; text-align: center; color: var(--dim); font-size: 9px; }
+
+    /* ── Stations ── */
+    main { position: relative; z-index: 1; margin-right: var(--tuner); }
+    .station { position: relative; min-height: 100svh; scroll-snap-align: start; padding: 96px var(--edge) 56px; display: flex; flex-direction: column; }
+    .station + .station { border-top: 1px solid var(--hair); }
+    .station-head { display: flex; align-items: baseline; gap: 18px; color: var(--dim); }
+    .station-head b { color: var(--red); text-shadow: var(--glow); }
+    h1, h2, h3 { font-family: var(--display); font-weight: 700; margin: 0; line-height: .9; letter-spacing: -.03em; text-transform: uppercase; }
+
+    /* Every station opens like a slit of light the first time it is tuned (js adds .open). */
+    .js .station .reveal { clip-path: inset(49.5% 0 49.5% 0); }
+    .js .station.open .reveal { animation: aperture 1.1s cubic-bezier(.75,0,.15,1) both; animation-delay: var(--d, 0s); }
+    @keyframes aperture { from { clip-path: inset(49.5% 0 49.5% 0); } to { clip-path: inset(-10% -10% -10% -10%); } }
+
+    /* The tuning sweep: one red line runs down the whole screen each time the station changes. */
+    .sweep { position: fixed; z-index: 35; left: 0; right: var(--tuner); top: 0; height: 2px; background: var(--red); box-shadow: 0 0 24px 4px rgba(200,29,37,.8); opacity: 0; pointer-events: none; }
+    .sweep.go { animation: sweep .7s cubic-bezier(.6,0,.3,1) both; }
+    @keyframes sweep { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(100vh); opacity: 0; } }
+
+    /* 00 · SEÑAL: the wordmark across the screen, the lens with the portrait over it, the ring of the bio turning. */
+    .signal { justify-content: space-between; overflow: hidden; }
+    .signal .meta { display: flex; justify-content: space-between; gap: 16px; color: var(--dim); }
+    .wordmark { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: clamp(60px, 15vw, 300px); letter-spacing: -.06em; white-space: nowrap; color: transparent; -webkit-text-stroke: 1px rgba(234,230,229,.5); pointer-events: none; }
+    .wordmark span { color: var(--bone); -webkit-text-stroke: 0; }
+    .lens { position: absolute; left: 50%; top: 50%; width: min(58vmin, 560px); aspect-ratio: 1; transform: translate(-50%,-50%); }
+    .lens-photo { position: absolute; inset: 11%; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 1px var(--red), 0 0 60px -10px rgba(200,29,37,.7); }
+    .lens-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 22%; filter: grayscale(1) contrast(1.15) brightness(.85); }
+    .lens-photo::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(180deg, transparent 0 3px, rgba(18,19,15,.35) 3px 5px); }
+    .lens-ring { position: absolute; inset: 0; animation: turn 60s linear infinite; }
+    .lens-ring text { font: 700 14px var(--display); letter-spacing: .2em; fill: var(--bone); text-transform: uppercase; }
+    @keyframes turn { to { rotate: 360deg; } }
+    .signal .bottom { position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+    .signal h2 { font-size: clamp(30px, 4.4vw, 64px); max-width: 9em; }
+    .signal h2 span { color: var(--red); text-shadow: var(--glow); }
+    .now { display: grid; grid-template-columns: 64px auto; gap: 4px 14px; align-items: center; text-align: left; background: none; border: 1px solid var(--hair); padding: 10px 18px 10px 10px; cursor: pointer; }
+    .now img { grid-row: span 2; width: 64px; height: 64px; object-fit: cover; }
+    .now .mono { color: var(--dim); }
+    .now strong { font: 700 22px/1 var(--display); letter-spacing: .02em; }
+    .now strong::before { content: "▶ "; color: var(--red); }
+    .now:hover { border-color: var(--red); box-shadow: var(--glow); }
+
+    /* 01 · MÚSICA: one cover as big as the screen allows, everything else as a list of frequencies. */
+    .music-grid { flex: 1; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 72px); align-items: center; margin-top: 28px; }
+    .deck { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .deck-cover { position: relative; aspect-ratio: 1; max-height: 62vh; background: #000; overflow: hidden; }
+    .deck-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .deck-cover.swap img { animation: slit .6s cubic-bezier(.75,0,.15,1) both; }
+    @keyframes slit { from { clip-path: inset(49% 0 49% 0); filter: brightness(2); } to { clip-path: inset(0); filter: none; } }
+    .deck-title { font-size: clamp(36px, 5.6vw, 96px); overflow-wrap: anywhere; }
+    .deck-meta { color: var(--dim); display: flex; gap: 18px; flex-wrap: wrap; }
+    .deck-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+    .deck-links a, .deck-links button { background: none; border: 0; padding: 0 0 4px; text-decoration: none; border-bottom: 1px solid var(--hair); cursor: pointer; }
+    .deck-links a:hover, .deck-links button:hover { border-color: var(--red); }
+    .deck-links .play { color: var(--red); border-color: var(--red); text-shadow: var(--glow); }
+    .freqs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hair); }
+    .freqs button { width: 100%; display: grid; grid-template-columns: 64px 1fr auto; gap: 16px; align-items: baseline; padding: 14px 0; background: none; border: 0; border-bottom: 1px solid var(--hair); text-align: left; cursor: pointer; color: var(--dim); transition: color .25s, padding .25s; }
+    .freqs button strong { font: 700 clamp(16px, 1.7vw, 24px)/1 var(--display); letter-spacing: .01em; }
+    .freqs button:hover, .freqs button[aria-current="true"] { color: var(--bone); padding-left: 10px; }
+    .freqs button[aria-current="true"] .mono:first-child { color: var(--red); text-shadow: var(--glow); }
+
+    /* 02 · EN VIVO: the next night as big as it gets, the past as a log. */
+    .live-now { margin: auto 0 0; }
+    .live-now .mono { color: var(--red); text-shadow: var(--glow); }
+    .live-now h3 { font-size: clamp(80px, 17vw, 300px); letter-spacing: -.06em; margin: 10px 0 6px; }
+    .live-now p { margin: 0; font: 700 clamp(18px, 2vw, 28px)/1.2 var(--display); letter-spacing: .04em; }
+    .count { margin-top: 18px; font: 700 clamp(22px, 3vw, 40px)/1 var(--display); letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+    .log { margin: 40px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0 32px; }
+    .log li { display: grid; grid-template-columns: 80px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--hair); }
+    .log .mono { color: var(--dim); padding-top: 4px; }
+    .log strong { font: 700 17px/1.1 var(--display); letter-spacing: .02em; display: block; }
+    .log small { color: var(--dim); font-size: 13px; }
+    .log a { color: var(--red); font: 700 11px/1 var(--display); letter-spacing: .16em; text-decoration: none; }
+
+    /* 03 · ARTISTA: one statement, the size of a manifesto. */
+    .artist .statement { margin: auto 0; font: 700 clamp(28px, 4.4vw, 68px)/1.04 var(--display); letter-spacing: -.02em; text-transform: uppercase; max-width: 16em; }
+    .artist .statement em { font-style: normal; color: var(--red); text-shadow: var(--glow); }
+    .artist .signed { color: var(--dim); display: flex; flex-wrap: wrap; gap: 8px 26px; }
+    .artist .signed b { color: var(--bone); }
+
+    /* 04 · CONTACTO: the booking address is the whole screen. */
+    .contact .big { margin: auto 0 0; }
+    .contact .big a { display: inline-block; font: 700 clamp(28px, 7.4vw, 128px)/1 var(--display); letter-spacing: -.04em; text-decoration: none; overflow-wrap: anywhere; }
+    .contact .big a:hover { color: var(--red); text-shadow: var(--glow); }
+    .contact .rows { display: flex; flex-wrap: wrap; gap: 12px 36px; margin-top: 36px; }
+    .contact .rows a { text-decoration: none; border-bottom: 1px solid var(--hair); padding-bottom: 4px; }
+    .contact .rows a:hover { border-color: var(--red); }
+    .contact footer { margin-top: 56px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; color: var(--dim); }
+
+    /* The visualizer screen. */
+    .screen { width: min(1100px, 94vw); max-height: 92vh; padding: 0; border: 1px solid var(--red); background: #000; box-shadow: 0 0 80px -20px rgba(200,29,37,.8); }
+    .screen::backdrop { background: rgba(18,19,15,.92); }
+    .screen iframe { display: block; width: 100%; aspect-ratio: 16/9; border: 0; }
+    .screen button { position: absolute; top: 8px; right: 8px; width: 44px; height: 44px; border: 0; background: rgba(0,0,0,.6); font-size: 26px; cursor: pointer; }
+
+    @media (max-width: 760px) {
+      :root { --tuner: 44px; }
+      .chrome { padding: 14px var(--edge); gap: 14px; }
+      .chrome .clock { display: none; }
+      .chrome .back { margin-left: auto; }
+      .tuner-stations a { left: 14px; font-size: 9px; }
+      .tuner-freq b { font-size: 12px; }
+      .station { padding-top: 76px; }
+      .signal .meta span:nth-child(2) { display: none; }
+      .lens { top: 44%; width: 76vw; }
+      .wordmark { top: 44%; }
+      .signal .bottom { flex-direction: column; align-items: flex-start; }
+      .music-grid { grid-template-columns: 1fr; }
+      .deck-cover { max-height: none; }
+      .log { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .js .station .reveal { clip-path: none; }
+      .js .station.open .reveal, .deck-cover.swap img, .lens-ring { animation: none; }
+      .sweep { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="sr-only" href="#musica">Ir a la música</a>
+  <div class="chrome">
+    <a class="mark mono" href="#senal"><img src="/assets/rr-light.svg" alt="" width="30" height="30">ROMMUSER</a>
+    <span class="clock mono" aria-hidden="true">09°56′N 84°05′W · <span class="clock-time">CR --:--:--</span></span>
+    <a class="back mono" href="/es/">VERSIÓN 2026 ↗</a>
+  </div>
+
+  <nav class="tuner" aria-label="Estaciones">
+    <span class="tuner-top mono">FM</span>
+    <div class="tuner-ruler">
+      <span class="tuner-needle" aria-hidden="true"></span>
+      <ul class="tuner-stations">
+        <li><a class="mono" href="#senal" data-mhz="88.1">SEÑAL</a></li>
+        <li><a class="mono" href="#musica" data-mhz="92.7">MÚSICA</a></li>
+        <li><a class="mono" href="#vivo" data-mhz="97.3">EN VIVO</a></li>
+        <li><a class="mono" href="#artista" data-mhz="101.9">ARTISTA</a></li>
+        <li><a class="mono" href="#contacto" data-mhz="106.5">CONTACTO</a></li>
+      </ul>
+    </div>
+    <p class="tuner-freq mono" aria-hidden="true"><b>88.1</b><span>MHZ</span></p>
+  </nav>
+  <span class="sweep" aria-hidden="true"></span>
+
+  <main>
+    <section class="station signal" id="senal" aria-label="ROMMUSER">
+      <div class="meta mono"><span>DJ / PRODUCTOR · COSTA RICA</span><span>HOUSE Y TECHNO, CON ALMA MELÓDICA</span></div>
+      <h1 class="wordmark" aria-label="ROMMUSER">ROM<span>M</span>USER</h1>
+      <div class="lens reveal">
+        <div class="lens-photo"><img src="/assets/portrait.webp" alt="ROMMUSER" width="1080" height="1350" fetchpriority="high"></div>
+        <svg class="lens-ring" viewBox="0 0 400 400" aria-hidden="true">
+          <defs><path id="ring" d="M200,200 m-188,0 a188,188 0 1,1 376,0 a188,188 0 1,1 -376,0"/></defs>
+          <text><textPath href="#ring" textLength="1176" lengthAdjust="spacing">LA MÚSICA YA EXISTE · ROMMUSER LA SINTONIZA Y LA TRAE A LA TIERRA ·</textPath></text>
+        </svg>
+      </div>
+      <div class="bottom">
+        <h2 class="reveal" style="--d:.2s">CIERRA LOS OJOS. <span>SIENTE.</span></h2>
+        <button class="now reveal" style="--d:.35s" type="button" data-open-latest>
+          <img src="" alt="" width="64" height="64">
+          <span class="mono">AHORA EN EL AIRE</span>
+          <strong></strong>
+        </button>
+      </div>
+    </section>
+
+    <section class="station music" id="musica" aria-labelledby="musica-title">
+      <p class="station-head mono"><b>92.7</b><span id="musica-title">MÚSICA · ORIGINALES</span></p>
+      <div class="music-grid">
+        <div class="deck reveal">
+          <div class="deck-cover"><img src="" alt="" width="640" height="640"></div>
+          <div>
+            <h3 class="deck-title"></h3>
+            <p class="deck-meta mono"></p>
+            <p class="deck-links mono"></p>
+          </div>
+        </div>
+        <ol class="freqs reveal" style="--d:.15s"></ol>
+      </div>
+    </section>
+
+    <section class="station live" id="vivo" aria-labelledby="vivo-title">
+      <p class="station-head mono"><b>97.3</b><span id="vivo-title">EN VIVO</span></p>
+      <div class="live-now reveal">
+        <p class="mono next-when"></p>
+        <h3 class="next-name"></h3>
+        <p class="next-place"></p>
+        <p class="count mono" aria-live="off"></p>
+      </div>
+      <ol class="log reveal" style="--d:.2s" aria-label="Shows pasados"></ol>
+    </section>
+
+    <section class="station artist" id="artista" aria-labelledby="artista-title">
+      <p class="station-head mono"><b>101.9</b><span id="artista-title">EL ARTISTA</span></p>
+      <p class="statement reveal">La música ya existe. ROMMUSER la <em>sintoniza</em> desde Costa Rica: grooves hipnóticos, bajos potentes y emoción melódica, entre el house y el techno.</p>
+      <p class="signed mono reveal" style="--d:.2s"><b>FIRMADO EN</b><span>DECYPHER</span><span>DENAR RCRDS</span><span>ELECTRIC EDEN</span><span>HOUSEYOUNITE</span><span>LVLD MUSIC</span><span>HOUSE OF BOOGIE</span><span>JENDEX RECORDS</span><span>LATE HOURS</span></p>
+    </section>
+
+    <section class="station contact" id="contacto" aria-labelledby="contacto-title">
+      <p class="station-head mono"><b>106.5</b><span id="contacto-title">BOOKINGS</span></p>
+      <div class="big reveal">
+        <a href="mailto:bookings@rommuser.com?subject=Booking%20ROMMUSER">bookings@<br>rommuser.com</a>
+      </div>
+      <p class="rows mono reveal" style="--d:.2s">
+        <a href="mailto:contact@rommuser.com">contact@rommuser.com</a>
+        <a href="https://docs.google.com/document/d/18n2WqJGcaiTso_TtyPlYY8XAW2wxHLRng7rvMjYR-KI/view" target="_blank" rel="noopener noreferrer">EPK ↗</a>
+        <a href="https://docs.google.com/document/d/13EAdRQe6IrBC89S12bn34mVWEBE98g0zuRltf77ArXc/view" target="_blank" rel="noopener noreferrer">RIDER ↗</a>
+      </p>
+      <p class="rows mono">
+        <a href="https://open.spotify.com/artist/0mwQErvVjNdLmpcmIaikFb" target="_blank" rel="noopener noreferrer">SPOTIFY</a>
+        <a href="https://music.apple.com/us/artist/rommuser/1650613442" target="_blank" rel="noopener noreferrer">APPLE MUSIC</a>
+        <a href="https://soundcloud.com/rommuser" target="_blank" rel="noopener noreferrer">SOUNDCLOUD</a>
+        <a href="https://www.youtube.com/channel/UC6I_rdHIWCi-WciXjxWphMQ" target="_blank" rel="noopener noreferrer">YOUTUBE</a>
+        <a href="https://instagram.com/rommuser" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+        <a href="https://www.tiktok.com/@rommuser" target="_blank" rel="noopener noreferrer">TIKTOK</a>
+      </p>
+      <footer class="mono"><span>TRANSMITIDO DESDE EL AÑO 3000</span><span>© 2026 ROMMUSER · COSTA RICA</span></footer>
+    </section>
+  </main>
+
+  <dialog class="screen" aria-label="Visualizer">
+    <button type="button" aria-label="Cerrar">×</button>
+  </dialog>
+
+  <script type="application/json" id="data">{"tracks": [{"name": "JUST GROOVE", "label": "DECYPHER", "date": "2026-12-11", "cover": "/assets/covers/just-groove.webp", "presave": "https://create.ffm.to/rommuserjustgroo"}, {"name": "PIECES", "label": "DENAR RCRDS · CON GOSVE", "date": "2026-11-11", "cover": "/assets/covers/pieces.webp", "apple": "https://music.apple.com/us/album/pieces-single/6822369362", "youtube": "https://www.youtube.com/watch?v=yOZEs1BBfC4", "soundcloud": "https://on.soundcloud.com/zYPBqwIx9xIhiN3U4Z", "deezer": "https://www.deezer.com/track/4345430882", "amazon": "https://music.amazon.com/albums/B0HMX5WVCC?trackAsin=B0HMX9Q9SX", "tidal": "https://tidal.com/browse/track/569492540", "video": "https://www.youtube.com/watch?v=IS_lo4vZUDU"}, {"name": "DON'T WANNA", "label": "JENDEX RECORDS · CON GOSVE & OUTLANDAR", "date": "2026-10-30", "cover": "/assets/covers/dont-wanna.webp", "spotify": "https://open.spotify.com/track/29ySEAWQWgIw00MjWrPIOP", "apple": "https://music.apple.com/us/album/dont-wanna-single/6821963290", "youtube": "https://www.youtube.com/watch?v=ZA9uOBhCU7Y", "soundcloud": "https://soundcloud.com/rommuser/gosve-rommuser-outlander-dont-wanna-1", "beatport": "https://www.beatport.com/release/dont-wanna/7598860", "deezer": "https://www.deezer.com/album/1119789422", "amazon": "https://music.amazon.com/albums/B0HMSKWHVT", "tidal": "https://tidal.com/browse/track/571997469", "video": "https://www.youtube.com/watch?v=ZA9uOBhCU7Y"}, {"name": "HOLY", "label": "DENAR RCRDS", "date": "2026-08-22", "cover": "/assets/covers/holy.webp", "spotify": "https://open.spotify.com/track/4EjfoMJQ5B11CHIWuMDgjS", "apple": "https://music.apple.com/us/album/holy-single/6796712403", "youtube": "https://www.youtube.com/watch?v=0dp9F_Of01Q", "soundcloud": "https://soundcloud.com/rommuser/holy-radio-edit", "beatport": "https://www.beatport.com/release/holy/7297362", "deezer": "https://www.deezer.com/album/1043057612", "amazon": "https://music.amazon.com/albums/B0HCCHYN3X"}, {"name": "THE NUMBER", "label": "ELECTRIC EDEN RECORDS", "date": "2026-04-17", "cover": "/assets/covers/the-number.webp", "spotify": "https://open.spotify.com/track/4FfVy0JY7a8HyCeeekVZwh", "apple": "https://music.apple.com/us/album/the-number-ep/1890448996", "youtube": "https://www.youtube.com/watch?v=FQ_V4sPUL_g", "soundcloud": "https://soundcloud.com/rommuser/rommuser-the-number-1", "beatport": "https://www.beatport.com/release/the-number/6767706", "deezer": "https://www.deezer.com/album/954387511", "amazon": "https://music.amazon.com/albums/B0GVYW634D", "tidal": "https://tidal.com/browse/track/512849401", "bandcamp": "https://rommuser.bandcamp.com/album/the-number"}, {"name": "IDELY (I DON'T EVEN LOVE YOU)", "label": "ELECTRIC EDEN RECORDS", "date": "2026-04-17", "cover": "/assets/covers/the-number.webp", "spotify": "https://open.spotify.com/track/5cgIVGmMSvu7feMoJu7llg", "apple": "https://music.apple.com/us/album/the-number-ep/1890448996", "youtube": "https://www.youtube.com/watch?v=4-sehk7nR9E", "soundcloud": "https://soundcloud.com/rommuser/rommuser-idely-i-dont-even-love-you-2", "beatport": "https://www.beatport.com/release/the-number/6767706", "deezer": "https://www.deezer.com/album/954387511", "amazon": "https://music.amazon.com/albums/B0GVYW634D", "tidal": "https://tidal.com/browse/track/512849403", "bandcamp": "https://rommuser.bandcamp.com/album/the-number"}, {"name": "NEVER BE", "label": "HOUSE OF BOOGIE", "date": "2026-03-20", "cover": "/assets/covers/never-be.webp", "spotify": "https://open.spotify.com/track/13gslr8dsnTQWhSQ5dgflZ", "apple": "https://music.apple.com/us/album/never-be-single/1882757361", "youtube": "https://www.youtube.com/watch?v=ylXnA4l8o7Q", "soundcloud": "https://soundcloud.com/rommuser/rommuser-never-be", "beatport": "https://www.beatport.com/release/never-be/6404239", "deezer": "https://www.deezer.com/album/933382421", "amazon": "https://music.amazon.com/albums/B0GRC1CZD7", "tidal": "https://tidal.com/browse/track/504562302"}, {"name": "DALE", "label": "DENAR RCRDS", "date": "2025-10-31", "cover": "/assets/covers/dale.webp", "spotify": "https://open.spotify.com/track/1IrQ670X2GCrSkke6XeIy3", "apple": "https://music.apple.com/us/album/dale-single/1839453581", "youtube": "https://www.youtube.com/watch?v=d1cnhCDIbis", "soundcloud": "https://soundcloud.com/rommuser/dale-radio-edit", "beatport": "https://www.beatport.com/release/dale/5382370", "deezer": "https://www.deezer.com/album/820421511", "amazon": "https://music.amazon.com/albums/B0FQW44ZR9"}, {"name": "ECHOES", "label": "LVLD MUSIC", "date": "2025-03-08", "cover": "/assets/covers/echoes.webp", "spotify": "https://open.spotify.com/track/1ELooVJ9vxKjgBK0sSNpJp", "apple": "https://music.apple.com/us/album/echoes-single/1888550901", "youtube": "https://www.youtube.com/watch?v=2ViMlH0xBCs", "soundcloud": "https://on.soundcloud.com/3FoLi7AMdJENOzM1em", "beatport": "https://www.beatport.com/release/echoes/6736485", "deezer": "https://www.deezer.com/album/948970211", "amazon": "https://music.amazon.com/albums/B0DXKSPMQX", "tidal": "https://tidal.com/browse/track/510731946"}, {"name": "TIKIKAI", "label": "LATE HOURS MUSIC", "date": "2024-07-12", "cover": "/assets/covers/tikikai.webp", "spotify": "https://open.spotify.com/track/5hkQznyQ6PdAwKN6GljPYk", "apple": "https://music.apple.com/us/album/tikikai-single/1752033619", "youtube": "https://www.youtube.com/watch?v=489m-tZ7wfI", "soundcloud": "https://soundcloud.com/rommuser/tikikai-original-mix", "beatport": "https://www.beatport.com/release/tikikai/4614795", "deezer": "https://www.deezer.com/album/601316242", "amazon": "https://music.amazon.com/albums/B0D721ZX2P", "tidal": "https://tidal.com/browse/track/369328767"}], "next": {"date": "2026-11-13", "name": "MAMBO", "place": "Casa Grande"}, "shows": [{"date": "2026-10-16", "name": "360", "place": "Seis / La Fira · Santa Ana, Costa Rica", "video": null, "type": ""}, {"date": "2026-07-17", "name": "360", "place": "Seis / La Fira · Santa Ana, Costa Rica", "video": null, "type": ""}, {"date": "2026-06-20", "name": "KAPOK", "place": "Uvita, Costa Rica", "video": "https://youtu.be/HbsjPDnovKE?t=105", "type": "FESTIVAL"}, {"date": "2026-06-19", "name": "CLUB IBIZA", "place": "Jacó, Costa Rica", "video": null, "type": ""}, {"date": "2026-05-16", "name": "SECRET ROOMS", "place": "Ginebra · Heredia, Costa Rica", "video": null, "type": ""}, {"date": "2026-05-02", "name": "SECRET ROOMS", "place": "El Boiler · San José, Costa Rica", "video": "https://www.youtube.com/watch?v=P4GjT1SAnZQ", "type": ""}, {"date": "2026-02-14", "name": "EL BOILER", "place": "San José, Costa Rica", "video": null, "type": ""}, {"date": "2025-05-23", "name": "SECRET ROOMS", "place": "Amón Solar, El Sótano · San José, Costa Rica", "video": null, "type": ""}, {"date": "2023-05-06", "name": "SECRET ROOMS", "place": "El Botecito Deluxe · Ciudad Quesada, Costa Rica", "video": null, "type": ""}]}</script>
+  <script src="/3000/tuner.js" defer></script>
+</body>
+</html>
