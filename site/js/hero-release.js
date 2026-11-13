@@ -1,10 +1,10 @@
 // The newest release, playable at the top of the page without scrolling (people arrive from the Instagram bio).
-// It reads the newest released MÚSICA card that has a YouTube link, so it moves on by itself on the next release day.
+// It reads the newest released MÚSICA card with a visualizer (data-video) or else a YouTube link, so it moves on by itself on the next release day.
 // The video loads only after a tap, as a visible YouTube player: a player you can see and tap plays on iPhone and
 // inside the Instagram browser, where the hidden SoundCloud widget behind ESCUCHAR is blocked.
 import { todayInCostaRica } from './lib/dates.js';
 
-const CARDS = '#originales .track[data-youtube]:not(.presave)';
+const CARDS = '#originales .track:is([data-video],[data-youtube]):not(.presave)';
 
 export function newestRelease(cards, today) {
   return [...cards]
@@ -21,7 +21,7 @@ export function youtubeId(url) {
 export function initHeroRelease(player) {
   const box = document.querySelector('.hero-release');
   const card = newestRelease(document.querySelectorAll(CARDS), todayInCostaRica());
-  const id = youtubeId(card?.dataset.youtube);
+  const id = youtubeId(card?.dataset.video || card?.dataset.youtube);
   if (!box || !id) return;
   const name = card.querySelector('.track-info strong')?.textContent || '';
   const button = box.querySelector('.hero-release-play');
