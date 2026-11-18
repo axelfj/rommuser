@@ -1,7 +1,7 @@
 // Home page motion: the page is a radio. Each section is a station; the menu underlines the station on screen, and each time a new station comes in
 // one red line sweeps down the screen. Each station opens like a slit of light the first time it is seen, and shows,
 // contacts and the Golden Circle tip up into place. Transforms and opacity only, so iPhones keep 60 fps.
-// Visitors who ask for less motion keep the menu underline and nothing else.
+// It plays for everyone, also with the system's reduce-motion setting on (Axel, 18.11).
 // The CSS is in css/components/motion.css. Everything that hides waits for html.motion, so without JavaScript
 // nothing is hidden.
 
@@ -78,9 +78,9 @@ function onFirstSight(elements, options, show) {
 
 export function initPageMotion() {
   if (!document.querySelector('.artist-home > header')) return;
-  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  startStations(calm);
-  if (calm || !('IntersectionObserver' in window)) return;
+  // The motion always plays, whatever the system's reduce-motion setting (Axel, 18.11: Windows and macOS alike).
+  startStations(false);
+  if (!('IntersectionObserver' in window)) return;
   document.documentElement.classList.add('motion');
   const apertures = document.querySelectorAll(APERTURES);
   apertures.forEach((s) => s.classList.add('aperture'));

@@ -78,13 +78,3 @@ img {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .artist-home * {
-    scroll-behavior: auto;
-    transition: none !important;
-  }
-}

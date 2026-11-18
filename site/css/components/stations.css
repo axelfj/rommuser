@@ -661,12 +661,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .artist-home .music .tracks .music-choice.track {
-    transition: none;
-  }
-}
-
 /* Under each address: COPIADO when a tap copied it (js/contact-mail.js). */
 .artist-home .contact .mail-note {
   min-height: 1.4em;

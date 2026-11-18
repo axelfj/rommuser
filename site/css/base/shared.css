@@ -139,10 +139,3 @@ footer>.brand {
   padding-right: 0;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  /* Honor the operating-system preference across every decorative animation. */
-  .artist-home .music-tabs button::after,
-  .artist-home .live .next-label::after {
-    animation: none !important;
-  }
-}

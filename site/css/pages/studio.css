@@ -490,18 +490,3 @@ a.service-card:hover,
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .motion .studio-hero .rise,
-  .motion [data-reveal] {
-    filter: none;
-    transition: none;
-  }
-
-  .motion .tagline-reveal .word {
-    color: var(--bone);
-  }
-
-  .studio-faq summary::after {
-    transition: none;
-  }
-}

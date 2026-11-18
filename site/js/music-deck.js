@@ -141,7 +141,7 @@ export function initMusicDeck(player) {
           event.stopImmediatePropagation();
           tune(card);
           const top = parts.deck.getBoundingClientRect().top;
-          if (top < 0) parts.deck.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+          if (top < 0) parts.deck.scrollIntoView({ behavior: 'smooth', block: 'start' });
         },
         { capture: true },
       );
