@@ -37,6 +37,7 @@ function startStations(calm) {
   sweep.setAttribute('aria-hidden', 'true');
   document.body.append(sweep);
   let on = -1;
+  let lastSweep = 0;
   let frame = 0;
   const paint = () => {
     frame = 0;
@@ -47,7 +48,9 @@ function startStations(calm) {
     const first = on === -1;
     on = now;
     links.forEach((a, i) => a?.classList.toggle('is-tuned', i === on));
-    if (!calm && !first) {
+    // One sweep per arrival: scrolling fast past several stations draws a single line, not a burst of them.
+    if (!calm && !first && performance.now() - lastSweep > 1200) {
+      lastSweep = performance.now();
       sweep.classList.remove('go');
       void sweep.offsetWidth;
       sweep.classList.add('go');

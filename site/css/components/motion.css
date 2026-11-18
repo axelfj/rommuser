@@ -18,7 +18,7 @@
   right: 0;
   height: 2px;
   background: var(--red);
-  box-shadow: 0 0 24px 4px rgba(200,29,37,.8);
+  box-shadow: 0 0 14px 1px rgba(200,29,37,.6);
   opacity: 0;
   pointer-events: none;
 }
@@ -37,7 +37,7 @@
 }
 
 .motion .aperture.is-open {
-  animation: aperture 1.1s cubic-bezier(.75,0,.15,1) both;
+  animation: aperture .9s cubic-bezier(.75,0,.15,1) both;
 }
 
 .motion .aperture::after {
@@ -49,7 +49,7 @@
   height: 2px;
   margin-top: -1px;
   background: var(--red);
-  box-shadow: 0 0 22px 3px rgba(200,29,37,.85);
+  box-shadow: 0 0 14px 1px rgba(200,29,37,.7);
   opacity: 0;
   pointer-events: none;
   z-index: 3;
@@ -60,13 +60,13 @@
 }
 
 .motion .aperture.is-open::after {
-  animation: slit-fade 1.1s ease-out both;
+  animation: slit-fade .9s ease-out both;
 }
 
 /* Rising: tipped back and below, then up into place, a few hundredths of a second apart. */
 .motion .rise {
   opacity: 0;
-  transform: perspective(900px) translate3d(0,40px,0) rotateX(16deg);
+  transform: perspective(900px) translate3d(0,24px,0) rotateX(8deg);
   transform-origin: 50% 100%;
 }
 
@@ -86,7 +86,9 @@
   to { clip-path: inset(0); }
 }
 
+/* The slit stays one clean line and fades as the section opens, instead of blooming into a red band. */
 @keyframes slit-fade {
-  0% { opacity: 1; transform: scaleY(1); }
-  100% { opacity: 0; transform: scaleY(30); }
+  0% { opacity: 1; }
+  40% { opacity: .8; }
+  100% { opacity: 0; }
 }

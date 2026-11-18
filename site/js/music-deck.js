@@ -32,7 +32,7 @@ function buildDeck(panel) {
     '<div class="deck-actions"><button class="deck-play" type="button"></button><a class="deck-presave" target="_blank" rel="noopener noreferrer"></a></div><p class="deck-links"></p></div>';
   panel.prepend(deck);
   const $ = (s) => deck.querySelector(s);
-  return { deck, cover: $('.deck-cover'), freq: $('.deck-freq'), title: $('.deck-title'), meta: $('.deck-meta'), links: $('.deck-links'), play: $('.deck-play'), presave: $('.deck-presave') };
+  return { deck, info: $('.deck-info'), cover: $('.deck-cover'), freq: $('.deck-freq'), title: $('.deck-title'), meta: $('.deck-meta'), links: $('.deck-links'), play: $('.deck-play'), presave: $('.deck-presave') };
 }
 
 export function initMusicDeck(player) {
@@ -91,6 +91,9 @@ export function initMusicDeck(player) {
           }),
       );
       parts.links.hidden = !parts.links.childElementCount;
+      parts.info.classList.remove('swap');
+      void parts.info.offsetWidth;
+      parts.info.classList.add('swap');
       parts.presave.hidden = !presave;
       if (presave) {
         parts.presave.href = card.href;
@@ -143,6 +146,7 @@ export function initMusicDeck(player) {
         { capture: true },
       );
     }
-    tune(cards[0]);
+    // The deck opens on the first release it can act on (the ID placeholder heads the list but has nothing to play).
+    tune(cards.find((c) => !c.classList.contains('id-placeholder')) || cards[0]);
   }
 }
