@@ -5,7 +5,7 @@ beforeAll(async () => {
   ({ initFanForm } = await import('../site/js/fan-form.js'));
 });
 
-function client() {
+function client(lang = 'es') {
   const listeners = {};
   const status = { textContent: '' }, button = {};
   const email = { value: 'fan@example.com', dataset: { placeholderEs: 'correo' }, focus: vi.fn() };
@@ -17,7 +17,7 @@ function client() {
   const turnstile = { render: vi.fn((_, options) => { callbacks = options; return 'widget-1'; }), reset: vi.fn() };
   const fetch = vi.fn(async () => ({ type: 'opaque' }));
   vi.stubGlobal('window', { turnstile });
-  vi.stubGlobal('document', { documentElement: { lang: 'es' }, referrer: '' });
+  vi.stubGlobal('document', { documentElement: { lang }, referrer: '' });
   vi.stubGlobal('location', { search: '' });
   vi.stubGlobal('localStorage', { getItem: () => null, setItem: () => {} });
   vi.stubGlobal('FormData', class { *[Symbol.iterator]() { yield ['email', email.value]; } });
@@ -32,11 +32,14 @@ it('never posts without a token', async () => {
   expect(c.fetch).not.toHaveBeenCalled();
   expect(c.status.textContent).toContain('verificación');
 });
-it('submits one token, confirms calmly, and resets before retry', async () => {
-  const c = client(); c.callbacks.callback('single-use-token');
+it.each([
+  ['es', 'Solicitud enviada. Aún no podemos confirmar tu registro.'],
+  ['en', 'Request sent. We can’t confirm your signup yet.'],
+])('does not confirm an opaque signup in %s and resets before retry', async (lang, message) => {
+  const c = client(lang); c.callbacks.callback('single-use-token');
   await c.submit();
   expect(c.fetch.mock.calls[0][1].body.get('cf-turnstile-response')).toBe('single-use-token');
-  expect(c.status.textContent).toContain('Estás dentro');
+  expect(c.status.textContent).toBe(message);
   expect(c.turnstile.reset).toHaveBeenCalledWith('widget-1');
   await c.submit();
   expect(c.fetch).toHaveBeenCalledTimes(1);

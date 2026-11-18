@@ -77,7 +77,8 @@ export function initFanForm(form = document.querySelector('.fan-form')) {
       await sendToAppsScript(form.dataset.endpoint, body);
       form.reset();
       fillHidden();
-      status.textContent = tr('Estás dentro. La próxima señal llega a tu correo.');
+      // An opaque response does not confirm that the backend accepted or saved this signup.
+      status.textContent = tr('Solicitud enviada. Aún no podemos confirmar tu registro.');
     } catch {
       status.textContent = tr('No pudimos confirmar el envío. Inténtalo otra vez.');
     } finally {

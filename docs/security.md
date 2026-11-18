@@ -28,7 +28,9 @@ Los cambios de código no activan por sí solos DNSSEC, 2FA, Bot Fight Mode ni r
 6. Probar ES/EN, error de red y reintento: se debe obtener un token nuevo después de cada intento.
    La respuesta de Apps Script es opaca (`no-cors`): la interfaz informa que envió una solicitud,
    nunca promete que se guardó. Para confirmación exacta haría falta un transporte que permita
-   leer la respuesta, fuera de esta migración.
+   leer la respuesta, fuera de esta migración. El mensaje provisional es «Solicitud enviada.
+   Aún no podemos confirmar tu registro.» (con equivalente EN); no confirma aceptación,
+   persistencia ni envío de bienvenida. La confirmación end-to-end sigue pendiente (#73).
 
 Límite de seguridad: máximo 300 altas nuevas/día (Costa Rica), contabilizadas dentro del lock.
 Es un límite global, no por IP. Puede detener altas legítimas en una campaña grande: revisar
