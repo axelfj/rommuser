@@ -101,8 +101,9 @@ export function initMusicDeck(player) {
       parts.play.hidden = presave || (!video && !track);
       parts.play.dataset.mode = video ? 'video' : 'audio';
       parts.play.textContent = video ? tr('VER EL VISUALIZER') : tr('ESCUCHAR AQUÍ');
-      if (!presave && !parts.links.childElementCount && parts.play.hidden) {
-        parts.meta.textContent = [parts.meta.textContent, card.querySelector('.track-type')?.textContent].filter(Boolean).join(' · ');
+      const type = card.querySelector('.track-type')?.textContent || '';
+      if (!presave && !parts.links.childElementCount && parts.play.hidden && !parts.meta.textContent.includes(type)) {
+        parts.meta.textContent = [parts.meta.textContent, type].filter(Boolean).join(' · ');
       }
     };
 
