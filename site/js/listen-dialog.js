@@ -25,8 +25,7 @@ export function initListenDialog() {
     .map((p) => ({ ...p, artistPage: p.element.href }));
 
   const goToSignup = () => {
-    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    document.getElementById('lista')?.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' });
+    document.getElementById('lista')?.scrollIntoView({ behavior: 'smooth' });
     document.getElementById('fan-email')?.focus({ preventScroll: true });
   };
 

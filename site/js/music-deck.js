@@ -32,7 +32,7 @@ function buildDeck(panel) {
     '<div class="deck-actions"><button class="deck-play" type="button"></button><a class="deck-presave" target="_blank" rel="noopener noreferrer"></a></div><p class="deck-links"></p></div>';
   panel.prepend(deck);
   const $ = (s) => deck.querySelector(s);
-  return { deck, cover: $('.deck-cover'), freq: $('.deck-freq'), title: $('.deck-title'), meta: $('.deck-meta'), links: $('.deck-links'), play: $('.deck-play'), presave: $('.deck-presave') };
+  return { deck, info: $('.deck-info'), cover: $('.deck-cover'), freq: $('.deck-freq'), title: $('.deck-title'), meta: $('.deck-meta'), links: $('.deck-links'), play: $('.deck-play'), presave: $('.deck-presave') };
 }
 
 export function initMusicDeck(player) {
@@ -91,6 +91,9 @@ export function initMusicDeck(player) {
           }),
       );
       parts.links.hidden = !parts.links.childElementCount;
+      parts.info.classList.remove('swap');
+      void parts.info.offsetWidth;
+      parts.info.classList.add('swap');
       parts.presave.hidden = !presave;
       if (presave) {
         parts.presave.href = card.href;
@@ -101,8 +104,9 @@ export function initMusicDeck(player) {
       parts.play.hidden = presave || (!video && !track);
       parts.play.dataset.mode = video ? 'video' : 'audio';
       parts.play.textContent = video ? tr('VER EL VISUALIZER') : tr('ESCUCHAR AQUÍ');
-      if (!presave && !parts.links.childElementCount && parts.play.hidden) {
-        parts.meta.textContent = [parts.meta.textContent, card.querySelector('.track-type')?.textContent].filter(Boolean).join(' · ');
+      const type = card.querySelector('.track-type')?.textContent || '';
+      if (!presave && !parts.links.childElementCount && parts.play.hidden && !parts.meta.textContent.includes(type)) {
+        parts.meta.textContent = [parts.meta.textContent, type].filter(Boolean).join(' · ');
       }
     };
 
@@ -137,11 +141,12 @@ export function initMusicDeck(player) {
           event.stopImmediatePropagation();
           tune(card);
           const top = parts.deck.getBoundingClientRect().top;
-          if (top < 0) parts.deck.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+          if (top < 0) parts.deck.scrollIntoView({ behavior: 'smooth', block: 'start' });
         },
         { capture: true },
       );
     }
-    tune(cards[0]);
+    // The deck opens on the first release it can act on (the ID placeholder heads the list but has nothing to play).
+    tune(cards.find((c) => !c.classList.contains('id-placeholder')) || cards[0]);
   }
 }

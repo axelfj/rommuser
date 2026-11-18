@@ -416,12 +416,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .platform-logo {
-    transition: none;
-  }
-}
-
 @supports (grid-template-rows: subgrid) {
   /* Every card in a row shares the same tracks (subgrid): covers, titles, labels and dates line up across the row
      even when a title or a label takes two lines. */

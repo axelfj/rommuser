@@ -1,6 +1,6 @@
 // /estudio motion: the hero rises in, each section rises once when about a fifth of it is visible, and the tagline's
-// words light up as they cross a line at 65% of the screen, in reading order. Nothing moves for visitors who ask for
-// less motion. The CSS for all of it is in css/pages/studio.css (.motion, .is-in, .shown, .word, .lit).
+// words light up as they cross a line at 65% of the screen, in reading order. It plays for everyone, also with
+// reduce-motion on (Axel, 18.11). The CSS for all of it is in css/pages/studio.css (.motion, .is-in, .shown, .word, .lit).
 
 // Splits the tagline into one <span class="word"> per word (after translation, so it works in both languages).
 function splitWords(tagline) {
@@ -47,7 +47,7 @@ function lightWordsOnScroll(tagline) {
 export function initStudioMotion() {
   const tagline = document.querySelector('.tagline-reveal');
   if (tagline) splitWords(tagline);
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  if (!('IntersectionObserver' in window)) return;
   const root = document.documentElement;
   root.classList.add('motion');
   document.querySelectorAll('.studio-hero .rise').forEach((el, i) => el.style.setProperty('--i', i));

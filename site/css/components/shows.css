@@ -324,10 +324,3 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .live .show-row,
-  .live .show-video,
-  .live .show-year summary::after {
-    transition: none;
-  }
-}

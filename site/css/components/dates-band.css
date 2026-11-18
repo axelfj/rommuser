@@ -125,12 +125,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .artist-home .dates-item.is-today small::before {
-    animation: none;
-  }
-}
-
 /* The on-air pulse, shared with the next-show light in EN VIVO. */
 @keyframes show-signal {
   0%, 100% { opacity: 1; }

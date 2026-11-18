@@ -4,9 +4,9 @@
 // the frame as comets, one at a time and soonest first, carrying their name and date like an announcement; each
 // pass comes in from a random side and the core's gravity bends it. The newest release is caught by that gravity the
 // first time each visitor sees it: it comes in from outside the frame as a comet, spirals in and settles on the
-// innermost orbit (once per release and visitor, remembered in localStorage; skipped for reduced motion).
+// innermost orbit (once per release and visitor, remembered in localStorage).
 // Everything is read from the MÚSICA cards, so nothing here is typed twice. It always moves (Axel's call, like the red
-// band); a device that asks for less motion gets it at half speed. Colours come from the brand tokens (--bone, --red).
+// band), at full speed on every device. Colours come from the brand tokens (--bone, --red).
 import { shortDate, todayInCostaRica } from './lib/dates.js';
 import { tr } from './lib/i18n.js';
 
@@ -17,7 +17,6 @@ export function initArtistSystem(player) {
   if (!ctx) return;
   const rows = [...document.querySelectorAll('#originales .track[data-track]')];
   const today = todayInCostaRica();
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const tokens = getComputedStyle(document.documentElement);
   const BONE = tokens.getPropertyValue('--bone').trim();
   const RED = tokens.getPropertyValue('--red').trim();
@@ -92,7 +91,7 @@ export function initArtistSystem(player) {
   try {
     seen = localStorage.getItem(SEEN_KEY) || '';
   } catch {}
-  let capture = newest && seen !== newest.name && !reduce.matches ? { from: Math.random() * Math.PI * 2, trail: [], ring: 0, done: false } : null;
+  let capture = newest && seen !== newest.name ? { from: Math.random() * Math.PI * 2, trail: [], ring: 0, done: false } : null;
   const remember = () => {
     try {
       localStorage.setItem(SEEN_KEY, newest.name);
@@ -497,8 +496,8 @@ export function initArtistSystem(player) {
     if (!visible || document.hidden) return;
     const dt = Math.min(0.05, (stamp - (last || stamp)) / 1000);
     last = stamp;
-    // The system always moves, like the red band (Axel's call): a device that asks for less motion gets it at half speed.
-    const pace = reduce.matches ? 0.5 : 1;
+    // The system always moves, like the red band (Axel's call), at full speed everywhere.
+    const pace = 1;
     {
       t += dt * pace;
       if (playing && current) {
@@ -557,10 +556,6 @@ export function initArtistSystem(player) {
     visible ? start() : (cancelAnimationFrame(frame), (frame = 0));
   }).observe(figure);
   document.addEventListener('visibilitychange', start);
-  reduce.addEventListener?.('change', () => {
-    paint();
-    start();
-  });
   // Follow the shared player: the playing track's planet turns red and the system starts to breathe.
   player.on((p) => {
     current = released.find((b) => b.track && b.track === p.current) || null;
