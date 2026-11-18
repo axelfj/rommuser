@@ -38,6 +38,7 @@ const SOURCES = [
 // Ritmo de envío: pocos por hora para cuidar la reputación de contact@ (rebotes del 28/09).
 const NL_PER_RUN = 40;
 const NL_DAILY_CAP = 250;
+const NL_MAX_ATTEMPTS = 3;
 // Cuando alguien llega a estos referidos, contact@ recibe un aviso. El premio lo decide Axel.
 const REFERRAL_MILESTONES = [3, 10, 25];
 
@@ -152,7 +153,8 @@ function sendQueue() {
       try { tpl = template_(c.subject); } catch (err) { mark_(c, 'ERROR', err.message); return; }
       const todo = pendingFor_(c);
       const room = Math.min(NL_PER_RUN, nlRoomToday_());
-      const batch = todo.slice(0, room);
+      const attempts = attemptsFor_(c.id);
+      const batch = todo.filter(r => (attempts.get(r.email) || 0) < NL_MAX_ATTEMPTS).slice(0, room);
       batch.forEach(r => {
         let result = 'Enviado';
         try { sendOne_(tpl, r, c, ''); } catch (err) { result = 'Error: ' + err.message; }
@@ -161,11 +163,15 @@ function sendQueue() {
       nlUse_(batch.length);
       const sent = sentFor_(c.id).size;
       sh.getRange(row, 7).setValue(sent);
-      if (todo.length === batch.length) {
+      const remaining = pendingFor_(c);
+      const afterAttempts = attemptsFor_(c.id);
+      if (remaining.length === 0) {
         mark_(c, 'ENVIADA', 'Terminada · ' + stamp_());
         MailApp.sendEmail(ALERT_TO, 'Golden Circle: campaña ' + c.id + ' enviada', 'Salieron ' + sent + ' correos. El detalle está en la pestaña ' + SENDS + '.');
+      } else if (remaining.every(r => (afterAttempts.get(r.email) || 0) >= NL_MAX_ATTEMPTS)) {
+        mark_(c, 'ERROR', 'Quedan ' + remaining.length + ' fallidos tras ' + NL_MAX_ATTEMPTS + ' intentos. Revisar Envíos · ' + stamp_());
       } else {
-        mark_(c, 'ENVIANDO', 'Faltan ' + (todo.length - batch.length) + ' · ' + stamp_());
+        mark_(c, 'ENVIANDO', 'Faltan ' + remaining.length + ' · ' + stamp_());
       }
       return; // una campaña por corrida
     }
@@ -265,8 +271,22 @@ function sentFor_(id) {
   const sh = SpreadsheetApp.getActive().getSheetByName(SENDS);
   const done = new Set();
   if (!sh || sh.getLastRow() < 2) return done;
-  sh.getRange(2, 2, sh.getLastRow() - 1, 2).getValues().forEach(r => { if (String(r[0]) === id) done.add(String(r[1]).toLowerCase()); });
+  sh.getRange(2, 2, sh.getLastRow() - 1, 4).getValues().forEach(r => {
+    if (String(r[0]) === id && String(r[3]) === 'Enviado') done.add(String(r[1]).trim().toLowerCase());
+  });
   return done;
+}
+
+function attemptsFor_(id) {
+  const sh = SpreadsheetApp.getActive().getSheetByName(SENDS);
+  const attempts = new Map();
+  if (!sh || sh.getLastRow() < 2) return attempts;
+  sh.getRange(2, 2, sh.getLastRow() - 1, 2).getValues().forEach(r => {
+    if (String(r[0]) !== id) return;
+    const email = String(r[1]).trim().toLowerCase();
+    attempts.set(email, (attempts.get(email) || 0) + 1);
+  });
+  return attempts;
 }
 
 // ---------- Plantilla (borrador de Gmail) y envío ----------
@@ -406,7 +426,12 @@ function addBaja_(email, why) {
   if (last < 2) return;
   const emails = fans.getRange(2, COL.correo, last - 1, 1).getValues().flat().map(x => String(x).toLowerCase());
   const i = emails.indexOf(email);
-  if (i !== -1) fans.getRange(i + 2, COL.estado).setValue('Baja');
+  if (i !== -1) {
+    fans.getRange(i + 2, COL.estado).setValue('Baja');
+    if (fans.getRange(i + 2, COL.notas).getValue() === PENDING) {
+      fans.getRange(i + 2, COL.notas).setValue('Bienvenida cancelada por baja');
+    }
+  }
 }
 
 // Quien vuelve a entrar por la web sale de Bajas (pidió entrar de nuevo).
